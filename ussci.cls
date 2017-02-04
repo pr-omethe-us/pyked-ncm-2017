@@ -111,7 +111,7 @@
 
 \RequirePackage{hyperref}
 \urlstyle{tt}
-\newcommand{\email}[1]{\href{mailto:{#1}}{\tt{\nolinkurl{#1}}}}
+\newcommand{\email}[1]{\href{mailto:#1}{\tt{\nolinkurl{#1}}}}
 
 \RequirePackage{geometry}
 \geometry{
