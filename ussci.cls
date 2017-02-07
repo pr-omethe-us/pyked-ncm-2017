@@ -261,7 +261,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              @software
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\DeclareBibliographyDriver{software}{
+\DeclareBibliographyDriver{software}{%
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
   \usebibmacro{author/translator+others}%
@@ -278,7 +278,7 @@
   \newunit\newblock
   \usebibmacro{organization+location+date}%
   \newunit\newblock
-  \usebibmacro{doi+eprint+url}%
+  \usebibmacro{doi+url+software}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
@@ -375,6 +375,15 @@
   \iftoggle{bbx:url}
   {\iffieldundef{doi}{\usebibmacro{url+urldate}}{}}
   {}
+}
+
+% New macro for @software to print both URL and DOI
+\newbibmacro*{doi+url+software}{%
+  \iftoggle{bbx:doi}
+  {\printfield{doi}}{}%
+  \newunit\newblock
+  \iftoggle{bbx:url}
+  {\usebibmacro{url+urldate}}{}%
 }
 
 % New macro for publisher+location+parentheses around date
