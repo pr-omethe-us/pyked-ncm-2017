@@ -1,3 +1,4 @@
+% !TEX option = -shell-escape
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This work is licensed under the Creative Commons Attribution 4.0
 % International License. To view a copy of this license, visit
@@ -6,7 +7,9 @@
 \documentclass[12pt]{ussci}
 
 \usepackage{todonotes}
-
+\newcommand\ck{ChemKED}
+\usepackage{enumitem}
+\setlist{noitemsep}
 %======================================================================
 \addbibresource{pyked.bib}
 %======================================================================
@@ -67,9 +70,64 @@ stirred reactor, extinction, and speciation measurements.
 
 
 %====================================================================
-\section{Overview of format}
-%
-\todo[inline]{Bryan to do}
+\section{Overview of format}\label{sec:overview-of-format}
+
+The \ck{} file is a YAML-format file. This format offers the advantage of being
+human readable and having parsers in most common programming languages,
+including Python, C++, Java, Perl, MATLAB, and many others. The YAML syntax is
+quite simple. The basic file structure is made of mappings, delimited by a colon:
+
+\begin{minted}{yaml}
+    key: value
+    key: 10 # This is because YAML syntax highlighting in Atom is busted
+\end{minted}
+
+In addition, sequences can be specified by using a hypen \yaml|-| or square
+brackets
+
+\begin{minted}{yaml}
+    - [0, 1, 2]
+    key:
+      - 0
+      - 1
+      - 2
+\end{minted}
+
+The \ck{} format is designed
+to include all of the information necessary to simulate a given experiment. Most
+of the required information is specified as a \yaml|key| with a \yaml|value|.
+
+In
+general, this includes
+
+\todo{Make this smaller}
+\begin{itemize}
+    \item The type of experiment
+    \begin{itemize}
+        \item Ignition delay
+        \item Flame speed
+        \item Speciation
+        \item Extinction
+    \end{itemize}
+    \item The experimental apparatus
+    \begin{itemize}
+        \item Shock tube
+        \item Rapid compression machine
+        \item Counterflow flame
+        \item Burner-stabilized flame
+    \end{itemize}
+    \item The thermodynamic conditions of the experiment
+    \begin{itemize}
+        \item Temperature
+        \item Pressure
+        \item Composition
+    \end{itemize}
+    \item Apparatus specific effects
+    \begin{itemize}
+        \item Non-ideal pressure rise in shock tubes
+        \item Post-compression heat loss in rapid compression machines
+    \end{itemize}
+\end{itemize}
 
 
 %====================================================================
@@ -91,6 +149,6 @@ This research was funded by \ldots
 \todo[inline]{update}
 
 
-\printbibliography[heading=bibintoc]
+\printbibliography
 
 \end{document}

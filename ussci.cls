@@ -22,10 +22,15 @@
 
 \LoadClass{article}
 
+\RequirePackage{minted}
+\usemintedstyle{friendly}
+\newmintinline[yaml]{yaml}{}
+\newmintinline[python]{python}{}
+
 \RequirePackage{calc}
 
 %Set up biblatex
-\usepackage[
+\RequirePackage[
     backend=biber,
     doi=true,
     sorting=none,
