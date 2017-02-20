@@ -1,3 +1,4 @@
+% !TEX option = -shell-escape
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This work is licensed under the Creative Commons Attribution 4.0
 % International License. To view a copy of this license, visit
@@ -6,7 +7,9 @@
 \documentclass[12pt]{ussci}
 
 \usepackage{todonotes}
-
+\newcommand\ck{ChemKED}
+\usepackage[inline]{enumitem}
+\setlist{noitemsep}
 %======================================================================
 \addbibresource{pyked.bib}
 %======================================================================
@@ -19,7 +22,7 @@
 \author[2]{Kyle E. Niemeyer}
 
 \affil[1]{Department of Mechanical Engineering, University of Connecticut, Storrs, CT, USA}
-\affil[2]{Mechanical, Industrial, and Manfacturing Engineering, Oregon State University, Corvalis, OR, USA}
+\affil[2]{School of Mechanical, Industrial, and Manufacturing Engineering, Oregon State University, Corvallis, OR, USA}
 \affil[*]{Corresponding author: \email{bryan.weber@uconn.edu}}
 
 \begin{document}
@@ -67,10 +70,86 @@ stirred reactor, extinction, and speciation measurements.
 
 
 %====================================================================
-\section{Overview of format}
+\section{Overview of format}\label{sec:overview-of-format}
+
+The \ck{} file is a YAML-format file. This format offers the advantage of being
+human readable, written in plain text, and having parsers in most common
+programming languages, including Python, C++, Java, Perl, MATLAB, and many
+others. The YAML syntax is quite simple. The basic file structure is made of
+mappings, delimited by a colon. The key for the mapping is on the left of the
+colon, and the value on the right can be a single value, a sequence of values, or a nested mapping:
+
+\begin{minted}{yaml}
+    key1: value  # Single-value mapping
+    key2: [0, 1, 2]  # Mapping with sequence
+    key3:  # Alternative sequence format
+      - 0
+      - 1
+    key4:  # Nested mapping
+      key5: 0
+\end{minted}
+
+The \yaml|value| can be a string, integer, or floating point number. The type is
+inferred from the \yaml|key| when the value is read. The \ck{} format is
+designed to include all of the information necessary to simulate a given
+experiment. The \ck{} format can be broken into two main sections. The first
+section details all of the ``meta'' information about the experiment and the
+\ck{} file. In this section, the common \yaml|author| mapping is used for any
+fields where an author must be specified. The \yaml|author| mapping contains the
+following fields:
+%
+\begin{itemize}
+    \item \yaml|name| (required, string): The author's full name
+    \item \yaml|ORCID| (optional, string): the author's ORCID number
+\end{itemize}
+%
+More generally for the meta information, the required keys in this section
+are:
+%
+\begin{itemize}
+    \item \yaml|file-author| (required, \yaml|author|-type mapping): The author
+    of the \ck{} file
+    \item \yaml|file-version| (required, integer): The version of the \ck{} file
+    \item \yaml|chemked-version| (required, string): The version of the \ck{}
+    schema that this file conforms to
+    \item \yaml|reference| (required, mapping): The reference information for
+    the article associated with the data in the file. The fields in this
+    mapping are:
+    \begin{itemize}
+        \item \yaml|authors| (required, sequence): A sequence of \yaml|author| mappings
+        \item \yaml|journal| (required, string): The name of the publishing journal
+        \item \yaml|year| (required, integer): The year of publication
+    \end{itemize}
+    \item \yaml|experiment-type| (required, string): One of \yaml|ignition delay| or \yaml|flame speed|
+    \item \yaml|apparatus| (required, string): The type of apparatus used to perform the experiment
+\end{itemize}
+
+In addition to the meta information, the data encoded in the \ck{} file is in
+a mapping called \yaml|datapoints|. The \yaml|datapoints| mapping contains a
+sequence of nested mappings, with the following information for each element of
+the sequence:
+%
+\begin{itemize}
+    \item \yaml|temperature| (required, sequence): The temperature of the experiment, with units
+    \item \yaml|ignition-delay| (optional, sequence): The ignition delay of the experiment, with units, if the \yaml|experiment-type| is \yaml|ignition delay|
+    \item \yaml|flame-speed| (optional, sequence): The flame speed of the experiment, with units, if the \yaml|experiment-type| is \yaml|flame speed|
+    \item \yaml|pressure| (required, string): The pressure of the experiment, with units
+    \item \yaml|composition| (required, sequence): The composition of the mixture in the experiment, a sequence of mappings with the following fields
+    \begin{itemize}
+        \item \yaml|species-name| (required, string): The name of the species
+        \item \yaml|mole-fraction|, \yaml|mass-fraction|, \yaml|mole-percent| (required, float): The mole fraction or percent, or the mass fraction. Only one of the three is permitted in a given \yaml|composition| sequence.
+    \end{itemize}
+    \item \yaml|ignition-type| (required, mapping); The type of ignition measured in the experiments. The required fields are
+    \begin{itemize}
+        \item \yaml|type| (required, string): How the ignition delay was measured, one of \yaml|d/dt max| to indicate the ignition point is found at the maximum of the time derivative of the \yaml|target|, or \yaml|max| or \yaml|min| to indicate the ignition point is at the maximum or minimum of the \yaml|target|
+        \item \yaml|target| (required, string): The target for the type of the ignition point, one of \yaml|temperature|, \yaml|pressure|, \yaml|OH|, \yaml|OH*|, \yaml|CH|, or \yaml|CH*|
+    \end{itemize}
+\end{itemize}
+
+%====================================================================
+\section{PyKED Architecture}
 %
 \todo[inline]{Bryan to do}
-
 
 %====================================================================
 \section{Use example}
@@ -92,6 +171,6 @@ This research was funded by \ldots
 % Kyle: I don't think I have any funding yet to acknowledge for this
 
 
-\printbibliography[heading=bibintoc]
+\printbibliography
 
 \end{document}
