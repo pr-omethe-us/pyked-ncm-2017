@@ -8,6 +8,7 @@
 
 \usepackage{todonotes}
 \newcommand\ck{ChemKED}
+\newcommand\pk{PyKED}
 \usepackage[inline]{enumitem}
 \setlist{noitemsep}
 %======================================================================
@@ -189,14 +190,24 @@ datapoints:
     ignition-delay:
       - 10 us
       - uncertainty-type: relative
-        uncertainty: 10
+        uncertainty: 0.1
     ...
 \end{minted}
 
 %====================================================================
 \section{PyKED Architecture}
 %
-\todo[inline]{Bryan to do}
+\pk{} is a Python package that currently provides the reference implementation
+of the interface to \ck{} files. \pk{} reads \ck{} files, validates their
+structure and content, and allows the user to interact with the datapoints
+contained in the \ck{} file.
+
+The basic user interface to the \ck{} file in \pk{} is through the
+\python|ChemKED| class. The \python|ChemKED| class constructor takes the file
+name of a \ck{} file or a Python dictionary containing the contents of a \ck{}
+file as its argument. When the file or dictionary is loaded, it is validated to
+have the correct format by Cerberus \autocite{cerberus}. The fields of the \ck{}
+file are stored as instance attributes of the \python|ChemKED| class.
 
 %====================================================================
 \section{Use example}
@@ -206,7 +217,6 @@ datapoints:
 from the Pandas output for butanol?}
 \todo[inline]{Idea: VPRO simulations using Cantera from a \ck{} file for an RCM
 datapoint}
-
 
 %====================================================================
 \section{Conclusions and future work}
