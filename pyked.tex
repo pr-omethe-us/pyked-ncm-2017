@@ -151,6 +151,11 @@ the sequence:
         (required, float): The mole fraction or percent, or the mass fraction.
         Only one of the three is permitted in a given \yaml|composition|
         sequence.
+        \item \yaml|InChI|, \yaml|SMILES|, \yaml|atomic-composition|, or
+        \yaml|elemental-composition| (required, string or sequence): The InChI
+        or SMILES representing the molecule, or its atomic or elemental
+        composition (\yaml|atomic-composition| and \yaml|elemental-composition|
+        are synonyms) as a sequence
     \end{itemize}
     \item \yaml|ignition-type| (required, mapping); The type of ignition
     measured in the experiments. The required fields are
@@ -165,6 +170,28 @@ the sequence:
         \yaml|OH*|, \yaml|CH|, or \yaml|CH*|
     \end{itemize}
 \end{itemize}
+
+Each of the quantities in a datapoint must be specified with units. This should
+be done as a single string associated with the first element of the sequence.
+The units of the quantity are validated to ensure they have the appropriate
+dimensionality for the quanity. In addition, each of the quantities in the
+\yaml|datapoint| can optionally be assigned an uncertainty. This uncertainty can
+be either absolute or relative, and is specified as elements of the sequence of
+the associated key. For example, the absolute uncertainty of the temperature and
+the relative uncertainty of the ignition delay might be specified as follows:
+
+\begin{minted}{yaml}
+datapoints:
+  - temperature:
+      - 1100 kelvin
+      - uncertainty-type: absolute
+        uncertainty: 10 kelvin
+    ignition-delay:
+      - 10 us
+      - uncertainty-type: relative
+        uncertainty: 10
+    ...
+\end{minted}
 
 %====================================================================
 \section{PyKED Architecture}
