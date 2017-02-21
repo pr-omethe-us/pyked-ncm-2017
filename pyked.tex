@@ -8,6 +8,7 @@
 
 \usepackage{todonotes}
 \newcommand\ck{ChemKED}
+\newcommand\pk{PyKED}
 \usepackage[inline]{enumitem}
 \setlist{noitemsep}
 %======================================================================
@@ -62,6 +63,7 @@ stirred reactor, extinction, and speciation measurements.
 %
 \todo[inline]{Kyle to do}
 
+Fundamental combustion experiments provide
 
 %====================================================================
 \section{Related work}
@@ -150,6 +152,13 @@ the sequence:
 \section{PyKED Architecture}
 %
 \todo[inline]{Bryan to do}
+
+\pk{} relies on well-established scientific Python software tools.
+These include NumPy~\cite{vanderWalt:2011np} for array manipulation, Pint~\cite{Grecco2016} for
+interpreting and converting between units, \texttt{ruamel.yaml} for parsing YAML files,\todo{needs ref}{}
+Cerberus for validating \ck{} files\todo{needs ref}{},
+and pytest~\cite{pytest:3.0.1} for unit testing.
+Travis-CI~\cite{Travis2016} also provides continuous integration testing.
 
 %====================================================================
 \section{Use example}
