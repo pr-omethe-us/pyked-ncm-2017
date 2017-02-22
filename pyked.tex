@@ -76,7 +76,7 @@ Interestingly, this contrasts the situation for chemical kinetic models, where t
 CHEMKIN~\cite{Kee:1996ck} format dominates. Competing standards such as the
 Cantera~\cite{Cantera:2.3.0} CTI format or FlameMaster lag behind considerably, although
 use of the former continually grows due to Cantera's open availability.\todo{add flamemaster citation}{}
-Similarly, 
+Similarly,
 
 Instead, such data must typically be found in under-documented, nonstandard comma-separated value
 files and Excel spreadsheets, or even contained in PDF tables or figures rather than as
@@ -105,19 +105,20 @@ Python software tool for validating and working with \ck{} files: \pk{}.
 %====================================================================
 \section{Overview of format}\label{sec:overview-of-format}
 
-The \ck{} file is a YAML-format file. This format offers the advantage of being
+The \ck{} file is a YAML-format file. This format offers the advantages of being
 human readable, written in plain text, and having parsers in most common
 programming languages, including Python, C++, Java, Perl, MATLAB, and many
 others. The YAML syntax is quite simple. The basic file structure is made of
 mappings, delimited by a colon. The key for the mapping is on the left of the
-colon, and the value on the right can be a single value, a sequence of values, or a nested mapping:
+colon, and the value on the right can be a single value, a sequence of values,
+a nested mapping, or some combination of these:
 
 \begin{minted}{yaml}
     key1: value  # Single-value mapping
     key2: [0, 1, 2]  # Mapping with sequence
     key3:  # Alternative sequence format
-      - 0
-      - 1
+      - value
+      - value
     key4:  # Nested mapping
       key5: 0
 \end{minted}
@@ -125,11 +126,10 @@ colon, and the value on the right can be a single value, a sequence of values, o
 The \yaml|value| can be a string, integer, or floating point number. The type is
 inferred from the \yaml|key| when the value is read. The \ck{} format is
 designed to include all of the information necessary to simulate a given
-experiment. The \ck{} format can be broken into two main sections. The first
-section details all of the ``meta'' information about the experiment and the
-\ck{} file. In this section, the common \yaml|author| mapping is used for any
-fields where an author must be specified. The \yaml|author| mapping contains the
-following fields:
+experiment and can be broken into two main sections. The first section details
+all of the ``meta'' information about the experiment and the \ck{} file. In this
+section, the common \yaml|author| mapping is used for any fields where an author
+must be specified. The \yaml|author| mapping contains the following fields:
 %
 \begin{itemize}
     \item \yaml|name| (required, string): The author's full name
@@ -149,12 +149,16 @@ are:
     the article associated with the data in the file. The fields in this
     mapping are:
     \begin{itemize}
-        \item \yaml|authors| (required, sequence): A sequence of \yaml|author| mappings
-        \item \yaml|journal| (required, string): The name of the publishing journal
+        \item \yaml|authors| (required, sequence): A sequence of \yaml|author|
+        mappings
+        \item \yaml|journal| (required, string): The name of the publishing
+        journal
         \item \yaml|year| (required, integer): The year of publication
     \end{itemize}
-    \item \yaml|experiment-type| (required, string): One of \yaml|ignition delay| or \yaml|flame speed|
-    \item \yaml|apparatus| (required, string): The type of apparatus used to perform the experiment
+    \item \yaml|experiment-type| (required, string): One of \yaml|ignition
+    delay| or \yaml|flame speed|
+    \item \yaml|apparatus| (required, string): The type of apparatus used to
+    perform the experiment
 \end{itemize}
 
 In addition to the meta information, the data encoded in the \ck{} file is in
@@ -163,26 +167,79 @@ sequence of nested mappings, with the following information for each element of
 the sequence:
 %
 \begin{itemize}
-    \item \yaml|temperature| (required, sequence): The temperature of the experiment, with units
-    \item \yaml|ignition-delay| (optional, sequence): The ignition delay of the experiment, with units, if the \yaml|experiment-type| is \yaml|ignition delay|
-    \item \yaml|flame-speed| (optional, sequence): The flame speed of the experiment, with units, if the \yaml|experiment-type| is \yaml|flame speed|
-    \item \yaml|pressure| (required, string): The pressure of the experiment, with units
-    \item \yaml|composition| (required, sequence): The composition of the mixture in the experiment, a sequence of mappings with the following fields
+    \item \yaml|temperature| (required, sequence): The temperature of the
+    experiment, with units
+    \item \yaml|ignition-delay| (optional, sequence): The ignition delay of the
+    experiment, with units, if the \yaml|experiment-type| is \yaml|ignition
+    delay|
+    \item \yaml|flame-speed| (optional, sequence): The flame speed of the
+    experiment, with units, if the \yaml|experiment-type| is \yaml|flame speed|
+    \item \yaml|pressure| (required, string): The pressure of the experiment,
+    with units
+    \item \yaml|composition| (required, sequence): The composition of the
+    mixture in the experiment, a sequence of mappings with the following fields
     \begin{itemize}
         \item \yaml|species-name| (required, string): The name of the species
-        \item \yaml|mole-fraction|, \yaml|mass-fraction|, \yaml|mole-percent| (required, float): The mole fraction or percent, or the mass fraction. Only one of the three is permitted in a given \yaml|composition| sequence.
+        \item \yaml|mole-fraction|, \yaml|mass-fraction|, \yaml|mole-percent|
+        (required, float): The mole fraction or percent, or the mass fraction.
+        Only one of the three is permitted in a given \yaml|composition|
+        sequence.
+        \item \yaml|InChI|, \yaml|SMILES|, \yaml|atomic-composition|, or
+        \yaml|elemental-composition| (required, string or sequence): The InChI
+        or SMILES representing the molecule, or its atomic or elemental
+        composition (\yaml|atomic-composition| and \yaml|elemental-composition|
+        are synonyms) as a sequence
     \end{itemize}
-    \item \yaml|ignition-type| (required, mapping); The type of ignition measured in the experiments. The required fields are
+    \item \yaml|ignition-type| (required, mapping); The type of ignition
+    measured in the experiments. The required fields are
     \begin{itemize}
-        \item \yaml|type| (required, string): How the ignition delay was measured, one of \yaml|d/dt max| to indicate the ignition point is found at the maximum of the time derivative of the \yaml|target|, or \yaml|max| or \yaml|min| to indicate the ignition point is at the maximum or minimum of the \yaml|target|
-        \item \yaml|target| (required, string): The target for the type of the ignition point, one of \yaml|temperature|, \yaml|pressure|, \yaml|OH|, \yaml|OH*|, \yaml|CH|, or \yaml|CH*|
+        \item \yaml|type| (required, string): How the ignition delay was
+        measured, one of \yaml|d/dt max| to indicate the ignition point is
+        found at the maximum of the time derivative of the \yaml|target|, or
+        \yaml|max| or \yaml|min| to indicate the ignition point is at the
+        maximum or minimum of the \yaml|target|
+        \item \yaml|target| (required, string): The target for the type of the
+        ignition point, one of \yaml|temperature|, \yaml|pressure|, \yaml|OH|,
+        \yaml|OH*|, \yaml|CH|, or \yaml|CH*|
     \end{itemize}
 \end{itemize}
+
+Each of the quantities in a datapoint must be specified with units. This should
+be done as a single string associated with the first element of the sequence.
+The units of the quantity are validated to ensure they have the appropriate
+dimensionality for the quanity. In addition, each of the quantities in the
+\yaml|datapoint| can optionally be assigned an uncertainty. This uncertainty can
+be either absolute or relative, and is specified as elements of the sequence of
+the associated key. For example, the absolute uncertainty of the temperature and
+the relative uncertainty of the ignition delay might be specified as follows:
+
+\begin{minted}{yaml}
+datapoints:
+  - temperature:
+      - 1100 kelvin
+      - uncertainty-type: absolute
+        uncertainty: 10 kelvin
+    ignition-delay:
+      - 10 us
+      - uncertainty-type: relative
+        uncertainty: 0.1
+    ...
+\end{minted}
 
 %====================================================================
 \section{PyKED Architecture}
 %
-\todo[inline]{Bryan to do}
+\pk{} is a Python package that currently provides the reference implementation
+of the interface to \ck{} files. \pk{} reads \ck{} files, validates their
+structure and content, and allows the user to interact with the datapoints
+contained in the \ck{} file.
+
+The basic user interface to the \ck{} file in \pk{} is through the
+\python|ChemKED| class. The \python|ChemKED| class constructor takes the file
+name of a \ck{} file or a Python dictionary containing the contents of a \ck{}
+file as its argument. When the file or dictionary is loaded, it is validated to
+have the correct format by Cerberus \autocite{cerberus}. The fields of the \ck{}
+file are stored as instance attributes of the \python|ChemKED| class.
 
 \pk{} relies on well-established scientific Python software tools.
 These include NumPy~\cite{vanderWalt:2011np} for array manipulation, Pint~\cite{Grecco2016} for
@@ -203,21 +260,15 @@ versions of \pk{} will be distributed on \href{https://pypi.python.org/pypi}{PyP
 \section{Use example}
 %
 \todo[inline]{Bryan/Kyle to do}
-
+\todo[inline]{Idea: CONV simulations using Cantera in a loop with conditions
+from the Pandas output for butanol?}
+\todo[inline]{Idea: VPRO simulations using Cantera from a \ck{} file for an RCM
+datapoint}
 
 %====================================================================
 \section{Conclusions and future work}
 %
 \todo[inline]{both to do}
-
-
-
-%====================================================================
-\section{Acknowledgements}
-This research was funded by \ldots
-\todo[inline]{update}
-% Kyle: I don't think I have any funding yet to acknowledge for this
-
 
 \printbibliography
 
