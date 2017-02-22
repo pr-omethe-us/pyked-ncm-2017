@@ -8,7 +8,7 @@
 
 \usepackage{todonotes}
 \newcommand\ck{ChemKED}
-\newcommand\pk{PyKED}
+\newcommand\pk{\texttt{PyKED}}
 \usepackage[inline]{enumitem}
 \setlist{noitemsep}
 %======================================================================
@@ -70,6 +70,37 @@ Fundamental combustion experiments provide
 %
 \todo[inline]{Kyle to do}
 
+The combustion\slash chemical kinetics community lacks an accepted, commonly used
+standard for recording and sharing data from fundamental combustion experiments.
+Interestingly, this contrasts the situation for chemical kinetic models, where the
+CHEMKIN~\cite{Kee:1996ck} format dominates. Competing standards such as the
+Cantera~\cite{Cantera:2.3.0} CTI format or FlameMaster lag behind considerably, although
+use of the former continually grows due to Cantera's open availability.\todo{add flamemaster citation}{}
+Similarly, 
+
+Instead, such data must typically be found in under-documented, nonstandard comma-separated value
+files and Excel spreadsheets, or even contained in PDF tables or figures rather than as
+supplementary material associated with a paper.
+
+While the community has not widely adopted a standard format,
+---most notably, Frenklach developed the PrIMe (\textbf{Pr}ocess \textbf{I}nformatics
+\textbf{M}od\textbf{e}l) data format~\cite{Frenklach:2007bm,You:2011hy} and an associated
+online database, the PrIMe Data Warehouse~\cite{PrIMe}.
+
+More recently, Varga et al.~\cite{Varga2015a,Varga2015b} developed the \texttt{ReSpecTh} standard,
+an XML-based format that builds on, and is compatible with, PrIMe.
+
+We aim to develop a new, human- and machine-readable data standard for fundamental combustion
+experiments, \ck{}, and offer tools for easily working with data encoded in this format.
+Our motivations are similar to some of those of the PrIMe and \texttt{ReSpecTh} teams, although
+less ambitious in scope: enable easy sharing and use of data, for the (primary) purposes of
+developing and validating predictive chemical kinetic models.
+However, those efforts were generally less successful in being adopted---we hope to succeed
+by developing more user-friendly data files and tools for interacting with them.
+
+Niemeyer recently introduced an initial version of the \ck{} format~\cite{Niemeyer:2016wf},
+and in this work we further formalize and develop the standard. We also discuss a related
+Python software tool for validating and working with \ck{} files: \pk{}.
 
 %====================================================================
 \section{Overview of format}\label{sec:overview-of-format}
@@ -159,6 +190,14 @@ interpreting and converting between units, \texttt{ruamel.yaml} for parsing YAML
 Cerberus for validating \ck{} files\todo{needs ref}{},
 and pytest~\cite{pytest:3.0.1} for unit testing.
 Travis-CI~\cite{Travis2016} also provides continuous integration testing.
+
+\todo[inline]{Need to archive version of PyKED and cite}
+
+\pk{} is available under the permissive, open-source BSD 3-clause license via a GitHub
+repository: \url{https://github.com/pr-omethe-us/PyKED}. It can be installed using setuptools
+by downloading the source code files and executing \texttt{python setup.py install}. More mature
+versions of \pk{} will be distributed on \href{https://pypi.python.org/pypi}{PyPI}
+(Python Package Index) and conda-forge.\todo{add URL}{}
 
 %====================================================================
 \section{Use example}
