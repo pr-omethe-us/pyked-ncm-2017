@@ -83,7 +83,7 @@ Interestingly, this contrasts the situation for chemical kinetic models, where t
 CHEMKIN~\autocite{Kee:1996ck} format dominates. Competing standards such as the
 Cantera~\autocite{Cantera:2.3.0} CTI format or FlameMaster~\autocite{FlameMaster:ref,FlameMaster:code}
 lag behind considerably, although use of the former continually grows due to Cantera's
-open availability. Similarly, 
+open availability. Similarly,
 
 Instead, such data must typically be found in under-documented, nonstandard comma-separated value
 files and Excel spreadsheets, or even contained in PDF tables or figures rather than as
@@ -494,7 +494,9 @@ while netw.time < 0.05:
 
 \subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
 
-The \ck{} file used in this example can be found online.\todo{add url}
+The \ck{} file used in this example can be found online.\todo{add url}{}
+The data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
+shock-tube ignition delays for \textit{tert}-butanol.
 Examining the file, we first find the section that specifies the information about the \ck{} file itself:
 %
 \begin{minted}{yaml}
