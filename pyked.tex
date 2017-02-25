@@ -371,6 +371,123 @@ from the Pandas output for butanol?}
 \todo[inline]{Idea: VPRO simulations using Cantera from a \ck{} file for an RCM
 datapoint}
 
+The following usage examples provide a guide to the use of \pk{}. They are by no
+means an exhaustive treatement, and are meant to demonstrate the basic
+capabilities of the software.
+
+\subsection{RCM modeling with varying reactor volume}\label{sec:rcm-modeling}
+
+The \ck{} file that will be used in this example can be found in the
+\python|tests| directory of the PyKED repository,
+\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_rcm.yaml}.
+Examining that file, we find the first section specifies the information about
+the \ck{} file itself
+%
+\begin{minted}{yaml}
+file-author:
+  name: Kyle E Niemeyer
+  ORCID: 0000-0003-4425-7097
+file-version: (1, 0)
+chemked-version: 0.0.1
+fake-key: 0 # Again here because Atom's syntax highlighting is busted :(
+\end{minted}
+%
+Then, we find the information regarding the article in the literature from which
+this data was taken. In this case, the data point is from the work of \textcite{Mittal2006a}:
+%
+\begin{minted}{yaml}
+reference:
+  doi: 10.1002/kin.20180
+  authors:
+    - name: Gaurav Mittal
+    - name: Chih-Jen Sung
+      ORCID: 0000-0003-2046-8076
+    - name: Richard A Yetter
+  journal: International Journal of Chemical Kinetics
+  year: 2006
+  volume: 38
+  pages: 516-529
+  detail: Fig. 6, open circle
+experiment-type: ignition delay
+apparatus:
+  kind: rapid compression machine
+  institution: Case Western Reserve University
+  facility: CWRU RCM
+  fake-key: 0 # Again here because Atom's syntax highlighting is busted :(
+\end{minted}
+
+Finally, there is just a single datapoint in this file, which codes the ignition
+delay for the experiment, the mixture composition, the initial temperature,
+pressure,
+%
+\begin{minted}{yaml}
+datapoints:
+  - temperature: 297.4 kelvin
+    ignition-delay: 1.0 ms
+    pressure: 958.0 torr
+    composition:
+      - species-name: H2
+        InChI: 1S/H2/h1H
+        mole-fraction: 0.12500
+      - species-name: O2
+        InChI: 1S/O2/c1-2
+        mole-fraction: 0.06250
+      - species-name: N2
+        InChI: 1S/N2/c1-2
+        mole-fraction: 0.18125
+      - species-name: Ar
+        InChI: 1S/Ar
+        mole-fraction: 0.63125
+    ignition-type:
+      target: pressure
+      type: d/dt max
+    compression-time: 38.0 ms
+    volume-history:
+      time:
+        units: s
+        column: 0
+      volume:
+        units: cm3
+        column: 1
+      values:
+        - [0.00E+000, 5.47669375000E+002]
+        - [1.00E-003, 5.46608789894E+002]
+        - [2.00E-003, 5.43427034574E+002]
+        - [3.00E-003, 5.38124109043E+002]
+        - 0 # Dammit Atom
+        ...
+\end{minted}
+
+The values for the \yaml|volume-history| are truncated to save space. The user
+can load this file into \pk{} and run a simulation in Cantera with the following
+code:
+
+\begin{minted}{python}
+import cantera as ct
+from pyked import ChemKED
+
+ck = ChemKED('testfile_rcm.yaml')
+dp = ck.datapoints[0]
+
+T_0 = dp.temperature.to('K').magnitude
+P_0 = dp.pressure.to('Pa').magnitude
+X_0 = dp.get_cantera_mole_fraction()
+
+gas = ct.Solution('h2-co-mechanism.cti')
+gas.TPX = T_0, P_0, X_0
+
+reac = ct.IdealGasReactor(gas)
+env = ct.Reservoir(ct.Solution('air.xml'))
+
+time = dp.volume_history.time
+volume = dp.volume_history.volume
+ct.Wall(reac, env, velocity=VolumeProfile(time=time, volume=volume))
+
+netw = ct.ReactorNet([reac])
+while netw.time < 0.05:
+    netw.step()
+
+\end{minted}
 %====================================================================
 \section{Conclusions and future work}
 %
