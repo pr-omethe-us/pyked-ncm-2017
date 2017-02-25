@@ -73,8 +73,8 @@ Fundamental combustion experiments provide
 The combustion\slash chemical kinetics community lacks an accepted, commonly used
 standard for recording and sharing data from fundamental combustion experiments.
 Interestingly, this contrasts the situation for chemical kinetic models, where the
-CHEMKIN~\cite{Kee:1996ck} format dominates. Competing standards such as the
-Cantera~\cite{Cantera:2.3.0} CTI format or FlameMaster lag behind considerably, although
+CHEMKIN~\autocite{Kee:1996ck} format dominates. Competing standards such as the
+Cantera~\autocite{Cantera:2.3.0} CTI format or FlameMaster lag behind considerably, although
 use of the former continually grows due to Cantera's open availability.\todo{add flamemaster citation}{}
 Similarly,
 
@@ -84,10 +84,10 @@ supplementary material associated with a paper.
 
 While the community has not widely adopted a standard format,
 ---most notably, Frenklach developed the PrIMe (\textbf{Pr}ocess \textbf{I}nformatics
-\textbf{M}od\textbf{e}l) data format~\cite{Frenklach:2007bm,You:2011hy} and an associated
-online database, the PrIMe Data Warehouse~\cite{PrIMe}.
+\textbf{M}od\textbf{e}l) data format~\autocite{Frenklach:2007bm,You:2011hy} and an associated
+online database, the PrIMe Data Warehouse~\autocite{PrIMe}.
 
-More recently, Varga et al.~\cite{Varga2015a,Varga2015b} developed the \texttt{ReSpecTh} standard,
+More recently, Varga et al.~\autocite{Varga2015a,Varga2015b} developed the \texttt{ReSpecTh} standard,
 an XML-based format that builds on, and is compatible with, PrIMe.
 
 We aim to develop a new, human- and machine-readable data standard for fundamental combustion
@@ -98,7 +98,7 @@ developing and validating predictive chemical kinetic models.
 However, those efforts were generally less successful in being adopted---we hope to succeed
 by developing more user-friendly data files and tools for interacting with them.
 
-Niemeyer recently introduced an initial version of the \ck{} format~\cite{Niemeyer:2016wf},
+Niemeyer recently introduced an initial version of the \ck{} format~\autocite{Niemeyer:2016wf},
 and in this work we further formalize and develop the standard. We also discuss a related
 Python software tool for validating and working with \ck{} files: \pk{}.
 
@@ -241,12 +241,13 @@ file as its argument. When the file or dictionary is loaded, it is validated to
 have the correct format by Cerberus \autocite{cerberus}. The fields of the \ck{}
 file are stored as instance attributes of the \python|ChemKED| class.
 
-\pk{} relies on well-established scientific Python software tools.
-These include NumPy~\cite{vanderWalt:2011np} for array manipulation, Pint~\cite{Grecco2016} for
-interpreting and converting between units, \texttt{ruamel.yaml} for parsing YAML files,\todo{needs ref}{}
-Cerberus for validating \ck{} files\todo{needs ref}{},
-and pytest~\cite{pytest:3.0.1} for unit testing.
-Travis-CI~\cite{Travis2016} also provides continuous integration testing.
+\pk{} relies on well-established scientific Python software tools. These include
+NumPy~\autocite{vanderWalt:2011np} for array manipulation,
+Pint~\autocite{Grecco2016} for interpreting and converting between units,
+\texttt{ruamel.yaml} for parsing YAML files,\todo{needs ref}{} Cerberus for
+validating \ck{} files~\autocite{cerberus}, and pytest~\autocite{pytest:3.0.1}
+for unit testing. Travis-CI~\autocite{Travis2016} also provides continuous
+integration testing.
 
 \todo[inline]{Need to archive version of PyKED and cite}
 
