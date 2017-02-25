@@ -242,8 +242,57 @@ The basic user interface to the \ck{} file in \pk{} is through the
 \python|ChemKED| class. The \python|ChemKED| class constructor takes the file
 name of a \ck{} file or a Python dictionary containing the contents of a \ck{}
 file as its argument. When the file or dictionary is loaded, it is validated to
-have the correct format by Cerberus \autocite{cerberus}. The fields of the \ck{}
-file are stored as instance attributes of the \python|ChemKED| class.
+have the correct format by Cerberus \autocite{cerberus}.
+
+The fields of the \ck{} file are stored as instance attributes of the
+\python|ChemKED| class. The following attributes are available with the
+appropriate data:
+%
+\begin{itemize}
+    \item \python|chemked_version|, \python|file_version|, \python|file_author|,
+    \python|experiment_type|: Stores the values from the \ck{} file
+    \item \python|reference|: Instance of a \python|namedtuple| containing all
+    the information from the literature reference associated with the data
+    \item \python|apparatus|: Instance of a \python|namedtuple| containing all
+    the information about the apparatus used to perform the experiment
+    \item \python|datapoints|: A Python list of \python|DataPoint| instances
+\end{itemize}
+
+The \python|DataPoint| class stores the information associated with a single
+data point in the \ck{} file. Similar to the \python|ChemKED| class, the
+information from the \ck{} file are stored as attributes of class instances,
+including
+%
+\begin{itemize}
+    \item \python|equivalence_ratio|: The value of the equivalence ratio, if
+    present. For informational purposes only, no validation is done of the value
+    \item \python|ignition_delay|, \python|temperature|, \python|pressure|,
+    \python|pressure_rise|: The value of these data are stored as instances of
+    the \python|Quantity| class from the Pint \autocite{Grecco2016} package,
+    possibly with associated uncertainty
+    \item \python|composition|: A list of dictionaries of the species and their
+    respective amounts. The values are validated so that \yaml|mole-percent|,
+    \yaml|mole-fraction|, or \yaml|mass-fraction| cannot be mixed for a single
+    data point, and so that the sum of the values is approximately 1.0, or
+    100.0 for \yaml|mole-percent|.
+    \item \python|composition_type|: A string indicating the type of composition
+    information for the data point---one of \python|'mole-percent'|,
+    \python|'mole-fraction'|, or \python|'mass-fraction'|
+    \item \python|volume_history|: If the \yaml|volume-history| of an RCM
+    experiment is provided in the \ck{} file, it is stored in this attribute as
+    a \python|namedtuple|, and the actual values are stored in NumPy arrays
+    \autocite{vanderWalt:2011np}.
+\end{itemize}
+
+The \python|DataPoint| class has two instance methods defined, called
+\python|get_cantera_mole_fraction| and \python|get_cantera_mass_fraction|. With
+these methods, the composition of the reactant mixture can be output to a format
+that can be used to set the composition of a Cantera \python|Solution|. Note
+that the \python|composition| specification is not required to contain the
+molecular weights of the components, so calling
+\python|get_cantera_mass_fraction| when \yaml|mole-percent| or
+\yaml|mole-fraction| has been used in the \ck{} file will raise a
+\python|ValueError| (and vice versa for \python|get_cantera_mole_fraction|).
 
 \pk{} relies on well-established scientific Python software tools. These include
 NumPy~\autocite{vanderWalt:2011np} for array manipulation,
