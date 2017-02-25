@@ -488,6 +488,126 @@ while netw.time < 0.05:
     netw.step()
 
 \end{minted}
+
+\subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
+
+The \ck{} file used in this example can be found online.\todo{add url}
+Examining the file, we first find the section that specifies the information about the \ck{} file itself:
+%
+\begin{minted}{yaml}
+file-author:
+  name: Morgan Mayer
+  ORCID: 0000-0001-7137-5721
+file-version: (0,1)
+chemked-version: 0.0.1
+screw-you-atom: 0
+\end{minted}
+%
+Then the reference information:
+%
+\begin{minted}{yaml}
+reference:
+  doi: 10.1016/j.combustflame.2011.08.014
+  authors:
+    - name: Ivo Stranic
+    - name: Deanna P. Chase
+    - name: Joseph T. Harmon
+    - name: Sheng Yang
+    - name: David F. Davidson
+    - name: Ronald K. Hanson
+  journal: Combustion and Flame
+  year: 2011
+  volume: 159
+  pages: 516-527
+  detail:
+experiment-type: ignition delay
+apparatus:
+  kind: shock tube
+  institution: High Temperature Gasdynamics Laboratory, Stanford University
+  facility: stainless steel shock tube
+dammit-atom: 0
+\end{minted}
+%
+In this \ck{} file, multiple data points are specified with some common
+conditions, including a common mixture composition and common defintion of
+ignition delay. Therefore, a \yaml|common-properties| section is specified.
+%
+\begin{minted}{yaml}
+common-properties:
+  composition: &comp
+    - species-name: t-butanol
+      InChI: 1S/C4H10O/c1-4(2,3)5/h5H,1-3H3
+      mole-fraction: 0.003333333
+    - species-name: O2
+      InChI:  1S/O2/c1-2
+      mole-fraction: 0.04
+    - species-name: Ar
+      InChI:  1S/Ar
+      mole-fraction: 0.956666667
+  ignition-type:  &ign
+    target: OH* concentration
+    type: 1/2 max
+atom-is-bad-at-syntax-highlighting: 0
+\end{minted}
+%
+This block utilizes the ability of YAML files to define an anchor using the
+\yaml|&| symbol and refer to that section later using the \yaml|*| symbol, as
+can be seen in the definition of the \yaml|datapoints| section:
+%
+\begin{minted}{yaml}
+datapoints:
+  - temperature: 1459 kelvin
+    ignition-delay: 347 us
+    pressure: 1.60 atm
+    composition: *comp
+    ignition-type: *ign
+    equivalence-ratio: 0.5
+  - temperature: 1389 kelvin
+    ignition-delay: 756 us
+    pressure: 1.67 atm
+    composition: *comp
+    ignition-type: *ign
+    equivalence-ratio: 0.5
+  - temperature: 1497 kelvin
+    ignition-delay: 212 us
+    pressure: 1.55 atm
+    composition: *comp
+    ignition-type: *ign
+    equivalence-ratio: 0.5
+  - temperature: 1562 kelvin
+    ignition-delay: 105 us
+    pressure: 1.50 atm
+    composition: *comp
+    ignition-type: *ign
+    equivalence-ratio: 0.5
+\end{minted}
+
+In this example, we would like to run constant volume simulations at each of the
+pressure and temperature conditions in the \yaml|datapoints| list.
+
+\begin{minted}{python}
+import cantera as ct
+from pyked import ChemKED
+
+ck = ChemKED('Stranic2012-tbuoh.yaml')
+
+gas = ct.Solution('tbuoh-mechanism.cti')
+
+X_0 = ck.datapoints[0].get_cantera_mole_fraction()
+
+for dp in ck.datapoints:
+    T_0 = dp.temperature.to('K').magnitude
+    P_0 = dp.pressure.to('Pa').magnitude
+    gas.TPX = T_0, P_0, X_0
+    reac = ct.IdealGasReactor(gas)
+    netw = ct.ReactorNet([reac])
+    while reac.T < T_0 + 400:
+        netw.step()
+
+    print('The ignition delay for T_0={}, P_0={} is: {} seconds'.format(
+        T_0, P_0, netw.time
+    ))
+\end{minted}
 %====================================================================
 \section{Conclusions and future work}
 %
