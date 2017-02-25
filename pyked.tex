@@ -294,6 +294,52 @@ molecular weights of the components, so calling
 \yaml|mole-fraction| has been used in the \ck{} file will raise a
 \python|ValueError| (and vice versa for \python|get_cantera_mole_fraction|).
 
+The \python|ChemKED| class has one instance method defined, called
+\python|get_dataframe|. Using this method, the user can get an instance of a
+Pandas~\autocite{pandas} \python|DataFrame| that contains the information in the
+list of \python|DataPoint|s. The user can specify the columns provided in the
+\python|DataFrame| by passing a list of column names to the
+\python|output_columns| argument of the \python|get_dataframe| function. The
+possible columns are not case-sensitive and are:
+
+\noindent\begin{itemize*}
+    \item \python|'Temperature'|
+    \item \python|'Pressure'|
+    \item \python|'Ignition Delay'|
+    \item \python|'Composition'|
+    \item \python|'Equivalence Ratio'|
+    \item \python|'Reference'|
+    \item \python|'Apparatus'|
+    \item \python|'Experiment Type'|
+    \item \python|'File Author'|
+    \item \python|'File Version'|
+    \item \python|'ChemKED Version'|
+\end{itemize*}
+
+In addition, specific fields from the Reference and Apparatus attributes can
+be included by specifying the name after a colon. These options are:
+
+\noindent\begin{itemize*}
+    \item \python|'Reference:Volume'|
+    \item \python|'Reference:Journal'|
+    \item \python|'Reference:DOI'|
+    \item \python|'Reference:Authors'|
+    \item \python|'Reference:Detail'|
+    \item \python|'Reference:Year'|
+    \item \python|'Reference:Pages'|
+    \item \python|'Apparatus:Kind'|
+\end{itemize*}
+
+% This weirdness is necessary to prevent the list from running over the margin
+\noindent\begin{itemize*}
+    \item \python|'Apparatus:Facility'|
+    \item \python|'Apparatus:Institution'|
+\end{itemize*}
+
+Only the first author is printed when \python|Reference| or
+\python|Reference:Authors| is selected because the whole author list may be
+quite long.
+
 \pk{} relies on well-established scientific Python software tools. These include
 NumPy~\autocite{vanderWalt:2011np} for array manipulation,
 Pint~\autocite{Grecco2016} for interpreting and converting between units,
