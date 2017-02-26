@@ -638,18 +638,29 @@ determine one-half the maximum OH* concentration to match the experimental
 definition of ignition delay.
 %====================================================================
 \section{Conclusions and future work}
-%
-\todo[inline]{both to do}
 
-In this article, we introduced the \ck{} data format for describing measurements
-taken from fundamental combustion experiments, as well as the Python-based tool
-\pk{} for working with the format. Currently, \ck{} supports ignition delay data
-from studies using shock tubes and rapid compression machines.
+Recognizing that the community has a need for an open and standardized data
+serialization format, in this paper we have presented the \ck{} data format for
+describing measurements taken from fundamental combustion experiments. \ck{}
+files are formatted using the YAML language and are plain-text, human- and
+machine-readable, and easy to construct.
 
-We are currently incorporating support for specifying uncertainty in all quantities.
-Version 1.0 of \ck{}\slash \pk{} will include ...
-Later versions will support measurements from additional fundamental experiments,
-including laminar flames and flow reactors.
+We have also presented a Python-based tool, \pk{}, for validating and working
+with \ck{} files. \pk{} provides the reference implementation of the validator
+for \ck{} files and utilizes several common packages from Python's scientific
+computing community. \pk{} and \ck{} currently support ignition delay
+measurements from rapid compression machines and shock tubes, including facility
+specific effects from each type of experiment.
+
+\ck{} and \pk{} are currently under active development, and contributions from
+the community are gratefully welcomed. All development occurs under the BSD
+3-clause license and the code is housed on GitHub at
+\url{https://github.com/pr-omethe-us/PyKED}. Future directions for development
+are outlined in the public
+\href{Roadmap}{https://github.com/pr-omethe-us/PyKED/wiki/Roadmap}. The highest
+priority issues are currently adding support for other types of fundamental
+experiments, including flame speed, speciation, and flame extinction
+measurements.
 
 \printbibliography
 
