@@ -23,7 +23,7 @@
 \LoadClass{article}
 
 \RequirePackage{tcolorbox}
-\tcbuselibrary{minted,breakable,skins}
+\tcbuselibrary{minted,breakable,skins,xparse}
 \usemintedstyle{friendly}
 \newmintinline[yaml]{yaml}{}
 \newmintinline[python]{python}{}
@@ -33,6 +33,8 @@
     minted language=python,
     breakable,
     skin=enhanced jigsaw,
+    colback=yellow!10!white,
+    colframe=yellow!25!black,
     pad at break*=2mm
 }
 \newtcblisting{yamlbox}{%
@@ -40,8 +42,44 @@
     minted language=yaml,
     breakable,
     skin=enhanced jigsaw,
+    colback=black!10!white,
+    colframe=black!50!white,
     pad at break*=2mm
 }
+
+\DeclareTotalTCBox{\pybox}{v}{%
+    nobeforeafter,
+    tcbox raise base,
+    arc=0pt,
+    outer arc=0pt,
+    top=0pt,
+    bottom=0pt,
+    left=0mm,
+    right=0mm,
+    leftrule=0pt,
+    rightrule=0pt,
+    toprule=0mm,
+    bottomrule=0mm,
+    boxsep=0.5mm,
+    colback=yellow!10!white
+}{\python|#1|}
+
+\DeclareTotalTCBox{\yabox}{v}{%
+    nobeforeafter,
+    tcbox raise base,
+    arc=0pt,
+    outer arc=0pt,
+    top=0pt,
+    bottom=0pt,
+    left=0mm,
+    right=0mm,
+    leftrule=0pt,
+    rightrule=0pt,
+    toprule=0mm,
+    bottomrule=0mm,
+    boxsep=0.5mm,
+    colback=black!10!white
+}{\yaml|#1|}
 
 \RequirePackage{calc}
 
