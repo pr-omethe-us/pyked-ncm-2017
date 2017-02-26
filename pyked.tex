@@ -77,18 +77,23 @@ CHEMKIN~\autocite{Kee:1996ck} format dominates. Competing standards such as the
 Cantera~\autocite{Cantera:2.3.0} CTI format or FlameMaster~\autocite{FlameMaster:ref,FlameMaster:code}
 lag behind considerably, although use of the former continually grows due to Cantera's
 open availability.
+\todo[inline, author=Bryan]{This reads more as a footnote, maybe consider putting it there instead?}
 % Similarly, % with more space, discuss JANAF/NASA polynomial standard ?
 
-Instead, such data must typically be found in non- or under-documented, nonstandard
+Instead, such data is typically found in under-documented
 comma-separated value files and Excel spreadsheets, or contained in PDF tables
 rather than as supplementary material associated with a paper.
-(In the worst cases, data is only available in figures---and in some cases not at all.)
-\todo{call out specific examples of these...?}{}
+In the worst case, data is only available in figures and must be digitized by the use of software such as WebPlotDigitizer.
+\todo{give a citation here}
+% I think we're already stirring the pot enough, no need to call out
+% specific people
+% \todo{call out specific examples of these...?}{}
 These practices limit the wide use of the valuable, extensive experimental data
 available in the literature. Frenklach~\autocite{Frenklach:2007bm} further explained the
 benefits of standardized, widely available data for combustion.
+\todo[author=Bryan,inline]{It would maybe be good to give a bit of Frenklach's perspective here, rather than just throwing in the citation}
 
-While the community has not widely adopted a standard format or the practice of openly
+While the community has not widely adopted a standard format or the practice of openly \todo{this second bit feels like a slightly separate point, and it makes the second clause here a bit awkward}
 sharing data, some researchers and groups attempted to solve the first problem.
 Most notably, Frenklach developed the PrIMe (\textbf{Pr}ocess \textbf{I}nformatics
 \textbf{M}od\textbf{e}l) data format~\autocite{Frenklach:2007bm,You:2011hy} and an associated
@@ -96,29 +101,31 @@ online database, the PrIMe Data Warehouse~\autocite{PrIMe}. PrIMe files encode f
 combustion experimental data, along with kinetic models and calculated quantities,
 using the Extensible Markup Language (XML) standard.
 
-PrIMe represented an admirable first attempt at standardization, but a number of limitations
+PrIMe~\autocite{Frenklach:2007bm,You:2011hy} represented an admirable \todo{Maybe its just me, but this feels a bit sarcastic} first attempt at standardization, but a number of limitations
 prevented wide adoption: the PrIMe standard does not require or support all information
 needed to simulate an experiment, including a machine-readable definition of ignition or a
 standard way to express the rapid compression machine (RCM) compression process; and
 the XML format, intended more as a markup language than data format, presents a barrier
 to creating and working with files.
+\todo{Also because the standard was closed?}
 
 More recently, Varga et al.~\autocite{Varga2015a,Varga2015b} developed the ReSpecTh standard,
 an XML-based format that builds on PrIMe. While ReSpecTh adds important features, it still
 suffers from the same usability issues as PrIMe.
+\todo{slightly more detail?}
 
-We aim to develop a new, human- and machine-readable data standard for fundamental combustion
+In this work, we present a new, open-source, human- and machine-readable data standard for fundamental combustion
 experiments, \ck{}, and offer tools for easily working with data encoded in this format.
 Niemeyer recently introduced an initial version of the \ck{} format~\autocite{Niemeyer:2016wf},
 and in this work we further formalize and develop the standard. We also discuss a related
 Python software tool for validating and working with \ck{} files: \pk{}.
-Our motivations are similar to some of those of the PrIMe and ReSpecTh teams, although
-less ambitious in scope: enable easy sharing and use of data, for the (primary) purposes of
+Our motivations are similar those of the PrIMe and ReSpecTh teams, although
+less ambitious in scope\todo{its not clear to me how this is less ambitious than the other projects}: the \ck{} project will enable easy sharing and use of fundamental combustion data, for the (primary) purposes of
 developing and validating predictive chemical kinetic models.
-However, those efforts were generally less successful in being adopted---we hope to succeed
-by developing more user-friendly data files and tools for interacting with them.
 Furthermore, we plan to share all data and software openly, and cultivate a community of
 user-developers.
+
+\todo[inline, author=Bryan]{We should probably also mention the CloudFlame project from KAUST.}
 
 %====================================================================
 \section{Overview of format}\label{sec:overview-of-format}
