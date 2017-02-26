@@ -22,10 +22,26 @@
 
 \LoadClass{article}
 
-\RequirePackage{minted}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{minted,breakable,skins}
 \usemintedstyle{friendly}
 \newmintinline[yaml]{yaml}{}
 \newmintinline[python]{python}{}
+
+\newtcblisting{pythonbox}{%
+    listing only,
+    minted language=python,
+    breakable,
+    skin=enhanced jigsaw,
+    pad at break*=2mm
+}
+\newtcblisting{yamlbox}{%
+    listing only,
+    minted language=yaml,
+    breakable,
+    skin=enhanced jigsaw,
+    pad at break*=2mm
+}
 
 \RequirePackage{calc}
 

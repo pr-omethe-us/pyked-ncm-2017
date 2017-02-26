@@ -402,21 +402,21 @@ The \ck{} file that will be used in this example can be found in the
 \python|tests| directory of the PyKED repository,
 \url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_rcm.yaml}.
 Examining that file, we find the first section specifies the information about
-the \ck{} file itself
+the \ck{} file itself:
 %
-\begin{minted}{yaml}
+\begin{yamlbox}
 file-author:
   name: Kyle E Niemeyer
   ORCID: 0000-0003-4425-7097
 file-version: (1, 0)
 chemked-version: 0.0.1
-fake-key: 0 # Again here because Atom's syntax highlighting is busted :(
-\end{minted}
+\end{yamlbox}
 %
 Then, we find the information regarding the article in the literature from which
-this data was taken. In this case, the data point is from the work of \textcite{Mittal2006a}:
+this data was taken. In this case, the data point is from the work of
+\textcite{Mittal2006a}:
 %
-\begin{minted}{yaml}
+\begin{yamlbox}
 reference:
   doi: 10.1002/kin.20180
   authors:
@@ -434,14 +434,15 @@ apparatus:
   kind: rapid compression machine
   institution: Case Western Reserve University
   facility: CWRU RCM
-  fake-key: 0 # Again here because Atom's syntax highlighting is busted :(
-\end{minted}
-
+\end{yamlbox}
+%
 Finally, there is just a single datapoint in this file, which codes the ignition
 delay for the experiment, the mixture composition, the initial temperature,
-pressure,
+pressure, compression time, ignition type, and the volume history that specifies
+how the volume of the reactor varies with time, simulating the compression
+stroke and post-compression processes.
 %
-\begin{minted}{yaml}
+\begin{yamlbox}
 datapoints:
   - temperature: 297.4 kelvin
     ignition-delay: 1.0 ms
@@ -475,87 +476,80 @@ datapoints:
         - [1.00E-003, 5.46608789894E+002]
         - [2.00E-003, 5.43427034574E+002]
         - [3.00E-003, 5.38124109043E+002]
-        - 0 # Dammit Atom
         ...
-\end{minted}
-
-The values for the \yaml|volume-history| are truncated to save space. The user
-can load this file into \pk{} and run a simulation in Cantera with the following
-code:
-
-\begin{minted}{python}
+\end{yamlbox}
+%
+The values for the \yaml|volume-history| are truncated to save space. A user
+might like to load the information from this file to perform a simulation to
+calculate the ignition delay using Cantera. All of the information required to
+perform this simulation is present in the \ck{} file, with the exception of a
+chemical kinetic mechanism for H$_2$/CO combustion.
+%
+\begin{pythonbox}
 import cantera as ct
 from pyked import ChemKED
 
+# Load the ChemKED file and retrieve the first element of the
+# datapoints list, which is an instance of the DataPoint class
 ck = ChemKED('testfile_rcm.yaml')
 dp = ck.datapoints[0]
-
+\end{pythonbox}
+%
+The initial temperature, pressure, and mixture composition can be read from the
+instance of the \python|DataPoint| class. \pk{} uses Pint \python|Quantities| to
+store values with units, while Cantera expects a floating point value in SI
+units as input. Therefore, we use the built-in capabilities of Pint to convert
+the units from those specified in the \ck{} file to SI units:
+%
+\begin{pythonbox}
 T_0 = dp.temperature.to('K').magnitude
 P_0 = dp.pressure.to('Pa').magnitude
 X_0 = dp.get_cantera_mole_fraction()
 
+# Load the mechanism and set the initial state of the mixture
 gas = ct.Solution('h2-co-mechanism.cti')
 gas.TPX = T_0, P_0, X_0
 
+# Create the reactor and the outside environment
 reac = ct.IdealGasReactor(gas)
 env = ct.Reservoir(ct.Solution('air.xml'))
-
+\end{pythonbox}
+%
+To apply the effect of the volume trace to the \python|IdealGasReactor|, a
+\python|Wall| is installed between the reactor and the environment and assigned
+a velocity. Although we do not show the details here, a reference implementation
+of a class that computes a wall velocity given the volume history of the reactor
+is available in CanSen~\autocite{cansen}, in the
+\python|cansen.profile.VolumeProfile| class.
+%
+\begin{pythonbox}
 time = dp.volume_history.time
 volume = dp.volume_history.volume
 ct.Wall(reac, env, velocity=VolumeProfile(time=time, volume=volume))
 
 netw = ct.ReactorNet([reac])
+
+# Integrate for 50 ms
 while netw.time < 0.05:
     netw.step()
-
-\end{minted}
+\end{pythonbox}
+%
+Although not shown in this example, the user would typically store information
+about the \python|IdealGasReactor| (e.g., temperature, pressure, mass fractions)
+at each time step of the integration for post-processing.
 
 \subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
 
-The \ck{} file used in this example can be found online.\todo{add url}{}
-The data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
-shock-tube ignition delays for \textit{tert}-butanol.
-Examining the file, we first find the section that specifies the information about the \ck{} file itself:
-%
-\begin{minted}{yaml}
-file-author:
-  name: Morgan Mayer
-  ORCID: 0000-0001-7137-5721
-file-version: (0,1)
-chemked-version: 0.0.1
-screw-you-atom: 0
-\end{minted}
-%
-Then the reference information:
-%
-\begin{minted}{yaml}
-reference:
-  doi: 10.1016/j.combustflame.2011.08.014
-  authors:
-    - name: Ivo Stranic
-    - name: Deanna P. Chase
-    - name: Joseph T. Harmon
-    - name: Sheng Yang
-    - name: David F. Davidson
-    - name: Ronald K. Hanson
-  journal: Combustion and Flame
-  year: 2011
-  volume: 159
-  pages: 516-527
-  detail:
-experiment-type: ignition delay
-apparatus:
-  kind: shock tube
-  institution: High Temperature Gasdynamics Laboratory, Stanford University
-  facility: stainless steel shock tube
-dammit-atom: 0
-\end{minted}
+The \ck{} file used in this example can be found online.\todo{add url}{} The
+data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
+shock-tube ignition delays for \textit{tert}-butanol. We have omitted the file
+meta information below for space; the format is largely similar to the example in Section~\ref{sec:rcm-modeling}.
 %
 In this \ck{} file, multiple data points are specified with some common
-conditions, including a common mixture composition and common defintion of
+conditions, including a common mixture composition and common definition of
 ignition delay. Therefore, a \yaml|common-properties| section is specified.
 %
-\begin{minted}{yaml}
+\begin{yamlbox}
 common-properties:
   composition: &comp
     - species-name: t-butanol
@@ -570,14 +564,13 @@ common-properties:
   ignition-type:  &ign
     target: OH* concentration
     type: 1/2 max
-atom-is-bad-at-syntax-highlighting: 0
-\end{minted}
+\end{yamlbox}
 %
 This block utilizes the ability of YAML files to define an anchor using the
 \yaml|&| symbol and refer to that section later using the \yaml|*| symbol, as
 can be seen in the definition of the \yaml|datapoints| section:
 %
-\begin{minted}{yaml}
+\begin{yamlbox}
 datapoints:
   - temperature: 1459 kelvin
     ignition-delay: 347 us
@@ -603,12 +596,14 @@ datapoints:
     composition: *comp
     ignition-type: *ign
     equivalence-ratio: 0.5
-\end{minted}
+\end{yamlbox}
 
 In this example, we would like to run constant volume simulations at each of the
-pressure and temperature conditions in the \yaml|datapoints| list.
-
-\begin{minted}{python}
+pressure and temperature conditions in the \yaml|datapoints| list. Once again,
+the \ck{} file specifies all the information required for the simulations except
+for the chemical kinetic mechanism.
+%
+\begin{pythonbox}
 import cantera as ct
 from pyked import ChemKED
 
@@ -616,21 +611,31 @@ ck = ChemKED('Stranic2012-tbuoh.yaml')
 
 gas = ct.Solution('tbuoh-mechanism.cti')
 
+# Since the composition is specified by the common-properties,
+# just take the composition of the first DataPoint
 X_0 = ck.datapoints[0].get_cantera_mole_fraction()
 
+# Loop through each of the DataPoints
 for dp in ck.datapoints:
     T_0 = dp.temperature.to('K').magnitude
     P_0 = dp.pressure.to('Pa').magnitude
     gas.TPX = T_0, P_0, X_0
     reac = ct.IdealGasReactor(gas)
     netw = ct.ReactorNet([reac])
+    # Define ignition delay as T_0 + 400 K
     while reac.T < T_0 + 400:
         netw.step()
 
     print('The ignition delay for T_0={}, P_0={} is: {} seconds'.format(
         T_0, P_0, netw.time
     ))
-\end{minted}
+\end{pythonbox}
+%
+Note that the ignition delay in this example is defined as equal to $T_0 +
+400\,\mathrm{K}$, a simplified definition used for this example. In general, the
+user could post-process the concentration information from the simulation to
+determine one-half the maximum OH* concentration to match the experimental
+definition of ignition delay.
 %====================================================================
 \section{Conclusions and future work}
 %
