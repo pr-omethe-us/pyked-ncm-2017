@@ -70,20 +70,20 @@ fuel chemistry and validating chemical kinetic models. Important measured quanti
 include autoignition delay times, laminar flame speeds, and species profiles.
 However, despite both the importance and abundance of such information in the literature,
 the combustion\slash chemical kinetics community lacks an accepted, commonly used
-standard for recording and sharing data from fundamental combustion experiments.
-
+standard for recording and sharing data from fundamental combustion experiments.\footnote{
 Interestingly, this contrasts the situation for chemical kinetic models, where the
 CHEMKIN~\autocite{Kee:1996ck} format dominates. Competing standards such as the
 Cantera~\autocite{Cantera:2.3.0} CTI format or FlameMaster~\autocite{FlameMaster:ref,FlameMaster:code}
 lag behind considerably, although use of the former continually grows due to Cantera's
 open availability.
-\todo[inline, author=Bryan]{This reads more as a footnote, maybe consider putting it there instead?}
 % Similarly, % with more space, discuss JANAF/NASA polynomial standard ?
+}
 
 Instead, such data is typically found in under-documented
 comma-separated value files and Excel spreadsheets, or contained in PDF tables
 rather than as supplementary material associated with a paper.
-In the worst case, data is only available in figures and must be digitized by the use of software such as WebPlotDigitizer.
+In the worst case, data is only available in figures and must be digitized by the
+use of software such as WebPlotDigitizer.
 \todo{give a citation here}
 % I think we're already stirring the pot enough, no need to call out
 % specific people
@@ -91,41 +91,64 @@ In the worst case, data is only available in figures and must be digitized by th
 These practices limit the wide use of the valuable, extensive experimental data
 available in the literature. Frenklach~\autocite{Frenklach:2007bm} further explained the
 benefits of standardized, widely available data for combustion.
-\todo[author=Bryan,inline]{It would maybe be good to give a bit of Frenklach's perspective here, rather than just throwing in the citation}
+In brief, much of combustion\slash chemical kinetics research drives towards the ultimate goal
+of developing predictive kinetic models---and ultimately this depends on a community
+infrastructure for data and methods.
 
-While the community has not widely adopted a standard format or the practice of openly \todo{this second bit feels like a slightly separate point, and it makes the second clause here a bit awkward}
-sharing data, some researchers and groups attempted to solve the first problem.
+The combustion community has not yet widely adopted a standard format for experimental data,
+but some researchers and groups attempted to solve this problem.\todo[author=Kyle]{this still doesn't read quite right}{}
 Most notably, Frenklach developed the PrIMe (\textbf{Pr}ocess \textbf{I}nformatics
 \textbf{M}od\textbf{e}l) data format~\autocite{Frenklach:2007bm,You:2011hy} and an associated
 online database, the PrIMe Data Warehouse~\autocite{PrIMe}. PrIMe files encode fundamental
 combustion experimental data, along with kinetic models and calculated quantities,
 using the Extensible Markup Language (XML) standard.
 
-PrIMe~\autocite{Frenklach:2007bm,You:2011hy} represented an admirable \todo{Maybe its just me, but this feels a bit sarcastic} first attempt at standardization, but a number of limitations
-prevented wide adoption: the PrIMe standard does not require or support all information
+PrIMe~\autocite{Frenklach:2007bm,You:2011hy} represents an admirable \todo{Maybe its just me, but this feels a bit sarcastic} first attempt at standardization, but a number of limitations
+prevent wide adoption: the PrIMe standard does not require or support all information
 needed to simulate an experiment, including a machine-readable definition of ignition or a
 standard way to express the rapid compression machine (RCM) compression process; and
 the XML format, intended more as a markup language than data format, presents a barrier
 to creating and working with files.
-\todo{Also because the standard was closed?}
+Furthermore, the closed and opaque nature of the PrIMe standard and associated Data Warehouse
+limit contributions and community development of these and compatible tools.
 
 More recently, Varga et al.~\autocite{Varga2015a,Varga2015b} developed the ReSpecTh standard,
-an XML-based format that builds on PrIMe. While ReSpecTh adds important features, it still
-suffers from the same usability issues as PrIMe.
-\todo{slightly more detail?}
+an XML-based format that builds on PrIMe. ReSpecTh adds important features that make files
+better standalone representations of experimental data---i.e., more informative by themselves
+rather than in concert with a larger system.
+For example, where PrIMe used internal bibliographic references, ReSpecTh added a field for
+typical bibliographic data. The ReSpecTh standard also provides machine-readable formats
+for better specifying ignition experiments, including a definition of autoignition and
+either volume histories for RCMs or pressure-rise in shock tubes.
+However, being XML-based, ReSpecTh experimental files still suffer from the same usability
+issues as PrIMe, and the standard remains closed.
+\todo[author=Kyle,inline]{how's this?}
+
+Olm and colleagues used their ReSpecTh-based database to quantify the performance of literature
+hydrogen~\autocite{Olm:2014gn} and syngas~\autocite{Olm:2015ch} kinetic models, and more recently
+develop improved models for hydrogen\slash syngas~\autocite{Varga:2016gj} and
+ethanol~\autocite{Olm:2016et}. In all four cases, they converted numerous experimental datasets
+from the literature into the ReSpecTh standard.
+
+Building on the lack of an accepted data standard, limited examples exist of open sharing
+of such data. The Clean Combustion Research Center at King Abdullah University of Science
+and Technology (KAUST) started the CloudFlame project in 2013~\autocite{Goteng:2013cf}\todo{a few more refs needed}{}
+(\url{https://cloudflame.kaust.edu.sa}). CloudFlame does serve as an openly accessible database
+for experimental data, available in a standard CSV format, but also goes beyond this by
+providing a cloud infrastructure for running simulations based on stored models and data.
+While an admirable (and useful) effort, CloudFlame represents another closed system controlled
+by a specific institution rather than the community.
 
 In this work, we present a new, open-source, human- and machine-readable data standard for fundamental combustion
 experiments, \ck{}, and offer tools for easily working with data encoded in this format.
 Niemeyer recently introduced an initial version of the \ck{} format~\autocite{Niemeyer:2016wf},
 and in this work we further formalize and develop the standard. We also discuss a related
 Python software tool for validating and working with \ck{} files: \pk{}.
-Our motivations are similar those of the PrIMe and ReSpecTh teams, although
-less ambitious in scope\todo{its not clear to me how this is less ambitious than the other projects}: the \ck{} project will enable easy sharing and use of fundamental combustion data, for the (primary) purposes of
-developing and validating predictive chemical kinetic models.
-Furthermore, we plan to share all data and software openly, and cultivate a community of
-user-developers.
-
-\todo[inline, author=Bryan]{We should probably also mention the CloudFlame project from KAUST.}
+Our motivations are similar those of the PrIMe and ReSpecTh teams:
+the \ck{} project will enable easy sharing and use of fundamental combustion data,
+for the (primary) purposes of developing and validating predictive chemical kinetic models.
+However, we make usability a major design focus, and plan to share all data and software openly
+to cultivate a community of user-contributors.
 
 %====================================================================
 \section{Overview of format}\label{sec:overview-of-format}
@@ -163,6 +186,9 @@ must be specified. The \yaml|author| mapping contains the following fields:
 %
 More generally for the meta information, the required keys in this section
 are:
+\todo[author=Kyle,inline]{one difference ReSpecTh called out from PrIMe is that
+the latter added a copyright line in all files, claiming copyright on the data...
+do we want to be incendiary and point out that you can't copyright data?}
 %
 \begin{itemize}
     \item \yaml|file-author| (required, \yaml|author|-type mapping): The author
