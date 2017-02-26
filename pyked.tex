@@ -103,13 +103,17 @@ online database, the PrIMe Data Warehouse~\autocite{PrIMe}. PrIMe files encode f
 combustion experimental data, along with kinetic models and calculated quantities,
 using the Extensible Markup Language (XML) standard.
 
-PrIMe~\autocite{Frenklach:2007bm,You:2011hy} represents an admirable \todo{Maybe its just me, but this feels a bit sarcastic} first attempt at standardization, but a number of limitations
-prevent wide adoption: the PrIMe standard does not require or support all information
+PrIMe~\autocite{Frenklach:2007bm,You:2011hy} has a number of features that make it
+a strong standardization format, but suffers from two primary flaws that
+prevent wide adoption: (1) the PrIMe standard does not require or support all information
 needed to simulate an experiment, including a machine-readable definition of ignition or a
-standard way to express the rapid compression machine (RCM) compression process; and
+standard way to express the rapid compression machine (RCM) compression process; (2) and
 the XML format, intended more as a markup language than data format, presents a barrier
 to creating and working with files.
-Furthermore, the closed and opaque nature of the PrIMe standard and associated Data Warehouse
+Furthermore, the focus on using internal identifiers for bibliographic references and
+species\slash reactions, rather than standard identifiers (e.g., DOIs for scholarly products
+and InCHI or SMILES for species), limits usability outside the PrIMe ecosystem.
+Finally, the closed and opaque nature of the PrIMe standard and associated Data Warehouse
 limit contributions and community development of these and compatible tools.
 
 More recently, Varga et al.~\autocite{Varga2015a,Varga2015b} developed the ReSpecTh standard,
@@ -122,13 +126,12 @@ for better specifying ignition experiments, including a definition of autoigniti
 either volume histories for RCMs or pressure-rise in shock tubes.
 However, being XML-based, ReSpecTh experimental files still suffer from the same usability
 issues as PrIMe, and the standard remains closed.
-\todo[author=Kyle,inline]{how's this?}
-
 Olm and colleagues used their ReSpecTh-based database to quantify the performance of literature
 hydrogen~\autocite{Olm:2014gn} and syngas~\autocite{Olm:2015ch} kinetic models, and more recently
 develop improved models for hydrogen\slash syngas~\autocite{Varga:2016gj} and
 ethanol~\autocite{Olm:2016et}. In all four cases, they converted numerous experimental datasets
 from the literature into the ReSpecTh standard.
+\todo[author=Kyle,inline]{how's this?}
 
 Building on the lack of an accepted data standard, limited examples exist of open sharing
 of such data. The Clean Combustion Research Center at King Abdullah University of Science
