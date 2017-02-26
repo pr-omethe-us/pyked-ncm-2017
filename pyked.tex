@@ -206,8 +206,8 @@ do we want to be incendiary and point out that you can't copyright data?}
         journal
         \item \yaml|year| (required, integer): The year of publication
     \end{itemize}
-    \item \yaml|experiment-type| (required, string): One of \yaml|ignition
-    delay| or \yaml|flame speed|
+    \item \yaml|experiment-type| (required, string): One of
+    \yaml|ignition delay| or \yaml|flame speed|
     \item \yaml|apparatus| (required, string): The type of apparatus used to
     perform the experiment
 \end{itemize}
@@ -221,8 +221,8 @@ the sequence:
     \item \yaml|temperature| (required, sequence): The temperature of the
     experiment, with units
     \item \yaml|ignition-delay| (optional, sequence): The ignition delay of the
-    experiment, with units, if the \yaml|experiment-type| is \yaml|ignition
-    delay|
+    experiment, with units, if the \yaml|experiment-type| is
+    \yaml|ignition delay|
     \item \yaml|flame-speed| (optional, sequence): The flame speed of the
     experiment, with units, if the \yaml|experiment-type| is \yaml|flame speed|
     \item \yaml|pressure| (required, string): The pressure of the experiment,
@@ -278,7 +278,7 @@ datapoints:
 \end{minted}
 
 %====================================================================
-\section{PyKED Architecture}
+\section{PyKED architecture}
 %
 \pk{} is a Python package that currently provides the reference implementation
 of the interface to \ck{} files. \pk{} reads \ck{} files, validates their
