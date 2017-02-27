@@ -80,17 +80,17 @@ although use of the former continually grows due to Cantera's open availability.
 % Similarly, % with more space, discuss JANAF/NASA polynomial standard ?
 }
 
-Instead, such data is typically found in under-documented comma-separated value (CSV)
-files and Excel spreadsheets, or contained in PDF tables rather than as
+Instead, such data is typically found in under-documented comma-separated value
+(CSV) files and Excel spreadsheets, or contained in PDF tables rather than as
 supplementary material associated with a paper. In the worst case, data is only
 available in figures and must be digitized by the use of software such as
 WebPlotDigitizer~\autocite{WebPlotDigitizer}. These practices limit the wide use
 of the valuable, extensive experimental data available in the literature.
-Frenklach~\autocite{Frenklach:2007bm} further explained the benefits of
-standardized, widely available data for combustion. In brief, much of
-fundamental combustion\slash chemical kinetics research drives towards the
-ultimate goal of developing predictive kinetic models---and ultimately this
-depends on a \emph{community} infrastructure for data and methods.
+\textcite{Frenklach:2007bm} further explained the benefits of standardized,
+widely available data for combustion. In brief, much of fundamental
+combustion\slash chemical kinetics research drives towards the ultimate goal of
+developing predictive kinetic models---and ultimately this depends on a
+\emph{community} infrastructure for data and methods.
 
 The combustion community has not yet widely adopted a standard format for
 experimental data, but some researchers and groups have proposed solutions to
@@ -104,7 +104,7 @@ quantities, using the Extensible Markup Language (XML) standard.
 PrIMe~\autocite{Frenklach:2007bm,You:2011hy} has a number of features that make
 it a strong standardization format, but it suffers from several flaws that
 prevent wide adoption. First, the PrIMe standard does not require or support all
-information needed to simulate an experiment, including a machine-readable
+the information needed to simulate an experiment, including a machine-readable
 definition of ignition or a standard way to express detailed facility specific
 effects important to properly simulating certain experiments. Second, the XML
 format is intended to be a markup language rather than a data format, and
@@ -236,8 +236,9 @@ are:
     perform the experiment
 \end{itemize}
 
-In the \ck{} file, the experimental data is encoded in a sequence of mappings,
-with the following information required in each element of the sequence:
+The second section of the file encodes the experimental data. In the \ck{} file,
+this is done in a sequence of mappings, with the following information required
+in each element of the sequence:
 %
 \begin{itemize}
     \item \yabox{temperature} (required, sequence): The temperature of the
@@ -307,10 +308,13 @@ their structure and content, and allows the user to interact with the data conta
 in the \ck{} file.
 
 The basic user interface to the \ck{} file in \pk{} is through the
-\pybox{ChemKED} class. The \pybox{ChemKED} class constructor takes the file
-name of a \ck{} file or a Python dictionary containing the contents of a \ck{}
-file as its argument. When the file or dictionary is loaded, it is validated to
-have the correct format by the Python package Cerberus \autocite{cerberus}.
+\pybox{ChemKED} class. The \pybox{ChemKED} class constructor takes the file name
+of a \ck{} file or a Python dictionary containing the contents of a \ck{} file
+as its argument. When the file or dictionary is loaded, it is validated to have
+the correct format by the Python package Cerberus \autocite{cerberus}. The
+schema used for validation of the \ck{} files is available publicly in the
+source code repository for
+PyKED\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/chemked_schema.yaml}}.
 
 The fields of the \ck{} file are stored as instance attributes of the
 \pybox{ChemKED} class. The following attributes are available:
@@ -332,7 +336,8 @@ sequence). Similar to the \pybox{ChemKED} class, information in the
 %
 \begin{itemize}
     \item \pybox{equivalence_ratio}: The value of the equivalence ratio, if
-    present. For informational purposes only, no validation is done of the value
+    present. For informational purposes only, no validation is done of the
+    value.
     \item \pybox{ignition_delay}, \pybox{temperature}, \pybox{pressure},
     \pybox{pressure_rise}: The value of these data are stored as instances of
     the \pybox{Quantity} class from the Pint \autocite{Grecco2016} package,
@@ -348,9 +353,11 @@ sequence). Similar to the \pybox{ChemKED} class, information in the
     \item \pybox{volume_history}: If the \yabox{volume-history} of an RCM
     experiment is provided in the \ck{} file, it is stored in this attribute as
     a \pybox{namedtuple}, and the actual values are stored in NumPy arrays
-    \autocite{vanderWalt:2011np}.
+    \autocite{vanderWalt:2011np}
     \item \pybox{compression_time}: If the \ck{} file encodes an RCM experiment,
     the length of the compression stroke may be included
+    \item \pybox{ignition_type}: A dictionary specifying the method of the
+    measurement of ignition delay
 \end{itemize}
 
 The \pybox{DataPoint} class has two instance methods defined, called
@@ -578,7 +585,7 @@ at each time step of the integration for post-processing.
 
 \subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
 
-The \ck{} file used in this example can be found in the \pybox{tests} directory of the \pk{} 
+The \ck{} file used in this example can be found in the \pybox{tests} directory of the \pk{}
 repository\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_st_p5.yaml}}.
 The data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
 shock-tube ignition delays for \textit{tert}-butanol. We have omitted the file
@@ -678,10 +685,10 @@ definition of ignition delay.
 %====================================================================
 \section{Conclusions and future work}
 
-In this paper we presented the \ck{} data format for describing measurements
-taken from fundamental combustion experiments, recognizing
-that the community has a need for an open and standardized data serialization format.
-\ck{} files are formatted using the YAML language and are plain-text, human- and
+In this paper, we presented the \ck{} data format for describing measurements
+taken from fundamental combustion experiments, recognizing that the community
+has a need for an open and standardized data serialization format. \ck{} files
+are formatted using the YAML language and are plain-text, human- and
 machine-readable, and easy to construct.
 
 We also presented a Python-based tool, \pk{}, for validating and working
@@ -692,12 +699,13 @@ measurements from rapid compression machines and shock tubes, including
 facility-specific effects from each type of experiment.
 
 \ck{} and \pk{} are currently under active development, and contributions from
-the community are welcomed. All development occurs under the BSD
-3-clause license and the code is housed on GitHub at
+the community are welcomed. All development occurs under the BSD 3-clause
+license and the code is housed on GitHub at
 \url{https://github.com/pr-omethe-us/PyKED}. Future directions for development
-are outlined in the public roadmap\footnote{\url{https://github.com/pr-omethe-us/PyKED/wiki/Roadmap}}.
-The highest priority issues are currently adding support for other types of fundamental
-experiments, including flame speed, speciation, and flame extinction
+are outlined in the public
+roadmap\footnote{\url{https://github.com/pr-omethe-us/PyKED/wiki/Roadmap}}. The
+highest priority issues are currently adding support for other types of
+fundamental experiments, including flame speed, speciation, and flame extinction
 measurements.
 
 \printbibliography
