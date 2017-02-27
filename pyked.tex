@@ -65,92 +65,105 @@ stirred reactor, extinction, and speciation measurements.
 %====================================================================
 \section{Introduction}
 %
-Fundamental combustion experiments provide vital data for understanding
-fuel chemistry and validating chemical kinetic models. Important measured quantities
-include autoignition delay times, laminar flame speeds, and species profiles.
-However, despite both the importance and abundance of such information in the literature,
-the combustion\slash chemical kinetics community lacks an accepted, commonly used
-standard for recording and sharing data from fundamental combustion experiments.\footnote{
-Interestingly, this contrasts the situation for chemical kinetic models, where the
-CHEMKIN~\autocite{Kee:1996ck} format dominates. Competing standards such as the
-Cantera~\autocite{Cantera:2.3.0} CTI format or FlameMaster~\autocite{FlameMaster:ref,FlameMaster:code}
-lag behind considerably, although use of the former continually grows due to Cantera's
-open availability.
+Fundamental combustion experiments provide vital data for understanding fuel
+chemistry and validating chemical kinetic models. Important measured quantities
+include autoignition delay times, laminar flame speeds, and species profiles,
+among others. However, despite both the importance and abundance of such
+information in the literature, the combustion\slash chemical kinetics community
+lacks an accepted, commonly used standard for recording and sharing data from
+fundamental combustion experiments.\footnote{ Interestingly, this contrasts the
+situation for chemical kinetic models, where the CHEMKIN~\autocite{Kee:1996ck}
+format dominates. Competing standards such as the
+Cantera~\autocite{Cantera:2.3.0} CTI format or
+FlameMaster~\autocite{FlameMaster:ref,FlameMaster:code} lag behind considerably,
+although use of the former continually grows due to Cantera's open availability.
 % Similarly, % with more space, discuss JANAF/NASA polynomial standard ?
 }
 
-Instead, such data is typically found in under-documented
-comma-separated value files and Excel spreadsheets, or contained in PDF tables
-rather than as supplementary material associated with a paper.
-In the worst case, data is only available in figures and must be digitized by the
-use of software such as WebPlotDigitizer~\autocite{WebPlotDigitizer}.
-% I think we're already stirring the pot enough, no need to call out
-% specific people
-% \todo{call out specific examples of these...?}{}
-These practices limit the wide use of the valuable, extensive experimental data
-available in the literature. Frenklach~\autocite{Frenklach:2007bm} further explained the
-benefits of standardized, widely available data for combustion.
-In brief, much of combustion\slash chemical kinetics research drives towards the ultimate goal
-of developing predictive kinetic models---and ultimately this depends on a community
-infrastructure for data and methods.
+Instead, such data is typically found in under-documented comma-separated value
+files and Excel spreadsheets, or contained in PDF tables rather than as
+supplementary material associated with a paper. In the worst case, data is only
+available in figures and must be digitized by the use of software such as
+WebPlotDigitizer~\autocite{WebPlotDigitizer}. These practices limit the wide use
+of the valuable, extensive experimental data available in the literature.
+Frenklach~\autocite{Frenklach:2007bm} further explained the benefits of
+standardized, widely available data for combustion. In brief, much of
+fundamental combustion\slash chemical kinetics research drives towards the
+ultimate goal of developing predictive kinetic models---and ultimately this
+depends on a \emph{community} infrastructure for data and methods.
 
-The combustion community has not yet widely adopted a standard format for experimental data,
-but some researchers and groups attempted to solve this problem.\todo[author=Kyle]{this still doesn't read quite right}{}
-Most notably, Frenklach developed the PrIMe (\textbf{Pr}ocess \textbf{I}nformatics
-\textbf{M}od\textbf{e}l) data format~\autocite{Frenklach:2007bm,You:2011hy} and an associated
-online database, the PrIMe Data Warehouse~\autocite{PrIMe}. PrIMe files encode fundamental
-combustion experimental data, along with kinetic models and calculated quantities,
-using the Extensible Markup Language (XML) standard.
+The combustion community has not yet widely adopted a standard format for
+experimental data, but some researchers and groups have proposed solutions to
+this problem. Most notably, Frenklach developed the PrIMe (\textbf{Pr}ocess
+\textbf{I}nformatics \textbf{M}od\textbf{e}l) data
+format~\autocite{Frenklach:2007bm,You:2011hy} and an associated online database,
+the PrIMe Data Warehouse~\autocite{PrIMe}. PrIMe files encode fundamental
+combustion experimental data, along with kinetic models and calculated
+quantities, using the Extensible Markup Language (XML) standard.
 
-PrIMe~\autocite{Frenklach:2007bm,You:2011hy} has a number of features that make it
-a strong standardization format, but suffers from two primary flaws that
-prevent wide adoption: (1) the PrIMe standard does not require or support all information
-needed to simulate an experiment, including a machine-readable definition of ignition or a
-standard way to express the rapid compression machine (RCM) compression process; (2) and
-the XML format, intended more as a markup language than data format, presents a barrier
-to creating and working with files.
-Furthermore, the focus on using internal identifiers for bibliographic references and
-species\slash reactions, rather than standard identifiers (e.g., DOIs for scholarly products
-and InCHI or SMILES for species), limits usability outside the PrIMe ecosystem.
-Finally, the closed and opaque nature of the PrIMe standard and associated Data Warehouse
-limit contributions and community development of these and compatible tools.
+PrIMe~\autocite{Frenklach:2007bm,You:2011hy} has a number of features that make
+it a strong standardization format, but it suffers from several flaws that
+prevent wide adoption. First, the PrIMe standard does not require or support all
+information needed to simulate an experiment, including a machine-readable
+definition of ignition or a standard way to express detailed facility specific
+effects important to properly simulating certain experiments. Second, the XML
+format is intended to be a markup language rather than a data format, and
+presents a barrier to creating and working with database files. Furthermore, the
+focus on using internal identifiers for bibliographic references and
+species\slash reactions, rather than standard identifiers (e.g., DOIs for
+scholarly products and InCHI or SMILES for species), limits usability outside
+the PrIMe ecosystem. Finally, the closed and opaque nature of the PrIMe standard
+and associated Data Warehouse limit contributions and community development of
+the PrIMe standard and compatible data files and tools.
 
-More recently, Varga et al.~\autocite{Varga2015a,Varga2015b} developed the ReSpecTh standard,
-an XML-based format that builds on PrIMe. ReSpecTh adds important features that make files
-better standalone representations of experimental data---i.e., more informative by themselves
-rather than in concert with a larger system.
-For example, where PrIMe used internal bibliographic references, ReSpecTh added a field for
-typical bibliographic data. The ReSpecTh standard also provides machine-readable formats
-for better specifying ignition experiments, including a definition of autoignition and
-either volume histories for RCMs or pressure-rise in shock tubes.
-However, being XML-based, ReSpecTh experimental files still suffer from the same usability
-issues as PrIMe, and the standard remains closed.
-Olm and colleagues used their ReSpecTh-based database to quantify the performance of literature
-hydrogen~\autocite{Olm:2014gn} and syngas~\autocite{Olm:2015ch} kinetic models, and more recently
-develop improved models for hydrogen\slash syngas~\autocite{Varga:2016gj} and
-ethanol~\autocite{Olm:2016et}. In all four cases, they converted numerous experimental datasets
-from the literature into the ReSpecTh standard.
-\todo[author=Kyle,inline]{how's this?}
+More recently, Varga et al.~\autocite{Varga2015a,Varga2015b} developed the
+ReSpecTh standard, which builds on the PrIMe format. ReSpecTh adds important
+features that make files better standalone representations of experimental
+data---i.e., more informative by themselves rather than in concert with a larger
+system. For example, where PrIMe uses internal bibliographic references,
+ReSpecTh adds a field for typical bibliographic data. The ReSpecTh standard also
+provides machine-readable formats for specifying ignition experiments, including
+a field for the definition of autoignition and the ability to specify
+facility-specific effects. However, ReSpecTh experimental files are another
+XML-based format, and as such, suffer from the same usability issues as PrIMe.
+Moreover, the standard remains closed, requiring potential users to register
+with the standard's authors to access the specification.
 
-Building on the lack of an accepted data standard, limited examples exist of open sharing
-of such data. The Clean Combustion Research Center at King Abdullah University of Science
-and Technology (KAUST) started the CloudFlame project in 2013~\autocite{Goteng:2013cf}\todo{a few more refs needed}{}
-(\url{https://cloudflame.kaust.edu.sa}). CloudFlame does serve as an openly accessible database
-for experimental data, available in a standard CSV format, but also goes beyond this by
-providing a cloud infrastructure for running simulations based on stored models and data.
-While an admirable (and useful) effort, CloudFlame represents another closed system controlled
-by a specific institution rather than the community.
+Nonetheless, the usefulness of databases of fundamental combustion experiments
+has been shown to be quite useful. For instance, Olm and colleagues used their
+ReSpecTh-based database to quantify the performance of literature
+hydrogen~\autocite{Olm:2014gn} and syngas~\autocite{Olm:2015ch} kinetic models,
+and more recently develop improved models for hydrogen\slash
+syngas~\autocite{Varga:2016gj} and ethanol~\autocite{Olm:2016et}. In all four
+cases, they converted numerous experimental datasets from the literature into
+the ReSpecTh standard.
 
-In this work, we present a new, open-source, human- and machine-readable data standard for fundamental combustion
-experiments, \ck{}, and offer tools for easily working with data encoded in this format.
-Niemeyer recently introduced an initial version of the \ck{} format~\autocite{Niemeyer:2016wf},
-and in this work we further formalize and develop the standard. We also discuss a related
-Python software tool for validating and working with \ck{} files: \pk{}.
-Our motivations are similar those of the PrIMe and ReSpecTh teams:
-the \ck{} project will enable easy sharing and use of fundamental combustion data,
-for the (primary) purposes of developing and validating predictive chemical kinetic models.
-However, we make usability a major design focus, and plan to share all data and software openly
-to cultivate a community of user-contributors.
+Despite the development of these standards, limited examples of open data
+\emph{sharing} utilizing the formats is available in the literature. To the best
+of our knowledge, the largest such such publicly available database is hosted by
+the Clean Combustion Research Center at King Abdullah University of Science and
+Technology (KAUST) and is known as CloudFlame
+(\url{https://cloudflame.kaust.edu.sa}). Started in
+2013~\autocite{Goteng:2013cf},\todo{a few more refs needed}{} CloudFlame serves
+as an openly accessible database for experimental data, available in a standard
+CSV format, and also provides a cloud infrastructure for running simulations
+based on stored models and data. While an admirable and useful effort,
+CloudFlame, like ReSpecTh and PrIMe, is a closed system controlled by a single
+institution rather than by the community at large.
+
+Therefore, we believe there is a need for an open, community focused and
+developed, combustion\slash chemical kinetics data format. In this work, we
+present a new, open-source, human- and machine-readable data standard for
+fundamental combustion experiments, \ck{}, and offer tools for easily working
+with data encoded in this format. Niemeyer recently introduced an initial
+version of the \ck{} format~\autocite{Niemeyer:2016wf}, and in this work we
+further formalize and develop the standard. We also discuss a related Python
+software tool for validating and working with \ck{} files: \pk{}. Our
+motivations are similar those of the PrIMe and ReSpecTh teams: the \ck{} project
+will enable easy sharing and use of fundamental combustion data, for the
+(primary) purposes of developing and validating predictive chemical kinetic
+models. However, we make usability a major design focus, and plan to share all
+data and software openly to cultivate a community of user-contributors.
 
 %====================================================================
 \section{Overview of ChemKED format}\label{sec:overview-of-format}
@@ -681,7 +694,7 @@ measurements from rapid compression machines and shock tubes, including
 facility-specific effects from each type of experiment.
 
 \ck{} and \pk{} are currently under active development, and contributions from
-the community are gratefully welcomed. All development occurs under the BSD
+the community are welcomed. All development occurs under the BSD
 3-clause license and the code is housed on GitHub at
 \url{https://github.com/pr-omethe-us/PyKED}. Future directions for development
 are outlined in the public
