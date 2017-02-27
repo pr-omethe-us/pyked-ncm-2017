@@ -71,7 +71,7 @@ include autoignition delay times, laminar flame speeds, and species profiles,
 among others. However, despite both the importance and abundance of such
 information in the literature, the combustion\slash chemical kinetics community
 lacks an accepted, commonly used standard for recording and sharing data from
-fundamental combustion experiments.\footnote{ Interestingly, this contrasts the
+fundamental combustion experiments.\footnote{Interestingly, this contrasts the
 situation for chemical kinetic models, where the CHEMKIN~\autocite{Kee:1996ck}
 format dominates. Competing standards such as the
 Cantera~\autocite{Cantera:2.3.0} CTI format or
@@ -80,7 +80,7 @@ although use of the former continually grows due to Cantera's open availability.
 % Similarly, % with more space, discuss JANAF/NASA polynomial standard ?
 }
 
-Instead, such data is typically found in under-documented comma-separated value
+Instead, such data is typically found in under-documented comma-separated value (CSV)
 files and Excel spreadsheets, or contained in PDF tables rather than as
 supplementary material associated with a paper. In the worst case, data is only
 available in figures and must be digitized by the use of software such as
@@ -139,8 +139,8 @@ cases, they converted numerous experimental datasets from the literature into
 the ReSpecTh standard.
 
 Despite the development of these standards, limited examples of open data
-\emph{sharing} utilizing the formats is available in the literature. To the best
-of our knowledge, the largest such such publicly available database is hosted by
+\emph{sharing} using the formats exist in the literature. To the best
+of our knowledge, the largest such publicly available database is hosted by
 the Clean Combustion Research Center at King Abdullah University of Science and
 Technology (KAUST) and is known as CloudFlame
 (\url{https://cloudflame.kaust.edu.sa}). Started in
@@ -151,7 +151,7 @@ based on stored models and data. While an admirable and useful effort,
 CloudFlame, like ReSpecTh and PrIMe, is a closed system controlled by a single
 institution rather than by the community at large.
 
-Therefore, we believe there is a need for an open, community focused and
+Therefore, we believe there remains a need for an open, community-focused and
 developed, combustion\slash chemical kinetics data format. In this work, we
 present a new, open-source, human- and machine-readable data standard for
 fundamental combustion experiments, \ck{}, and offer tools for easily working
@@ -212,9 +212,6 @@ fields:
 %
 More generally for the meta information, the required keys in this section
 are:
-\todo[author=Kyle,inline]{one difference ReSpecTh called out from PrIMe is that
-the latter added a copyright line in all files, claiming copyright on the data...
-do we want to be incendiary and point out that you can't copyright data?}
 %
 \begin{itemize}
     \item \yabox{file-author} (required, \yabox{author}-type mapping): The
@@ -697,9 +694,8 @@ facility-specific effects from each type of experiment.
 the community are welcomed. All development occurs under the BSD
 3-clause license and the code is housed on GitHub at
 \url{https://github.com/pr-omethe-us/PyKED}. Future directions for development
-are outlined in the public
-\href{Roadmap}{https://github.com/pr-omethe-us/PyKED/wiki/Roadmap}. The highest
-priority issues are currently adding support for other types of fundamental
+are outlined in the public roadmap\footnote{\url{https://github.com/pr-omethe-us/PyKED/wiki/Roadmap}}.
+The highest priority issues are currently adding support for other types of fundamental
 experiments, including flame speed, speciation, and flame extinction
 measurements.
 
