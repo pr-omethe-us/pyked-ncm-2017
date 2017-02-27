@@ -302,8 +302,8 @@ datapoints:
 \section{PyKED architecture}\label{sec:pyked-architecture}
 %
 \pk{} is a Python package that currently provides the reference implementation
-of the interface to \ck{} files. \pk{} reads \ck{} files, validates their
-structure and content, and allows the user to interact with the data contained
+of the interface to \ck{} files~\autocite{PyKED}. \pk{} reads \ck{} files, validates
+their structure and content, and allows the user to interact with the data contained
 in the \ck{} file.
 
 The basic user interface to the \ck{} file in \pk{} is through the
@@ -408,9 +408,9 @@ Only the first author is printed when \pybox{Reference} or
 \pybox{Reference:Authors} is selected because the whole author list may be
 quite long.
 
-\pk{} relies on well-established scientific Python software tools. These include
-NumPy~\autocite{vanderWalt:2011np} and Pandas~\autocite{pandas,McKinney2010} for
-array manipulation, Pint~\autocite{Grecco2016} for interpreting and converting
+\pk{}~\autocite{PyKED} relies on well-established scientific Python software tools.
+These include NumPy~\autocite{vanderWalt:2011np} and Pandas~\autocite{pandas,McKinney2010}
+for array manipulation, Pint~\autocite{Grecco2016} for interpreting and converting
 between units, \texttt{ruamel.yaml}~\autocite{ruamel_yaml} for parsing YAML
 files, Cerberus for validating \ck{} files~\autocite{cerberus}, and
 pytest~\autocite{pytest:3.0.1} for unit testing. Travis-CI~\autocite{Travis2016}
@@ -418,8 +418,8 @@ provides continuous integration testing.
 
 \pk{} is licensed under the permissive, open-source BSD 3-clause license. The
 source code is publicly available on GitHub at
-\url{https://github.com/pr-omethe-us/PyKED}. Installation of stable versions can
-be accomplished from a package repository, using either \pybox{pip} to install
+\url{https://github.com/pr-omethe-us/PyKED}~\autocite{PyKED}. Installation of stable versions
+can be accomplished from a package repository, using either \pybox{pip} to install
 from \href{https://pypi.python.org/pypi}{PyPI} (Python Package Index), or
 \pybox{conda} to install from the
 \href{https://anaconda.org/conda-forge}{\texttt{conda-forge}} channel. In
@@ -437,8 +437,8 @@ capabilities of the software.
 \subsection{RCM modeling with varying reactor volume}\label{sec:rcm-modeling}
 
 The \ck{} file that will be used in this example can be found in the
-\pybox{tests} directory of the PyKED repository,
-\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_rcm.yaml}.
+\pybox{tests} directory of the PyKED
+repository\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_rcm.yaml}}.
 Examining that file, we find the first section specifies the information about
 the \ck{} file itself:
 %
@@ -578,8 +578,9 @@ at each time step of the integration for post-processing.
 
 \subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
 
-The \ck{} file used in this example can be found online.\todo{add url}{} The
-data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
+The \ck{} file used in this example can be found in the \pybox{tests} directory of the \pk{} 
+repository\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_st_p5.yaml}}.
+The data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
 shock-tube ignition delays for \textit{tert}-butanol. We have omitted the file
 meta information below for space; the format is largely similar to the example in Section~\ref{sec:rcm-modeling}.
 %
