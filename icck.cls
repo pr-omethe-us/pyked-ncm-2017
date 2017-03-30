@@ -93,7 +93,8 @@
     minbibnames=99,
     maxcitenames=2,
     mincitenames=1,
-    citestyle=numeric-comp,
+    style=authoryear,
+    %citestyle=authoryear-comp,
     giveninits=true,
     isbn=false,
     date=year
@@ -212,7 +213,8 @@
   \setunit*{\addspace}%
   \printfield{volume}%
   \setunit*{\addspace}%
-  \printtext[parens]{\usebibmacro{date}}%
+  %\printtext[parens]{\usebibmacro{date}}%
+  \printtext[parens]{\printfield{number}}%
   \iffieldundef{pages}{%
     \setunit*{\addcomma\space}%
     }{\setunit*{\addspace}}
@@ -293,7 +295,8 @@
   \newunit\newblock
   \printfield{booktitle}%
   \setunit*{\addspace}
-  \usebibmacro{publisher+location+pdate}%
+  %\usebibmacro{publisher+location+pdate}%
+  \usebibmacro{publisher+location+date}%
   \newunit\newblock
   \printfield{note}%
   \newunit\newblock
