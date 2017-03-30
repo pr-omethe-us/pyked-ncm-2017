@@ -14,8 +14,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{ussci}[2017/02/01 v0.2
- LaTeX document class for the USSCI]
+\ProvidesClass{icck}[2017/02/01 v0.2
+ LaTeX document class for the ICCK]
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions \relax
@@ -114,10 +114,10 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % These lines should be edited before the new conference
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    10\textsuperscript{th} U.S. National Combustion Meeting\\%
-    Organized by the Eastern States Section of the Combustion Institute\\%
-    April 23--26, 2017\\%
-    College Park, Maryland\par\vspace{\baselineskip}%
+    %10\textsuperscript{th} U.S. National Combustion Meeting\\%
+    %Organized by the Eastern States Section of the Combustion Institute\\%
+    %April 23--26, 2017\\%
+    %College Park, Maryland\par\vspace{\baselineskip}%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % End editing section
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -146,7 +146,7 @@
 {\endlist}
 
 \newenvironment{keyword}{
-    \fontsize{10pt}{12pt}\selectfont\bfseries\itshape%
+    \fontsize{10pt}{12pt}\selectfont\itshape%
     \list{{Keywords:}}{%
             \listparindent=0.0in%
             \itemindent=0.4in%
@@ -185,7 +185,6 @@
 \RequirePackage{fancyhdr}
 \fancypagestyle{plain}{%
 \fancyhf{}%
-\fancyhead[L]{Sub Topic: \papertopic}%
 \fancyfoot[C]{\thepage}%
 \renewcommand{\headrulewidth}{0pt}%
 \renewcommand{\footrulewidth}{0pt}%

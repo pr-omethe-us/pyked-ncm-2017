@@ -4,7 +4,7 @@
 % International License. To view a copy of this license, visit
 % http://creativecommons.org/licenses/by/4.0/.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[12pt]{ussci}
+\documentclass[12pt]{icck}
 
 \usepackage{todonotes}
 
@@ -18,49 +18,45 @@
 %======================================================================
 \addbibresource{pyked.bib}
 %======================================================================
-\newcommand\papertopic{Reaction Kinetics}
 %======================================================================
 
 \title{ ChemKED: a human- and machine-readable data standard for chemical kinetics experiments }
 
-\author[1*]{Bryan W. Weber}
-\author[2]{Kyle E. Niemeyer}
+\author[1]{Bryan W.~Weber}
+\author[2]{Kyle E.~Niemeyer\thanks{Corresponding author: \email{kyle.niemeyer@oregonstate.edu}}}
 
 \affil[1]{Department of Mechanical Engineering, University of Connecticut, Storrs, CT, USA}
 \affil[2]{School of Mechanical, Industrial, and Manufacturing Engineering, Oregon State University, Corvallis, OR, USA}
-\affil[*]{Corresponding author: \email{bryan.weber@uconn.edu}}
 
 \begin{document}
 \maketitle
 
+\begin{keyword}
+    Chemical kinetics\sep Experimental data\sep Autoignition\sep Data standard \\
+\end{keyword}
+
 %====================================================================
 \begin{abstract} % not to exceed 200 words
-Fundamental experimental measurements of quantities including ignition delay
-times, laminar flame speeds, and species profiles serve important roles in
-understanding fuel chemistry and validating chemical kinetic models. However,
-despite both the importance and abundance of such information in the literature,
-the community lacks a widely adopted standard format for this data. This impedes
-both sharing and wide use by the community. In this paper, we will introduce a
-new Chemical Kinetics Experimental Data format, ChemKED, and the related
-Python-based package for creating and validating ChemKED-formatted files called
-PyKED. We will also review past and related efforts, and motivate the need for a
-new solution. ChemKED currently supports the representation of autoignition
-delay time and laminar flame speed measurements. ChemKED-formatted files contain
-all of the information needed to simulate experimental data points, including
-uncertainty. ChemKED is based on the YAML data serialization language, and is
-intended as a human- and machine-readable standard for easy creation and
-automated use. Development of ChemKED and PyKED occurs openly on GitHub under
-the BSD 3-clause license, and contributions from the community are welcome.
-Plans for future development include support for experimental data from jet
-stirred reactor, extinction, and speciation measurements.
+Fundamental experimental measurements of quantities including ignition delay times,
+laminar flame speeds, and species profiles serve important roles in understanding
+fuel chemistry and validating chemical kinetic models. However, despite both the
+importance and abundance of such information in the literature, the community lacks
+a widely adopted standard format for this data. This impedes both sharing and wide
+use by the community. In this talk, we will introduce a new Chemical Kinetics
+Experimental Data format, ChemKED, and the related Python-based package for creating
+and validating ChemKED-formatted files called PyKED. We will also review past and
+related efforts, and motivate the need for a new solution. ChemKED currently supports
+the representation of autoignition delay time and laminar flame speed measurements.
+ChemKED-formatted files contain all of the information needed to simulate experimental
+data points, including the uncertainty of the data. ChemKED is based on the YAML data
+serialization language, and is intended as a human- and machine-readable standard for
+easy creation and automated use.
+Development of ChemKED and PyKED occurs openly on GitHub under the
+BSD 3-clause license, and contributions from the community are welcome. Plans for
+future development include support for experimental data from jet stirred reactor,
+extinction, and speciation measurements.
 \end{abstract}
 
-% (Provide 2-4 keywords describing your research. Only abbreviations firmly
-% established in the field may be used. These keywords will be used for
-% sessioning/indexing purposes.)
-\begin{keyword}
-    chemical kinetics\sep data standard\sep software\sep database
-\end{keyword}
 
 %====================================================================
 \section{Introduction}
