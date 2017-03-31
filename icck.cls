@@ -87,17 +87,17 @@
 \RequirePackage[
     backend=biber,
     doi=true,
-    sorting=none,
+    sorting=nyt,
     sortcites=true,
     maxbibnames=99,
     minbibnames=99,
-    maxcitenames=2,
+    maxcitenames=1,
     mincitenames=1,
-    style=authoryear,
-    %citestyle=authoryear-comp,
+    style=authoryear-comp,
     giveninits=true,
     isbn=false,
-    date=year
+    date=year,
+    hyperref=auto
 ]{biblatex}
 
 % Load the Times New Roman font clone
