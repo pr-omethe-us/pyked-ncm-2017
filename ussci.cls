@@ -187,6 +187,8 @@
 \fancyhf{}%
 \fancyhead[L]{Sub Topic: \papertopic}%
 \fancyfoot[C]{\thepage}%
+\fancyfoot[L]{\parbox{0.4\textwidth}{\tiny This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit \url{http://creativecommons.org/licenses/by/4.0/}.}\hfill%
+\href{http://creativecommons.org/licenses/by/4.0/}{\includegraphics[height=0.5cm]{by}}}%
 \renewcommand{\headrulewidth}{0pt}%
 \renewcommand{\footrulewidth}{0pt}%
 }
