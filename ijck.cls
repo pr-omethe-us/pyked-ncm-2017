@@ -14,14 +14,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{icck}[2017/02/01 v0.2
- LaTeX document class for the ICCK]
+\ProvidesClass{ijck}[2017/02/01 v0.2
+ LaTeX document class for IJCK]
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions \relax
 
 \LoadClass{article}
 
+\RequirePackage{minted}
 \RequirePackage{tcolorbox}
 \tcbuselibrary{minted,breakable,skins,xparse}
 \usemintedstyle{friendly}
@@ -87,13 +88,14 @@
 \RequirePackage[
     backend=biber,
     doi=true,
-    sorting=nyt,
+    sorting=none,
     sortcites=true,
     maxbibnames=99,
     minbibnames=99,
     maxcitenames=1,
     mincitenames=1,
-    style=authoryear-comp,
+    style=chem-acs,
+    citestyle=numeric-comp,
     giveninits=true,
     isbn=false,
     date=year,
