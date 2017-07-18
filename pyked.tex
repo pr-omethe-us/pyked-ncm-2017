@@ -348,8 +348,10 @@ of a \ck{} file or a Python dictionary containing the contents of a \ck{} file
 as its argument. When the file or dictionary is loaded, it is validated to have
 the correct format by the Python package Cerberus \autocite{cerberus}. The
 schema used for validation of the \ck{} files is available publicly in the
-source code repository for
-PyKED\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/chemked_schema.yaml}}.
+\texttt{schemas} directory of the PyKED source code
+repository\footnote{\url{https://github.com/pr-omethe-us/PyKED/tree/master/pyked/schemas}}.
+To ease extension of the schema to describe other experimental measurements, it
+comprises multiple YAML files.
 
 The fields of the \ck{} file are stored as instance attributes of the
 \pybox|ChemKED| class. The following attributes are available:
@@ -455,10 +457,13 @@ quite long.
 These include NumPy~\autocite{vanderWalt:2011np} and Pandas~\autocite{pandas,McKinney2010}
 for array manipulation, Pint~\autocite{Grecco2016} for interpreting and converting
 between units, \texttt{ruamel.yaml}~\autocite{ruamel_yaml} for parsing YAML
-files, Cerberus for validating \ck{} files~\autocite{cerberus}, and
-pytest~\autocite{pytest:3.0.1} for unit testing.
+files, and Cerberus for validating \ck{} files~\autocite{cerberus}.
+Furthermore, \pk{} includes extensive unit, integration, and functional tests
+that ensure all aspects of the software operate as intended; others have pointed
+out the importance of automated testing in scientific software~\autocite{Wilson:bestpractices}.
+\pk{} relies on pytest~\autocite{pytest:3.0.1} for unit testing, and
 Travis-CI\footnote{\url{https://travis-ci.org/}} provides continuous integration
-testing.
+testing (i.e., runs the test suite after any new changes are made or pull-requested).
 
 \pk{} is licensed under the permissive, open-source BSD 3-clause license. The
 source code is publicly available on GitHub at
@@ -472,7 +477,7 @@ addition, \pk{} can be installed from the source code by running
 directory of the repository.
 
 %====================================================================
-\section{Usage example}\label{sec:usage-example}
+\section{Usage examples}\label{sec:usage-example}
 
 The following usage examples provide a guide to the use of \pk{}. They are by no
 means an exhaustive treatment, and are meant to demonstrate the basic
