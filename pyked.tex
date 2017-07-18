@@ -6,6 +6,24 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[12pt]{ijck}
 
+%\usepackage{listings}
+
+\usepackage{fancyvrb,newverbs,xcolor}
+
+\definecolor{cverbbg}{gray}{0.93}
+\colorlet{pyyellow}{yellow!10!white}
+\colorlet{yamlblack}{black!10!white}
+
+% \newcommand{\yabox}[1]{\colorbox{yamlblack}{\texttt{#1}}}
+% \newcommand{\pybox}[1]{\colorbox{pyyellow}{\texttt{#1}}}
+\newverbcommand{\yabox}
+  {\setbox\verbbox\hbox\bgroup}
+  {\egroup\colorbox{yamlblack}{\box\verbbox}}
+\newverbcommand{\pybox}
+  {\setbox\verbbox\hbox\bgroup}
+  {\egroup\colorbox{pyyellow}{\box\verbbox}}
+
+
 \usepackage[version=4]{mhchem}
 
 \usepackage{siunitx}
@@ -182,10 +200,10 @@ data and software openly to cultivate a community of user-contributors.
 
 This section will provide a brief introduction to the \ck{} database format.
 This is not a complete listing of available fields and more complete examples of
-\ck{} files can be found in the \pybox{tests} directory of the \pk{} package. In
+\ck{} files can be found in the \pybox|tests| directory of the \pk{} package. In
 addition, in Section~\ref{sec:usage-example}, we will provide examples of \ck{}
-files. We indicate \yabox{yaml} keywords or values using text with gray background,
-and \pybox{Python} code using text with a yellow background.
+files. We indicate \yabox|yaml| keywords or values using text with gray background,
+and \pybox|Python| code using text with a yellow background.
 
 \ck{} files use the YAML data serialization format~\autocite{yaml:1.2}. This
 format offers the advantages of being human readable, written in plain text, and
@@ -209,48 +227,48 @@ key5:  # Sequence of mappings
     key-s1: 0
 \end{yamlbox}
 
-The \yabox{value} can be a string, integer, or floating point number. The \ck{}
+The \yabox|value| can be a string, integer, or floating point number. The \ck{}
 format is designed to include all of the information necessary to simulate a
 given experiment and can be broken into two main sections. The first section
 details all of the ``meta'' information about the experiment and the \ck{} file.
-In this section, the common \yabox{author} mapping is used for any fields where
-an author must be specified. The \yabox{author} mapping contains the following
+In this section, the common \yabox|author| mapping is used for any fields where
+an author must be specified. The \yabox|author| mapping contains the following
 fields:
 %
 \begin{itemize}
-    \item \yabox{name} (required, string): The author's full name
-    \item \yabox{ORCID} (optional, string): the author's ORCID number
+    \item \yabox|name| (required, string): The author's full name
+    \item \yabox|ORCID| (optional, string): the author's ORCID number
 \end{itemize}
 %
 More generally for the meta information, the required keys in this section
 are:
 %
 \begin{itemize}
-    \item \yabox{file-author} (required, \yabox{author}-type mapping): The
+    \item \yabox|file-author| (required, \yabox|author|-type mapping): The
     author of the \ck{} file
-    \item \yabox{file-version} (required, integer): The version of the \ck{}
+    \item \yabox|file-version| (required, integer): The version of the \ck{}
     file
-    \item \yabox{chemked-version} (required, string): The version of the \ck{}
+    \item \yabox|chemked-version| (required, string): The version of the \ck{}
     schema that this file conforms to
-    \item \yabox{reference} (required, mapping): The reference information for
+    \item \yabox|reference| (required, mapping): The reference information for
     the article associated with the data in the file. The fields in this
     mapping are:
     \begin{itemize}
-        \item \yabox{authors} (required, sequence): A sequence of \yabox{author}
+        \item \yabox|authors| (required, sequence): A sequence of \yabox|author|
         mappings
-        \item \yabox{journal} (required, string): The name of the publishing
+        \item \yabox|journal| (required, string): The name of the publishing
         journal
-        \item \yabox{year} (required, integer): The year of publication
-        \item \yabox{doi} (optional, string): The article DOI
-        \item \yabox{volume} (required, integer): The journal volume number
-        \item \yabox{pages} (optional, string): The article pages
-        \item \yabox{detail} (optional, string): A description of from where the
+        \item \yabox|year| (required, integer): The year of publication
+        \item \yabox|doi| (optional, string): The article DOI
+        \item \yabox|volume| (required, integer): The journal volume number
+        \item \yabox|pages| (optional, string): The article pages
+        \item \yabox|detail| (optional, string): A description of from where the
         data originated (e.g., figure or table number)
     \end{itemize}
-    \item \yabox{experiment-type} (required, string): Currently, only
-    \yabox{ignition delay} is supported
-    \item \yabox{apparatus} (required, string): The type of apparatus used to
-    perform the experiment (\yabox{shock tube} or \yabox{rapid compression machine})
+    \item \yabox|experiment-type| (required, string): Currently, only
+    \yabox|ignition delay| is supported
+    \item \yabox|apparatus| (required, string): The type of apparatus used to
+    perform the experiment (\yabox|shock tube| or \yabox|rapid compression machine|)
 \end{itemize}
 
 The second section of the file encodes the experimental data. In the \ck{} file,
@@ -258,42 +276,42 @@ this is done in a sequence of mappings, with the following information required
 in each element of the sequence:
 %
 \begin{itemize}
-    \item \yabox{temperature} (required, sequence): The temperature of the
+    \item \yabox|temperature| (required, sequence): The temperature of the
     experiment, with units
-    \item \yabox{ignition-delay} (required, sequence): The ignition delay of the
+    \item \yabox|ignition-delay| (required, sequence): The ignition delay of the
     experiment, with units
-    \item \yabox{pressure} (required, string): The pressure of the experiment,
+    \item \yabox|pressure| (required, string): The pressure of the experiment,
     with units
-    \item \yabox{composition} (required, sequence): The composition of the
+    \item \yabox|composition| (required, sequence): The composition of the
     mixture in the experiment, a sequence of mappings with the following fields
     \begin{itemize}
-        \item \yabox{species-name} (required, string): The name of the species
-        \item \yabox{mole-fraction}, \yabox{mass-fraction}, \yabox{mole-percent}
+        \item \yabox|species-name| (required, string): The name of the species
+        \item \yabox|mole-fraction|, \yabox|mass-fraction|, \yabox|mole-percent|
         (required, float): The mole fraction or percent, or the mass fraction.
-        Only one of the three is permitted in a given \yabox{composition}
+        Only one of the three is permitted in a given \yabox|composition|
         sequence.
-        \item \yabox{InChI}, \yabox{SMILES}, \yabox{atomic-composition}, or
-        \yabox{elemental-composition} (required, string or sequence): The InChI
+        \item \yabox|InChI|, \yabox|SMILES|, \yabox|atomic-composition|, or
+        \yabox|elemental-composition| (required, string or sequence): The InChI
         or SMILES representing the molecule, or its atomic or elemental
-        composition (\yabox{atomic-composition} and
-        \yabox{elemental-composition} are synonyms) as a sequence
+        composition (\yabox|atomic-composition| and
+        \yabox|elemental-composition| are synonyms) as a sequence
     \end{itemize}
-    \item \yabox{ignition-type} (required, mapping): The type of ignition
+    \item \yabox|ignition-type| (required, mapping): The type of ignition
     measured in the experiments. The required fields are
     \begin{itemize}
-        \item \yabox{type} (required, string): How the ignition delay was
-        measured; one of \yabox{d/dt max} to indicate the ignition point is
-        found at the maximum of the time derivative of the \yabox{target},
-        \yabox{max} or \yabox{min} to indicate the ignition point is at the
-        maximum or minimum of the \yabox{target}, or \yabox{1/2 max} to
+        \item \yabox|type| (required, string): How the ignition delay was
+        measured; one of \yabox|d/dt max| to indicate the ignition point is
+        found at the maximum of the time derivative of the \yabox|target|,
+        \yabox|max| or \yabox|min| to indicate the ignition point is at the
+        maximum or minimum of the \yabox|target|, or \yabox|1/2 max| to
         indicate the half-maximum point
-        \item \yabox{target} (required, string): The target for the type of the
-        ignition point; one of \yabox{temperature}, \yabox{pressure},
-        \yabox{OH}, \yabox{OH*}, \yabox{CH}, or \yabox{CH*}
+        \item \yabox|target| (required, string): The target for the type of the
+        ignition point; one of \yabox|temperature|, \yabox|pressure|,
+        \yabox|OH|, \yabox|OH*|, \yabox|CH|, or \yabox|CH*|
     \end{itemize}
 \end{itemize}
 
-The top-level key for the sequence is called \yabox{datapoints}. Each of the
+The top-level key for the sequence is called \yabox|datapoints|. Each of the
 quantities in an element must be specified with units. This should be done as a
 single string associated with the first element of the sequence. The units of
 the quantity are validated to ensure they have the appropriate dimensionality
@@ -325,7 +343,7 @@ their structure and content, and allows the user to interact with the data conta
 in the \ck{} file.
 
 The basic user interface to the \ck{} file in \pk{} is through the
-\pybox{ChemKED} class. The \pybox{ChemKED} class constructor takes the filename
+\pybox|ChemKED| class. The \pybox|ChemKED| class constructor takes the filename
 of a \ck{} file or a Python dictionary containing the contents of a \ck{} file
 as its argument. When the file or dictionary is loaded, it is validated to have
 the correct format by the Python package Cerberus \autocite{cerberus}. The
@@ -334,103 +352,103 @@ source code repository for
 PyKED\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/chemked_schema.yaml}}.
 
 The fields of the \ck{} file are stored as instance attributes of the
-\pybox{ChemKED} class. The following attributes are available:
+\pybox|ChemKED| class. The following attributes are available:
 %
 \begin{itemize}
-    \item \pybox{chemked_version}, \pybox{file_version}, \pybox{file_author},
-    \pybox{experiment_type}: Stores the values from the \ck{} file
-    \item \pybox{reference}: Instance of a \pybox{namedtuple} containing all
+    \item \pybox|chemked_version|, \pybox|file_version|, \pybox|file_author|,
+    \pybox|experiment_type|: Stores the values from the \ck{} file
+    \item \pybox|reference|: Instance of a \pybox|namedtuple| containing all
     the information from the literature reference associated with the data
-    \item \pybox{apparatus}: Instance of a \pybox{namedtuple} containing all
+    \item \pybox|apparatus|: Instance of a \pybox|namedtuple| containing all
     the information about the apparatus used to perform the experiment
-    \item \pybox{datapoints}: A Python list of \pybox{DataPoint} instances
+    \item \pybox|datapoints|: A Python list of \pybox|DataPoint| instances
 \end{itemize}
 
-The \pybox{DataPoint} class stores the information associated with a single data
-point in the \ck{} file (i.e., a single element of the \yabox{datapoints}
-sequence). Similar to the \pybox{ChemKED} class, information in the
-\pybox{DataPoint} is stored as instance attributes:
+The \pybox|DataPoint| class stores the information associated with a single data
+point in the \ck{} file (i.e., a single element of the \yabox|datapoints|
+sequence). Similar to the \pybox|ChemKED| class, information in the
+\pybox|DataPoint| is stored as instance attributes:
 %
 \begin{itemize}
-    \item \pybox{equivalence_ratio}: The value of the equivalence ratio, if
+    \item \pybox|equivalence_ratio|: The value of the equivalence ratio, if
     present. For informational purposes only, no validation is done of the
     value.
-    \item \pybox{ignition_delay}, \pybox{temperature}, \pybox{pressure},
-    \pybox{pressure_rise}: The value of these data are stored as instances of
-    the \pybox{Quantity} class from the Pint \autocite{Grecco2016} package,
+    \item \pybox|ignition_delay|, \pybox|temperature|, \pybox|pressure|,
+    \pybox|pressure_rise|: The value of these data are stored as instances of
+    the \pybox|Quantity| class from the Pint \autocite{Grecco2016} package,
     possibly with associated uncertainty
-    \item \pybox{composition}: A list of dictionaries of the species and their
-    respective amounts. The values are validated so that \yabox{mole-percent},
-    \yabox{mole-fraction}, or \yabox{mass-fraction} cannot be mixed for a single
+    \item \pybox|composition|: A list of dictionaries of the species and their
+    respective amounts. The values are validated so that \yabox|mole-percent|,
+    \yabox|mole-fraction|, or \yabox|mass-fraction| cannot be mixed for a single
     data point, and so that the sum of the values is approximately 1.0, or
-    100.0 for \yabox{mole-percent}.
-    \item \pybox{composition_type}: A string indicating the type of composition
-    information for the data point---one of \pybox{'mole-percent'},
-    \pybox{'mole-fraction'}, or \pybox{'mass-fraction'}
-    \item \pybox{volume_history}: If the \yabox{volume-history} of an RCM
+    100.0 for \yabox|mole-percent|.
+    \item \pybox|composition_type|: A string indicating the type of composition
+    information for the data point---one of \pybox|'mole-percent'|,
+    \pybox|'mole-fraction'|, or \pybox|'mass-fraction'|
+    \item \pybox|volume_history|: If the \yabox|volume-history| of an RCM
     experiment is provided in the \ck{} file, it is stored in this attribute as
-    a \pybox{namedtuple}, and the actual values are stored in NumPy arrays
+    a \pybox|namedtuple|, and the actual values are stored in NumPy arrays
     \autocite{vanderWalt:2011np}
-    \item \pybox{compression_time}: If the \ck{} file encodes an RCM experiment,
+    \item \pybox|compression_time|: If the \ck{} file encodes an RCM experiment,
     the length of the compression stroke may be included
-    \item \pybox{ignition_type}: A dictionary specifying the method of the
+    \item \pybox|ignition_type|: A dictionary specifying the method of the
     measurement of ignition delay
 \end{itemize}
 
-The \pybox{DataPoint} class defines two instance methods:
-\pybox{get_cantera_mole_fraction()} and \pybox{get_cantera_mass_fraction()}.
+The \pybox|DataPoint| class defines two instance methods:
+\pybox|get_cantera_mole_fraction()| and \pybox|get_cantera_mass_fraction()|.
 With these methods, the composition of the reactant mixture can be output to a
 format that can be used to set the composition of a
-Cantera~\pybox{Solution}~\autocite{Cantera:2.3.0}.
-The \pybox{composition} specification does not contain the molecular
+Cantera~\pybox|Solution|~\autocite{Cantera:2.3.0}.
+The \pybox|composition| specification does not contain the molecular
 weights of the components, so conversion between mole fractions and mass
 fractions is not currently possible.
 
-The \pybox{ChemKED} class defines one instance method:
-\pybox{get_dataframe()}. Using this method, the user can get an instance of a
-Pandas \pybox{DataFrame}~\autocite{pandas} that contains the information in the
-list of \pybox{DataPoint}s. The user can specify the columns included in the
-\pybox{DataFrame} by passing a list of column names to the
-\pybox{output_columns} argument of the \pybox{get_dataframe()} method. The
+The \pybox|ChemKED| class defines one instance method:
+\pybox|get_dataframe()|. Using this method, the user can get an instance of a
+Pandas \pybox|DataFrame|~\autocite{pandas} that contains the information in the
+list of \pybox|DataPoint|s. The user can specify the columns included in the
+\pybox|DataFrame| by passing a list of column names to the
+\pybox|output_columns| argument of the \pybox|get_dataframe()| method. The
 possible columns are not case-sensitive and are:
 
 \noindent\begin{itemize*}
-    \item \pybox{'Temperature'}
-    \item \pybox{'Pressure'}
-    \item \pybox{'Ignition Delay'}
-    \item \pybox{'Composition'}
-    \item \pybox{'Equivalence Ratio'}
-    \item \pybox{'Reference'}
-    \item \pybox{'Apparatus'}
-    \item \pybox{'Experiment Type'}
-    \item \pybox{'File Author'}
-    \item \pybox{'File Version'}
-    \item \pybox{'ChemKED Version'}
+    \item \pybox|'Temperature'|
+    \item \pybox|'Pressure'|
+    \item \pybox|'Ignition Delay'|
+    \item \pybox|'Composition'|
+    \item \pybox|'Equivalence Ratio'|
+    \item \pybox|'Reference'|
+    \item \pybox|'Apparatus'|
+    \item \pybox|'Experiment Type'|
+    \item \pybox|'File Author'|
+    \item \pybox|'File Version'|
+    \item \pybox|'ChemKED Version'|
 \end{itemize*}
 
-In addition, specific fields from the \pybox{Reference} and \pybox{Apparatus}
+In addition, specific fields from the \pybox|Reference| and \pybox|Apparatus|
 attributes can be included by specifying the name after a colon. These options
 are:
 
 \noindent\begin{itemize*}
-    \item \pybox{'Reference:Volume'}
-    \item \pybox{'Reference:Journal'}
-    \item \pybox{'Reference:DOI'}
-    \item \pybox{'Reference:Authors'}
-    \item \pybox{'Reference:Detail'}
-    \item \pybox{'Reference:Year'}
-    \item \pybox{'Reference:Pages'}
-    \item \pybox{'Apparatus:Kind'}
+    \item \pybox|'Reference:Volume'|
+    \item \pybox|'Reference:Journal'|
+    \item \pybox|'Reference:DOI'|
+    \item \pybox|'Reference:Authors'|
+    \item \pybox|'Reference:Detail'|
+    \item \pybox|'Reference:Year'|
+    \item \pybox|'Reference:Pages'|
+    \item \pybox|'Apparatus:Kind'|
 \end{itemize*}
 
 % This weirdness is necessary to prevent the list from running over the margin
 \noindent\begin{itemize*}
-    \item \pybox{'Apparatus:Facility'}
-    \item \pybox{'Apparatus:Institution'}
+    \item \pybox|'Apparatus:Facility'|
+    \item \pybox|'Apparatus:Institution'|
 \end{itemize*}
 
-Only the first author is printed when \pybox{Reference} or
-\pybox{Reference:Authors} is selected because the whole author list may be
+Only the first author is printed when \pybox|Reference| or
+\pybox|Reference:Authors| is selected because the whole author list may be
 quite long.
 
 \pk{}~\autocite{PyKED} relies on well-established scientific Python software tools.
@@ -445,12 +463,12 @@ testing.
 \pk{} is licensed under the permissive, open-source BSD 3-clause license. The
 source code is publicly available on GitHub at
 \url{https://github.com/pr-omethe-us/PyKED}~\autocite{PyKED}. Installation of stable versions
-can be accomplished from a package repository, using either \pybox{pip} to install
+can be accomplished from a package repository, using either \pybox|pip| to install
 from \href{https://pypi.python.org/pypi}{PyPI} (Python Package Index), or
-\pybox{conda} to install from the
+\pybox|conda| to install from the
 \href{https://anaconda.org/conda-forge}{\texttt{conda-forge}} channel. In
 addition, \pk{} can be installed from the source code by running
-\pybox|python setup.py install| or \pybox{pip install .} from the root
+\pybox|python setup.py install| or \pybox|pip install .| from the root
 directory of the repository.
 
 %====================================================================
@@ -463,7 +481,7 @@ capabilities of the software.
 \subsection{RCM modeling with varying reactor volume}\label{sec:rcm-modeling}
 
 The \ck{} file that will be used in this example can be found in the
-\pybox{tests} directory of the PyKED
+\pybox|tests| directory of the PyKED
 repository\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_rcm.yaml}}.
 Examining that file, we find the first section specifies the information about
 the \ck{} file itself:
@@ -543,7 +561,7 @@ datapoints:
         ...
 \end{yamlbox}
 %
-The values for the \yabox{volume-history} are truncated here to save space. A user
+The values for the \yabox|volume-history| are truncated here to save space. A user
 might want to load the information from this file to perform a simulation using
 Cantera to calculate the ignition delay. All of the information required to
 perform this simulation is present in the \ck{} file, with the exception of a
@@ -560,7 +578,7 @@ dp = ck.datapoints[0]
 \end{pythonbox}
 %
 The initial temperature, pressure, and mixture composition can be read from the
-instance of the \pybox{DataPoint} class. \pk{} uses Pint \pybox{Quantities} to
+instance of the \pybox|DataPoint| class. \pk{} uses Pint \pybox|Quantities| to
 store values with units, while Cantera expects a floating point value in SI
 units as input. Therefore, we use the built-in capabilities of Pint to convert
 the units from those specified in the \ck{} file to SI units:
@@ -579,12 +597,12 @@ reac = ct.IdealGasReactor(gas)
 env = ct.Reservoir(ct.Solution('air.xml'))
 \end{pythonbox}
 %
-To apply the effect of the volume trace to the \pybox{IdealGasReactor}, a
-\pybox{Wall} is installed between the reactor and the environment and assigned
+To apply the effect of the volume trace to the \pybox|IdealGasReactor|, a
+\pybox|Wall| is installed between the reactor and the environment and assigned
 a velocity. Although we do not show the details here, a reference implementation
 of a class that computes a wall velocity given the volume history of the reactor
 is available in CanSen~\autocite{cansen}, in the
-\pybox{cansen.profile.VolumeProfile} class. Then, a Cantera \pybox{ReactorNet}
+\pybox|cansen.profile.VolumeProfile| class. Then, a Cantera \pybox|ReactorNet|
 can be used to advance the state through autoignition, in this case to an end
 time of \SI{50}{\milli\second}:
 %
@@ -601,12 +619,12 @@ while netw.time < 0.05:
 \end{pythonbox}
 %
 Although not shown in this example, the user would typically store information
-about the \pybox{IdealGasReactor} (e.g., temperature, pressure, mass fractions)
+about the \pybox|IdealGasReactor| (e.g., temperature, pressure, mass fractions)
 at each time step of the integration for post-processing.
 
 \subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
 
-The \ck{} file used in this example can be found in the \pybox{tests} directory of the \pk{}
+The \ck{} file used in this example can be found in the \pybox|tests| directory of the \pk{}
 repository\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_st_p5.yaml}}.
 The data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
 shock-tube ignition delays for \textit{tert}-butanol. We have omitted the file
@@ -614,7 +632,7 @@ meta information below for space; the format is largely similar to the example i
 %
 This \ck{} file specifies multiple data points with some common
 conditions, including a common mixture composition and common definition of
-ignition delay. Therefore, a \yabox{common-properties} section is specified.
+ignition delay. Therefore, a \yabox|common-properties| section is specified.
 %
 \begin{yamlbox}
 common-properties:
@@ -634,8 +652,8 @@ common-properties:
 \end{yamlbox}
 %
 This block uses the ability of YAML files to define an anchor with the
-\yabox{&} symbol and refer to that section later with the \yabox{*} symbol, as
-can be seen in the definition of the \yabox{datapoints} section:
+\yabox|&| symbol and refer to that section later with the \yabox|*| symbol, as
+can be seen in the definition of the \yabox|datapoints| section:
 %
 \begin{yamlbox}
 datapoints:
@@ -664,11 +682,11 @@ datapoints:
     ignition-type: *ign
     equivalence-ratio: 0.5
 \end{yamlbox}
-The \yabox{common-properties} section is not required, but can save space and
+The \yabox|common-properties| section is not required, but can save space and
 help avoid errors when all data points share some common values.
 
 In this example, we would like to run constant-volume simulations at each of the
-pressure and temperature conditions in the \yabox{datapoints} list. Once again,
+pressure and temperature conditions in the \yabox|datapoints| list. Once again,
 the \ck{} file specifies all the information required for the simulations except
 for the chemical kinetic model, and Cantera can be used to simulate autoignition:
 %
