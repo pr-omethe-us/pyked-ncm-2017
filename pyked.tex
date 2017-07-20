@@ -201,9 +201,10 @@ data and software openly to cultivate a community of user-contributors.
 This section will provide a brief introduction to the current version of the
 \ck{} database format, v0.1.6, which represents a functional standard
 for documenting autoignition measurements in shock tubes and rapid compression machines.
-This is not a complete listing of available fields and more complete examples of
-\ck{} files can be found in the \pybox|tests| directory of the \pk{} package. In
-addition, in Section~\ref{sec:usage-example}, we will provide examples of \ck{}
+This is not a complete listing of available fields and a complete reference for the
+schema can be found in the online documentation.
+\footnote{\url{https://pr-omethe-us.github.io/PyKED/schema-docs.html}}
+In addition, in Section~\ref{sec:usage-example}, we will provide examples of \ck{}
 files. We indicate \yabox|yaml| keywords or values using text with gray background,
 and \pybox|Python| code using text with a yellow background.
 
@@ -231,11 +232,11 @@ key5:  # Sequence of mappings
 
 The \yabox|value| can be a string, integer, or floating point number. The \ck{}
 format is designed to include all of the information necessary to simulate a
-given experiment and can be broken into two main sections. The first section
-details all of the ``meta'' information about the experiment and the \ck{} file.
-In this section, the common \yabox|author| mapping is used for any fields where
-an author must be specified. The \yabox|author| mapping contains the following
-fields:
+given experiment. A \ck{} file can generally be broken into two main sections.
+The first section details all of the ``meta'' information about the experiment
+and the \ck{} file. In this section, the common \yabox|author| mapping is used
+for any fields where an author must be specified. The \yabox|author| mapping
+contains the following fields:
 %
 \begin{itemize}
     \item \yabox|name| (required, string): The author's full name
@@ -497,8 +498,8 @@ the \ck{} file itself:
 file-author:
   name: Kyle E Niemeyer
   ORCID: 0000-0003-4425-7097
-file-version: (1, 0)
-chemked-version: 0.0.1
+file-version: 0
+chemked-version: 0.1.6
 \end{yamlbox}
 %
 Then, we find the information regarding the article in the literature from which
@@ -533,39 +534,48 @@ stroke and post-compression processes.
 %
 \begin{yamlbox}
 datapoints:
-  - temperature: 297.4 kelvin
-    ignition-delay: 1.0 ms
-    pressure: 958.0 torr
-    composition:
+- temperature:
+    - 297.4 kelvin
+  ignition-delay:
+    - 1.0 ms
+  pressure:
+    - 958.0 torr
+  composition:
+    kind: mole fraction
+    species:
       - species-name: H2
         InChI: 1S/H2/h1H
-        mole-fraction: 0.12500
+        amount:
+          - 0.12500
       - species-name: O2
         InChI: 1S/O2/c1-2
-        mole-fraction: 0.06250
+        amount:
+          - 0.06250
       - species-name: N2
         InChI: 1S/N2/c1-2
-        mole-fraction: 0.18125
+        amount:
+          - 0.18125
       - species-name: Ar
         InChI: 1S/Ar
-        mole-fraction: 0.63125
-    ignition-type:
-      target: pressure
-      type: d/dt max
-    compression-time: 38.0 ms
-    volume-history:
-      time:
-        units: s
-        column: 0
-      volume:
-        units: cm3
-        column: 1
-      values:
-        - [0.00E+000, 5.47669375000E+002]
-        - [1.00E-003, 5.46608789894E+002]
-        - [2.00E-003, 5.43427034574E+002]
-        - [3.00E-003, 5.38124109043E+002]
-        ...
+        amount:
+          - 0.63125
+  ignition-type:
+    target: pressure
+    type: d/dt max
+  compression-time:
+    - 38.0 ms
+  volume-history:
+    time:
+      units: s
+      column: 0
+    volume:
+      units: cm3
+      column: 1
+    values:
+      - [0.00E+000, 5.47669375000E+002]
+      - [1.00E-003, 5.46608789894E+002]
+      - [2.00E-003, 5.43427034574E+002]
+      ...
 \end{yamlbox}
 %
 The values for the \yabox|volume-history| are truncated here to save space. A user
@@ -644,17 +654,22 @@ ignition delay. Therefore, a \yabox|common-properties| section is specified.
 \begin{yamlbox}
 common-properties:
   composition: &comp
-    - species-name: t-butanol
-      InChI: 1S/C4H10O/c1-4(2,3)5/h5H,1-3H3
-      mole-fraction: 0.003333333
-    - species-name: O2
-      InChI:  1S/O2/c1-2
-      mole-fraction: 0.04
-    - species-name: Ar
-      InChI:  1S/Ar
-      mole-fraction: 0.956666667
-  ignition-type:  &ign
-    target: OH* concentration
+    kind: mole fraction
+    species:
+      - species-name: t-butanol
+        InChI: 1S/C4H10O/c1-4(2,3)5/h5H,1-3H3
+        amount:
+          - 0.003333333
+      - species-name: O2
+        InChI:  1S/O2/c1-2
+        amount:
+          - 0.04
+      - species-name: Ar
+        InChI:  1S/Ar
+        amount:
+          - 0.956666667
+  ignition-type: &ign
+    target: OH*
     type: 1/2 max
 \end{yamlbox}
 %
@@ -664,33 +679,48 @@ can be seen in the definition of the \yabox|datapoints| section:
 %
 \begin{yamlbox}
 datapoints:
-  - temperature: 1459 kelvin
-    ignition-delay: 347 us
-    pressure: 1.60 atm
+  - temperature:
+      - 1459 kelvin
+    ignition-delay:
+      - 347 us
+    pressure:
+      - 1.60 atm
     composition: *comp
     ignition-type: *ign
     equivalence-ratio: 0.5
-  - temperature: 1389 kelvin
-    ignition-delay: 756 us
-    pressure: 1.67 atm
+  - temperature:
+      - 1389 kelvin
+    ignition-delay:
+      - 756 us
+    pressure:
+      - 1.67 atm
     composition: *comp
     ignition-type: *ign
     equivalence-ratio: 0.5
-  - temperature: 1497 kelvin
-    ignition-delay: 212 us
-    pressure: 1.55 atm
+  - temperature:
+      - 1497 kelvin
+    ignition-delay:
+      - 212 us
+    pressure:
+      - 1.55 atm
     composition: *comp
     ignition-type: *ign
     equivalence-ratio: 0.5
-  - temperature: 1562 kelvin
-    ignition-delay: 105 us
-    pressure: 1.50 atm
+  - temperature:
+      - 1562 kelvin
+    ignition-delay:
+      - 105 us
+    pressure:
+      - 1.50 atm
     composition: *comp
     ignition-type: *ign
     equivalence-ratio: 0.5
 \end{yamlbox}
 The \yabox|common-properties| section is not required, but can save space and
-help avoid errors when all data points share some common values.
+help avoid errors when several data points share some common values. However, even if
+properties are specified in the \yabox|common-properties| section, they must also be
+explicitly specified in the \yabox|datapoints| section for each data point, as can be
+seen in the previous code.
 
 In this example, we would like to run constant-volume simulations at each of the
 pressure and temperature conditions in the \yabox|datapoints| list. Once again,
