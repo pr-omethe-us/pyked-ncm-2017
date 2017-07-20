@@ -216,7 +216,8 @@
   \printfield{volume}%
   \setunit*{\addspace}%
   %\printtext[parens]{\usebibmacro{date}}%
-  \printtext[parens]{\printfield{number}}%
+  \iffieldundef{number}{}{%
+  \printtext[parens]{\printfield{number}}}%
   \iffieldundef{pages}{%
     \setunit*{\addcomma\space}%
     }{\setunit*{\addspace}}
