@@ -337,6 +337,14 @@ datapoints:
     ...
 \end{yamlbox}
 
+ChemKED files are stored online in a git repository hosted on GitHub.
+\footnote{\url{https://github.com/pr-omethe-us/ChemKED-database}}
+Submissions from the community are welcomed and can be made via the standard Pull Request
+on GitHub. The authors also encourage questions and problems to be submitted either via
+email or as Issues on GitHub. In particular, researchers interested in converters for
+internal data formats to the ChemKED format are encouraged to reach out. In addition,
+converters to and from the ReSpecTh format are available in the PyKED repository.
+
 %====================================================================
 \section{PyKED architecture}\label{sec:pyked-architecture}
 %
@@ -464,20 +472,25 @@ files, and Cerberus for validating \ck{} files~\autocite{cerberus}.
 Furthermore, \pk{} includes extensive unit, integration, and functional tests
 that ensure all aspects of the software operate as intended; others have pointed
 out the importance of automated testing in scientific software~\autocite{Wilson:bestpractices}.
-\pk{} relies on pytest~\autocite{pytest:3.0.1} for unit testing, and
-Travis-CI\footnote{\url{https://travis-ci.org/}} provides continuous integration
-testing (i.e., runs the test suite after any new changes are made or pull-requested).
+\pk{} relies on pytest~\autocite{pytest:3.0.1} for unit testing, and currently has
+100\% line and branch coverage for all of the executable code in the repository. This
+means that the tests execute every line of code at least once, and every branch statement
+(e.g., if-then-else statement) is tested so that every condition is executed at least
+once.
+
+Travis-CI\footnote{\url{https://travis-ci.org/pr-omethe-us/PyKED}} provides continuous
+integration service, including running the test suite, building and distributing binary
+installer packages, and building and publishing the online documentation. This automation
+ensures that the test suite is run after every change to the source code, the
+documentation is up-to-date with the latest changes, and releasing new versions is as
+streamlined as possible.
 
 \pk{} is licensed under the permissive, open-source BSD 3-clause license. The
 source code is publicly available on GitHub at
-\url{https://github.com/pr-omethe-us/PyKED}~\autocite{PyKED}. Installation of stable versions
-can be accomplished from a package repository, using either \pybox|pip| to install
-from \href{https://pypi.python.org/pypi}{PyPI} (Python Package Index), or
-\pybox|conda| to install from the
-\href{https://anaconda.org/conda-forge}{\texttt{conda-forge}} channel. In
-addition, \pk{} can be installed from the source code by running
-\pybox|python setup.py install| or \pybox|pip install .| from the root
-directory of the repository.
+\url{https://github.com/pr-omethe-us/PyKED}~\autocite{PyKED}. Installation instructions
+are available in the online documentation at
+\url{https://pr-omethe-us.github.io/PyKED/install.html} and can be done via binary
+packages or from the source code.
 
 %====================================================================
 \section{Usage examples}\label{sec:usage-example}
@@ -777,16 +790,18 @@ measurements from rapid compression machines and shock tubes, including
 facility-specific effects from each type of experiment.
 
 \ck{} and \pk{} are currently under active development, and contributions from
-the community are welcomed. All development occurs under the BSD 3-clause
+the community are welcomed. All development occurs under the BSD 3-clause open source
 license and the code is housed on GitHub at
 \url{https://github.com/pr-omethe-us/PyKED}. Future directions for development
 are outlined in the public
 roadmap.\footnote{\url{https://github.com/pr-omethe-us/PyKED/wiki/Roadmap}}
 The highest priority issues are currently adding support for other types of
 fundamental experiments, including speciation in shock tubes, flame speeds,
-and flame extinction measurements. We also welcome proposals for new experimental
-types; see Issue \#60 in the \pk{} repository for an example of how this may be
-done.\footnote{\url{https://github.com/pr-omethe-us/PyKED/issues/60}}
+and flame extinction measurements.
+Questions, comments, or suggestions are welcomed and can be posted as Issues in the
+GitHub repository or emailed to the authors. In particular, we welcome proposals for new
+experimental types; see Issue \#60 in the \pk{} repository for an example of how this may
+be done.\footnote{\url{https://github.com/pr-omethe-us/PyKED/issues/60}}
 
 \printbibliography
 
