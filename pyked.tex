@@ -182,7 +182,7 @@ based on stored models and data. While an admirable and useful effort,
 CloudFlame, like ReSpecTh and PrIMe, is a closed system controlled by a single
 institution rather than by the community at large.
 
-Therefore, we believe there remains a need for an open, community-focused and
+We therefore believe there remains a need for an open, community-focused and
 developed, combustion\slash chemical kinetics data format. In this work, we
 present a new, open-source, human- and machine-readable data standard for
 fundamental combustion experiments, \ck{}, and offer tools for easily working
@@ -199,21 +199,21 @@ data and software openly to cultivate a community of user-contributors.
 %====================================================================
 \section{Overview of ChemKED format}\label{sec:overview-of-format}
 
-This section will provide a brief introduction to the current version of the
+This section provides a brief introduction to the current version of the
 \ck{} database format, v0.1.6, which represents a functional standard
 for documenting autoignition measurements in shock tubes and rapid compression machines.
 Here we do not include a complete listing of available fields; a complete reference for the
-schema can be found in the online documentation.
-\footnote{\url{https://pr-omethe-us.github.io/PyKED/schema-docs.html}}
-In addition, in Section~\ref{sec:usage-example}, we will provide examples of \ck{}
-files. We indicate \yabox|yaml| keywords or values using text with gray background,
-and \pybox|Python| code using text with a yellow background.
+schema can be found in the online
+documentation.\footnote{\url{https://pr-omethe-us.github.io/PyKED/schema-docs.html}}
+In Section~\ref{sec:usage-example}, we provide examples of \ck{} files and
+representative use cases. We indicate \yabox|yaml| keywords or values using text with
+gray background, and \pybox|Python| code using text with a yellow background.
 
 \ck{} files use the YAML data serialization format~\autocite{yaml:1.2}. This
 format offers the advantages of being human readable, written in plain text, and
 having parsers in most common programming languages, including Python, C++, Java,
 Perl, MATLAB, and many others. The YAML syntax is quite simple: the basic file
-structure is made of mappings, delimited by a colon. The key for the mapping is
+structure consists of mappings, delimited by a colon. The key for the mapping is
 on the left of the colon, and the value on the right can be a single value,
 a sequence of values, a nested mapping, or some combination of these:
 %
@@ -231,17 +231,17 @@ key5:  # Sequence of mappings
     key-s1: 0
 \end{yamlbox}
 
-The \yabox|value| can be a string, integer, or floating point number. The \ck{}
-format is designed to include all of the information necessary to simulate a
-given experiment. A \ck{} file can generally be broken into two main sections.
-The first section details all of the ``meta'' information about the experiment
-and the \ck{} file. In this section, the common \yabox|author| mapping is used
-for any fields where an author must be specified. The \yabox|author| mapping
+The \yabox|value| can be a string, integer, or floating-point number. We designed
+the \ck{} format to include all information necessary to simulate a
+given experiment. A \ck{} file is generally broken into two main sections.
+The first section details all the ``meta'' information about the experiment
+and the \ck{} file itself. This section uses the common \yabox|author| mapping
+for any fields that specify an author. The \yabox|author| mapping
 contains the following fields:
 %
 \begin{itemize}
     \item \yabox|name| (required, string): The author's full name
-    \item \yabox|ORCID| (optional, string): the author's ORCID number
+    \item \yabox|ORCID| (optional, string): the author's unique ORCID code
 \end{itemize}
 %
 More generally for the meta information, the required keys in this section
@@ -253,9 +253,9 @@ are:
     \item \yabox|file-version| (required, integer): The version of the \ck{}
     file
     \item \yabox|chemked-version| (required, string): The version of the \ck{}
-    schema that this file conforms to
+    schema to which this file conforms
     \item \yabox|reference| (required, mapping): The reference information for
-    the article associated with the data in the file. The fields in this
+    the published article associated with the data in the file. The fields in this
     mapping are:
     \begin{itemize}
         \item \yabox|authors| (required, sequence): A sequence of \yabox|author|
@@ -275,8 +275,8 @@ are:
     perform the experiment (\yabox|shock tube| or \yabox|rapid compression machine|)
 \end{itemize}
 
-The second section of the file encodes the experimental data. In the \ck{} file,
-this is done in a sequence of mappings, with the following information required
+The second section of the file encodes the experimental data. The \ck{} file
+describes these using a sequence of mappings, with the following information required
 in each element of the sequence:
 %
 \begin{itemize}
@@ -287,10 +287,10 @@ in each element of the sequence:
     \item \yabox|pressure| (required, string): The pressure of the experiment,
     with units
     \item \yabox|composition| (required, sequence): The composition of the
-    mixture in the experiment, a sequence of mappings with the following fields
+    mixture in the experiment, described via a sequence of mappings with the fields
     \begin{itemize}
         \item \yabox|species-name| (required, string): The name of the species
-        \item \yabox|mole-fraction|, \yabox|mass-fraction|, \yabox|mole-percent|
+        \item \yabox|mole-fraction|, \yabox|mole-percent|, \yabox|mass-fraction|
         (required, float): The mole fraction or percent, or the mass fraction.
         Only one of the three is permitted in a given \yabox|composition|
         sequence.
@@ -300,17 +300,17 @@ in each element of the sequence:
         composition (\yabox|atomic-composition| and
         \yabox|elemental-composition| are synonyms) as a sequence
     \end{itemize}
-    \item \yabox|ignition-type| (required, mapping): The type of ignition
-    measured in the experiments. The required fields are
+    \item \yabox|ignition-type| (required, mapping): The method used to detect
+    ignition in the experiments. The required fields are
     \begin{itemize}
-        \item \yabox|type| (required, string): How the ignition delay was
-        measured; one of \yabox|d/dt max| to indicate the ignition point is
-        found at the maximum of the time derivative of the \yabox|target|,
-        \yabox|max| or \yabox|min| to indicate the ignition point is at the
-        maximum or minimum of the \yabox|target|, or \yabox|1/2 max| to
-        indicate the half-maximum point
-        \item \yabox|target| (required, string): The target for the type of the
-        ignition point; one of \yabox|temperature|, \yabox|pressure|,
+        \item \yabox|type| (required, string): How ignition delay was
+        measured; one of \yabox|d/dt max| (indicates the ignition point was
+        found at the maximum of the time derivative of the \yabox|target|),
+        \yabox|max| or \yabox|min| (indicates the ignition point was at the
+        maximum or minimum of the \yabox|target|), or \yabox|1/2 max| (
+        indicates the half-maximum point of \yabox|target|)
+        \item \yabox|target| (required, string): The target for the ignition
+        \yabox|type| measurement; one of \yabox|temperature|, \yabox|pressure|,
         \yabox|OH|, \yabox|OH*|, \yabox|CH|, or \yabox|CH*|
     \end{itemize}
 \end{itemize}
@@ -318,13 +318,13 @@ in each element of the sequence:
 The top-level key for the sequence is called \yabox|datapoints|. Each of the
 quantities in an element must be specified with units. This should be done as a
 single string associated with the first element of the sequence. The units of
-the quantity are validated to ensure they have the appropriate dimensionality
+the quantity are validated to ensure appropriate dimensionality
 for the quantity. In addition, each of the quantities in an element can
 optionally be assigned an uncertainty. This uncertainty can be either absolute
-or relative, and is specified as elements of the sequence of the associated key.
+or relative, and is specified as an element of the sequence of the associated key.
 For example, the absolute uncertainty of the temperature and the relative
-uncertainty of the ignition delay might be specified as follows:
-
+uncertainty of the ignition delay might be specified as:
+%
 \begin{yamlbox}
 datapoints:
   - temperature:
@@ -338,33 +338,36 @@ datapoints:
     ...
 \end{yamlbox}
 
-\ck{} files are stored online in a git repository hosted on GitHub.
-\footnote{\url{https://github.com/pr-omethe-us/ChemKED-database}}
-Submissions from the community are welcomed and can be made via the standard Pull Request
+We have begun building an open repository of \ck{} files, available online at
+GitHub.\footnote{\url{https://github.com/pr-omethe-us/ChemKED-database}}
+We welcome submissions from the community; these can be made via the standard pull request
 on GitHub. The authors also encourage questions and problems to be submitted either via
-email or as Issues on GitHub. In particular, researchers interested in converters for
-internal data formats to the \ck{} format are encouraged to reach out. In addition,
+email or as issues on GitHub. In particular, researchers interested in converters for
+internal data formats to the \ck{} format are encouraged to reach out;
 the \pk{} package (described in more detail in Sec.~\ref{sec:pyked-architecture})
-provides converters to and from the ReSpecTh format~\autocite{Varga2015b}.
+currently provides converters to and from the ReSpecTh format~\autocite{Varga2015b}.
+While we plan to continue growing this database---and hope for submissions from
+the community---others can freely download files, or in fact copy (``fork,'' in GitHub
+parlance) the entire database for their own purposes.
 
 %====================================================================
 \section{PyKED architecture}\label{sec:pyked-architecture}
 %
-\pk{} is a Python package that currently provides the reference implementation
+\pk{} is a Python package that provides the reference implementation
 of the interface to \ck{} files~\autocite{PyKED}. \pk{} reads \ck{} files, validates
 their structure and content, and allows the user to interact with the data contained
 in the \ck{} file.
 
-The basic user interface to the \ck{} file in \pk{} is through the
-\pybox|ChemKED| class. The \pybox|ChemKED| class constructor takes the filename
+\pk{} provides the basic user interface to a \ck{} file through the
+\pybox|ChemKED| class. The \pybox|ChemKED| class constructor takes the name
 of a \ck{} file or a Python dictionary containing the contents of a \ck{} file
-as its argument. When the file or dictionary is loaded, it is validated to have
-the correct format by the Python package Cerberus \autocite{cerberus}. The
+as its argument. When the file or dictionary is loaded, \pk{} validates its
+format and contents using the Python package Cerberus \autocite{cerberus}. The
 schema used for validation of the \ck{} files is available publicly in the
 \texttt{schemas} directory of the PyKED source code
 repository.\footnote{\url{https://github.com/pr-omethe-us/PyKED/tree/master/pyked/schemas}}
-To ease extension of the schema to describe other experimental measurements, it
-comprises multiple YAML files.
+The schema comprises multiple YAML files to ease its extension to describe other
+experimental measurements.
 
 The fields of the \ck{} file are stored as instance attributes of the
 \pybox|ChemKED| class. The following attributes are available:
@@ -381,12 +384,12 @@ The fields of the \ck{} file are stored as instance attributes of the
 
 The \pybox|DataPoint| class stores the information associated with a single data
 point in the \ck{} file (i.e., a single element of the \yabox|datapoints|
-sequence). Similar to the \pybox|ChemKED| class, information in the
-\pybox|DataPoint| is stored as instance attributes:
+sequence). Similar to the \pybox|ChemKED| class,
+the \pybox|DataPoint| stores information as instance attributes:
 %
 \begin{itemize}
     \item \pybox|equivalence_ratio|: The value of the equivalence ratio, if
-    present. For informational purposes only, no validation is done of the
+    present. For informational purposes only---no validation is done of the
     value.
     \item \pybox|ignition_delay|, \pybox|temperature|, \pybox|pressure|,
     \pybox|pressure_rise|: The value of these data are stored as instances of
@@ -412,21 +415,24 @@ sequence). Similar to the \pybox|ChemKED| class, information in the
 
 The \pybox|DataPoint| class defines two instance methods:
 \pybox|get_cantera_mole_fraction()| and \pybox|get_cantera_mass_fraction()|.
-With these methods, the composition of the reactant mixture can be output to a
+These methods output the composition of the reactant mixture to a
 format that can be used to set the composition of a
 Cantera~\pybox|Solution|~\autocite{Cantera:2.3.0}.
 The \pybox|composition| specification does not contain the molecular
 weights of the components, so conversion between mole fractions and mass
-fractions is not currently possible.
+fractions is not currently possible. (Future versions of \pk{} may support this
+feature via, e.g., online lookup of species using their InChI\slash SMILES
+identifiers.)
 
-The \pybox|ChemKED| class defines one instance method:
-\pybox|get_dataframe()|. Using this method, the user can get an instance of a
+The \pybox|ChemKED| class defines three instance methods:
+\pybox|get_dataframe()|, \pybox|write_file()|, and \pybox|convert_to_ReSpecTh()|.
+The \pybox|get_dataframe()| method provides an instance of a
 Pandas \pybox|DataFrame|~\autocite{pandas} that contains the information in the
 list of \pybox|DataPoint|s. The user can specify the columns included in the
 \pybox|DataFrame| by passing a list of column names to the
 \pybox|output_columns| argument of the \pybox|get_dataframe()| method. The
 possible columns are not case-sensitive and are:
-
+%
 \noindent\begin{itemize*}
     \item \pybox|'Temperature'|
     \item \pybox|'Pressure'|
@@ -444,7 +450,7 @@ possible columns are not case-sensitive and are:
 In addition, specific fields from the \pybox|Reference| and \pybox|Apparatus|
 attributes can be included by specifying the name after a colon. These options
 are:
-
+%
 \noindent\begin{itemize*}
     \item \pybox|'Reference:Volume'|
     \item \pybox|'Reference:Journal'|
@@ -454,17 +460,21 @@ are:
     \item \pybox|'Reference:Year'|
     \item \pybox|'Reference:Pages'|
     \item \pybox|'Apparatus:Kind'|
+    \item \pybox|'Apparatus:Facility'|
 \end{itemize*}
 
 % This weirdness is necessary to prevent the list from running over the margin
 \noindent\begin{itemize*}
-    \item \pybox|'Apparatus:Facility'|
     \item \pybox|'Apparatus:Institution'|
 \end{itemize*}
 
 Only the first author is printed when \pybox|Reference| or
 \pybox|Reference:Authors| is selected because the whole author list may be
-quite long.
+quite long. The \pybox|write_file()| method writes another \ck{} YAML file based on
+the internal attributes, while \pybox|convert_to_ReSpecTh()| converts the \ck{}
+to a ReSpecTh XML file. In the latter case, some information may be lost, as \ck{}
+files both encode more details and specify more granularity of some information than
+ReSpecTh files.
 
 \pk{}~\autocite{PyKED} relies on well-established scientific Python software tools.
 These include NumPy~\autocite{vanderWalt:2011np} and Pandas~\autocite{pandas,McKinney2010}
@@ -475,11 +485,10 @@ Furthermore, \pk{} includes extensive unit, integration, and functional tests
 that ensure all aspects of the software operate as intended; others have pointed
 out the importance of automated testing in scientific software~\autocite{Wilson:bestpractices}.
 \pk{} relies on pytest~\autocite{pytest:3.0.1} for automated testing, and currently has
-100\% line and branch coverage for all of the executable code in the repository. This
+100\% line and branch coverage for all executable code in the repository. This
 means that the tests execute every line of code at least once, and evaluate
 every branch statement (e.g., if-then-else statements) to execute every condition
 at least once.
-
 Travis-CI\footnote{\url{https://travis-ci.org/pr-omethe-us/PyKED}} provides continuous
 integration service, including running the test suite, building and distributing binary
 installer packages, and building and publishing the online documentation. This automation
