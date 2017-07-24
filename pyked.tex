@@ -114,7 +114,7 @@ Instead, such data is typically found in under-documented comma-separated value
 (CSV) files and Excel spreadsheets, or contained in PDF tables rather than as
 supplementary material associated with a paper. In the worst case, data is only
 available in figures and must be digitized by the use of software such as
-WebPlotDigitizer~\autocite{WebPlotDigitizer}. These practices limit the wide use
+WebPlotDigitizer~\autocite{WebPlotDigitizer}. These practices limit wide use
 of the valuable, extensive experimental data available in the literature.
 \textcite{Frenklach:2007bm} further explained the benefits of standardized,
 widely available data for combustion. In brief, much of fundamental
@@ -136,14 +136,15 @@ PrIMe~\autocite{Frenklach:2007bm,You:2011hy} has a number of features that make
 it a strong standardization format, but it suffers from several flaws that
 prevent wide adoption. First, the PrIMe standard does not require or support all
 the information needed to simulate an experiment, including a machine-readable
-definition of ignition or a standard way to express detailed facility specific
-effects important to properly simulating certain experiments. Second, the XML
+definition of ignition or a standard way to express detailed facility-specific
+effects necessary to properly simulate certain experiments. Second, the XML
 format is intended to be a markup language rather than a data format, and
-presents a barrier to creating and working with database files. Furthermore, the
+its lack of human readibility presents a barrier to creating and working with
+database files. Furthermore, the
 focus on using internal identifiers for bibliographic references and
 species\slash reactions, rather than standard identifiers (e.g., DOIs for
-scholarly products and InCHI or SMILES for species), limits usability outside
-the PrIMe ecosystem. Finally, the closed and opaque nature of the PrIMe standard
+scholarly products, InCHI or SMILES for species), limits usability outside
+the PrIMe ecosystem. Finally, the closed and opaque natures of the PrIMe standard
 and associated Data Warehouse limit contributions and community development of
 the PrIMe standard and compatible data files and tools.
 
@@ -153,12 +154,12 @@ features that make files better standalone representations of experimental
 data---i.e., more informative by themselves rather than in concert with a larger
 system. For example, where PrIMe uses internal bibliographic references,
 ReSpecTh adds a field for typical bibliographic data. The ReSpecTh standard also
-provides machine-readable formats for specifying ignition experiments, including
+provides machine-readable formats for describing ignition experiments, including
 a field for the definition of autoignition and the ability to specify
 facility-specific effects. However, ReSpecTh experimental files are another
 XML-based format, and, as such, suffer from the same usability issues as PrIMe.
 Moreover, the standard remains closed, requiring potential users to register
-with the standard's authors to access the specification.
+with the standard's authors to access the specification and the growing database.
 
 Nonetheless, the usefulness of databases of fundamental combustion experiments
 has been shown to be quite useful. For instance, Olm and colleagues used their
@@ -169,14 +170,13 @@ syngas~\autocite{Varga:2016gj} and ethanol~\autocite{Olm:2016et}. In all four
 cases, they converted numerous experimental datasets from the literature into
 the ReSpecTh standard.
 
-Despite the development of these standards, limited examples of open data
-\emph{sharing} using the formats exist in the literature. To the best
+Despite the development of these standards, limited examples exist in the
+literature of open data \emph{sharing} using the formats. To the best
 of our knowledge, the largest such publicly available database is hosted by
 the Clean Combustion Research Center at King Abdullah University of Science and
-Technology (KAUST) and is known as CloudFlame
-(\url{https://cloudflame.kaust.edu.sa}). Started in
-2013~\autocite{Goteng:2013cf,Goteng:2014,ReynoChiasson:2015}, CloudFlame serves
-as an openly accessible database for experimental data, available in a standard
+Technology (KAUST): CloudFlame.\footnote{\url{https://cloudflame.kaust.edu.sa}}
+Started in 2013~\autocite{Goteng:2013cf,Goteng:2014,ReynoChiasson:2015}, CloudFlame
+serves as an openly accessible database for experimental data, available in a standard
 CSV format, and also provides a cloud infrastructure for running simulations
 based on stored models and data. While an admirable and useful effort,
 CloudFlame, like ReSpecTh and PrIMe, is a closed system controlled by a single
@@ -202,7 +202,7 @@ data and software openly to cultivate a community of user-contributors.
 This section will provide a brief introduction to the current version of the
 \ck{} database format, v0.1.6, which represents a functional standard
 for documenting autoignition measurements in shock tubes and rapid compression machines.
-This is not a complete listing of available fields and a complete reference for the
+Here we do not include a complete listing of available fields; a complete reference for the
 schema can be found in the online documentation.
 \footnote{\url{https://pr-omethe-us.github.io/PyKED/schema-docs.html}}
 In addition, in Section~\ref{sec:usage-example}, we will provide examples of \ck{}
@@ -344,7 +344,7 @@ Submissions from the community are welcomed and can be made via the standard Pul
 on GitHub. The authors also encourage questions and problems to be submitted either via
 email or as Issues on GitHub. In particular, researchers interested in converters for
 internal data formats to the \ck{} format are encouraged to reach out. In addition,
-the \pk{} package (described in more detail in Sec.~\label{sec:pyked-architecture})
+the \pk{} package (described in more detail in Sec.~\ref{sec:pyked-architecture})
 provides converters to and from the ReSpecTh format~\autocite{Varga2015b}.
 
 %====================================================================
