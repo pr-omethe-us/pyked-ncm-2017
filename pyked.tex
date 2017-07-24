@@ -338,6 +338,34 @@ datapoints:
     ...
 \end{yamlbox}
 
+Frequently, experimental series hold certain properties constant, such as initial
+mixture composition or pressure, and use the same method to detect ignition delay.
+\ck{} files support a \yabox|common-properties| convenience section where these
+common details may be defined once, and referenced in each datapoint.
+This block uses the ability of YAML files to define an anchor with the
+\yabox|&| symbol and refer to that section later with the \yabox|*| symbol:
+%
+\begin{yamlbox}
+common-properties:
+  composition: &comp
+    kind: mole fraction
+    species:
+      ...
+  ignition-type: &ign
+    ...
+datapoints:
+  composition: *comp
+  ignition-type: *ign
+  temperature: 1000 kelvin
+  ...
+\end{yamlbox}
+%
+The \yabox|common-properties| section is not required, but can save space and
+help avoid errors when several data points share some common values. However, even if
+properties are specified in the \yabox|common-properties| section, they must also be
+explicitly specified and referenced in the \yabox|datapoints| section for each data point,
+as seen in the previous code.
+
 We have begun building an open repository of \ck{} files, available online at
 GitHub.\footnote{\url{https://github.com/pr-omethe-us/ChemKED-database}}
 We welcome submissions from the community; these can be made via the standard pull request
@@ -512,7 +540,7 @@ capabilities of the software.
 \subsection{RCM modeling with varying reactor volume}\label{sec:rcm-modeling}
 
 The \ck{} file that will be used in this example can be found in the
-\pybox|tests| directory of the PyKED
+\texttt{tests} directory of the PyKED
 repository.\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_rcm.yaml}}
 Examining that file, we find the first section specifies the information about
 the \ck{} file itself:
@@ -549,9 +577,9 @@ apparatus:
   facility: CWRU RCM
 \end{yamlbox}
 %
-Finally, there is just a single datapoint in this file, which describes the ignition
-delay for the experiment, the mixture composition, the initial temperature,
-pressure, compression time, ignition type, and the volume history that specifies
+Finally, this file contains just a single datapoint, which describes the experimental
+ignition delay, initial mixture composition, initial temperature, initial pressure,
+compression time, ignition type, and volume history that specifies
 how the volume of the reactor varies with time, for simulating the compression
 stroke and post-compression processes.
 %
@@ -603,9 +631,9 @@ datapoints:
 %
 The values for the \yabox|volume-history| are truncated here to save space. A user
 might want to load the information from this file to perform a simulation using
-Cantera to calculate the ignition delay. All of the information required to
-perform this simulation is present in the \ck{} file, with the exception of a
-chemical kinetic model for \ce{H2}\slash {CO} combustion.
+Cantera~\autocite{Cantera:2.3.0} to calculate the ignition delay. All information
+required to perform this simulation is present in the \ck{} file, with the exception
+of a chemical kinetic model for \ce{H2}\slash {CO} combustion.
 %
 \begin{pythonbox}
 import cantera as ct
@@ -619,7 +647,7 @@ dp = ck.datapoints[0]
 %
 The initial temperature, pressure, and mixture composition can be read from the
 instance of the \pybox|DataPoint| class. \pk{} uses Pint \pybox|Quantities| to
-store values with units, while Cantera expects a floating point value in SI
+store values with units, while Cantera expects a floating-point value in SI
 units as input. Therefore, we use the built-in capabilities of Pint to convert
 the units from those specified in the \ck{} file to SI units:
 %
@@ -638,7 +666,7 @@ env = ct.Reservoir(ct.Solution('air.xml'))
 \end{pythonbox}
 %
 To apply the effect of the volume trace to the \pybox|IdealGasReactor|, a
-\pybox|Wall| is installed between the reactor and the environment and assigned
+\pybox|Wall| is installed between the reactor and environment, and assigned
 a velocity. Although we do not show the details here, a reference implementation
 of a class that computes a wall velocity given the volume history of the reactor
 is available in CanSen~\autocite{cansen}, in the
@@ -664,7 +692,7 @@ at each time step of the integration for post-processing.
 
 \subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
 
-The \ck{} file used in this example can be found in the \pybox|tests| directory of the \pk{}
+The \ck{} file used in this example can be found in the \texttt{tests} directory of the \pk{}
 repository.\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_st_p5.yaml}}
 The data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
 shock-tube ignition delays for \textit{tert}-butanol. We have omitted the file
@@ -694,13 +722,6 @@ common-properties:
   ignition-type: &ign
     target: OH*
     type: 1/2 max
-\end{yamlbox}
-%
-This block uses the ability of YAML files to define an anchor with the
-\yabox|&| symbol and refer to that section later with the \yabox|*| symbol, as
-can be seen in the definition of the \yabox|datapoints| section:
-%
-\begin{yamlbox}
 datapoints:
   - temperature:
       - 1459 kelvin
@@ -739,14 +760,9 @@ datapoints:
     ignition-type: *ign
     equivalence-ratio: 0.5
 \end{yamlbox}
-The \yabox|common-properties| section is not required, but can save space and
-help avoid errors when several data points share some common values. However, even if
-properties are specified in the \yabox|common-properties| section, they must also be
-explicitly specified in the \yabox|datapoints| section for each data point, as can be
-seen in the previous code.
 
-In this example, we would like to run constant-volume simulations at each of the
-pressure and temperature conditions in the \yabox|datapoints| list. Once again,
+In this example, we would like to run constant-volume simulations at each
+pressure and temperature condition in the \yabox|datapoints| list. Once again,
 the \ck{} file specifies all the information required for the simulations except
 for the chemical kinetic model, and Cantera can be used to simulate autoignition:
 %
@@ -806,11 +822,11 @@ license and the code is housed on GitHub at
 are outlined in the public
 roadmap.\footnote{\url{https://github.com/pr-omethe-us/PyKED/wiki/Roadmap}}
 The highest priority issues are currently adding support for other types of
-fundamental experiments, including speciation in shock tubes, flame speeds,
+fundamental experiments, including speciation in shock tubes, laminar flame speeds,
 and flame extinction measurements.
-Questions, comments, or suggestions are welcomed and can be posted as Issues in the
+Questions, comments, or suggestions are welcomed and can be posted as issues in the
 GitHub repository or emailed to the authors. In particular, we welcome proposals for new
-experimental types; see Issue \#60 in the \pk{} repository for an example of how this may
+experimental types; see issue \#60 in the \pk{} repository for an example of how this may
 be done.\footnote{\url{https://github.com/pr-omethe-us/PyKED/issues/60}}
 
 \printbibliography
