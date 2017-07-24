@@ -472,18 +472,17 @@ files, and Cerberus for validating \ck{} files~\autocite{cerberus}.
 Furthermore, \pk{} includes extensive unit, integration, and functional tests
 that ensure all aspects of the software operate as intended; others have pointed
 out the importance of automated testing in scientific software~\autocite{Wilson:bestpractices}.
-\pk{} relies on pytest~\autocite{pytest:3.0.1} for unit testing, and currently has
+\pk{} relies on pytest~\autocite{pytest:3.0.1} for automated testing, and currently has
 100\% line and branch coverage for all of the executable code in the repository. This
-means that the tests execute every line of code at least once, and every branch statement
-(e.g., if-then-else statement) is tested so that every condition is executed at least
-once.
+means that the tests execute every line of code at least once, and evaluate
+every branch statement (e.g., if-then-else statements) to execute every condition
+at least once.
 
 Travis-CI\footnote{\url{https://travis-ci.org/pr-omethe-us/PyKED}} provides continuous
 integration service, including running the test suite, building and distributing binary
 installer packages, and building and publishing the online documentation. This automation
-ensures that the test suite is run after every change to the source code, the
-documentation is up-to-date with the latest changes, and releasing new versions is as
-streamlined as possible.
+runs the test suite after every change to the source code, keeps the documentation
+up-to-date with the latest changes, and streamlines the release of new versions.
 
 \pk{} is licensed under the permissive, open-source BSD 3-clause license. The
 source code is publicly available on GitHub at
