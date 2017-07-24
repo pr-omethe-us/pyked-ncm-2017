@@ -75,19 +75,20 @@ laminar flame speeds, and species profiles serve important roles in understandin
 fuel chemistry and validating chemical kinetic models. However, despite both the
 importance and abundance of such information in the literature, the community lacks
 a widely adopted standard format for this data. This impedes both sharing and wide
-use by the community. In this talk, we will introduce a new Chemical Kinetics
-Experimental Data format, ChemKED, and the related Python-based package for creating
-and validating ChemKED-formatted files called PyKED. We will also review past and
+use by the community. Here we introduce a new chemical kinetics
+experimental data format, ChemKED, and the related Python-based package for creating
+and validating ChemKED-formatted files called PyKED. We also review past and
 related efforts, and motivate the need for a new solution. ChemKED currently supports
-the representation of autoignition delay time and laminar flame speed measurements.
+the representation of autoignition delay time measurements from shock tubes and rapid
+compression machines.
 ChemKED-formatted files contain all of the information needed to simulate experimental
 data points, including the uncertainty of the data. ChemKED is based on the YAML data
 serialization language, and is intended as a human- and machine-readable standard for
 easy creation and automated use.
 Development of ChemKED and PyKED occurs openly on GitHub under the
 BSD 3-clause license, and contributions from the community are welcome. Plans for
-future development include support for experimental data from jet stirred reactor,
-extinction, and speciation measurements.
+future development include support for experimental data from laminar flame,
+jet stirred reactor, and speciation measurements.
 \end{abstract}
 
 
@@ -337,13 +338,14 @@ datapoints:
     ...
 \end{yamlbox}
 
-ChemKED files are stored online in a git repository hosted on GitHub.
+\ck{} files are stored online in a git repository hosted on GitHub.
 \footnote{\url{https://github.com/pr-omethe-us/ChemKED-database}}
 Submissions from the community are welcomed and can be made via the standard Pull Request
 on GitHub. The authors also encourage questions and problems to be submitted either via
 email or as Issues on GitHub. In particular, researchers interested in converters for
-internal data formats to the ChemKED format are encouraged to reach out. In addition,
-converters to and from the ReSpecTh format are available in the PyKED repository.
+internal data formats to the \ck{} format are encouraged to reach out. In addition,
+the \pk{} package (described in more detail in Sec.~\label{sec:pyked-architecture})
+provides converters to and from the ReSpecTh format~\autocite{Varga2015b}.
 
 %====================================================================
 \section{PyKED architecture}\label{sec:pyked-architecture}
