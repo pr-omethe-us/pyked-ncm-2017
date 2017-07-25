@@ -70,8 +70,8 @@
 
 %====================================================================
 \begin{abstract} % not to exceed 200 words
-Fundamental experimental measurements of quantities including ignition delay times,
-laminar flame speeds, and species profiles serve important roles in understanding
+Fundamental experimental measurements of quantities such as ignition delay times,
+laminar flame speeds, and species profiles (among others) serve important roles in understanding
 fuel chemistry and validating chemical kinetic models. However, despite both the
 importance and abundance of such information in the literature, the community lacks
 a widely adopted standard format for this data. This impedes both sharing and wide
@@ -130,7 +130,7 @@ format~\autocite{Frenklach:2007bm,You:2011hy} and an associated online database,
 the PrIMe Data Warehouse.\footnote{\url{http://primekinetics.org}}
 PrIMe files encode fundamental
 combustion experimental data, along with kinetic models and calculated
-quantities, using the Extensible Markup Language (XML) standard.
+quantities, using the eXtensible Markup Language (XML) standard.
 
 PrIMe~\autocite{Frenklach:2007bm,You:2011hy} has a number of features that make
 it a strong standardization format, but it suffers from several flaws that
@@ -138,7 +138,7 @@ prevent wide adoption. First, the PrIMe standard does not require or support all
 the information needed to simulate an experiment, including a machine-readable
 definition of ignition or a standard way to express detailed facility-specific
 effects necessary to properly simulate certain experiments. Second, the XML
-format is intended to be a markup language rather than a data format, and
+format is intended to be a machine-readable markup language rather than a data format, and
 its lack of human readibility presents a barrier to creating and working with
 database files. Furthermore, the
 focus on using internal identifiers for bibliographic references and
@@ -148,7 +148,7 @@ the PrIMe ecosystem. Finally, the closed and opaque natures of the PrIMe standar
 and associated Data Warehouse limit contributions and community development of
 the PrIMe standard and compatible data files and tools.
 
-More recently, Varga et al.~\autocite{Varga2015a,Varga2015b} developed the
+More recently, Varga and coworkers~\autocite{Varga2015a,Varga2015b} developed the
 ReSpecTh standard, which builds on the PrIMe format. ReSpecTh adds important
 features that make files better standalone representations of experimental
 data---i.e., more informative by themselves rather than in concert with a larger
@@ -161,8 +161,8 @@ XML-based format, and, as such, suffer from the same usability issues as PrIMe.
 Moreover, the standard remains closed, requiring potential users to register
 with the standard's authors to access the specification and the growing database.
 
-Nonetheless, the usefulness of databases of fundamental combustion experiments
-has been shown to be quite useful. For instance, Olm and colleagues used their
+Nonetheless, databases of fundamental combustion experiments
+have been shown to be quite useful. For instance, Olm and colleagues used their
 ReSpecTh-based database to quantify the performance of literature
 hydrogen~\autocite{Olm:2014gn} and syngas~\autocite{Olm:2015ch} kinetic models,
 and more recently develop improved models for hydrogen\slash
@@ -454,7 +454,7 @@ identifiers.)
 
 The \pybox|ChemKED| class defines three instance methods:
 \pybox|get_dataframe()|, \pybox|write_file()|, and \pybox|convert_to_ReSpecTh()|.
-The \pybox|get_dataframe()| method provides an instance of a
+The \pybox|get_dataframe()| method returns an instance of a
 Pandas \pybox|DataFrame|~\autocite{pandas} that contains the information in the
 list of \pybox|DataPoint|s. The user can specify the columns included in the
 \pybox|DataFrame| by passing a list of column names to the
@@ -498,9 +498,11 @@ are:
 
 Only the first author is printed when \pybox|Reference| or
 \pybox|Reference:Authors| is selected because the whole author list may be
-quite long. The \pybox|write_file()| method writes another \ck{} YAML file based on
-the internal attributes, while \pybox|convert_to_ReSpecTh()| converts the \ck{}
-to a ReSpecTh XML file. In the latter case, some information may be lost, as \ck{}
+quite long.
+
+The \pybox|write_file()| method writes a new \ck{} YAML file based on
+the class' instance attributes, while \pybox|convert_to_ReSpecTh()| converts the \pybox|ChemKED|
+instance to a ReSpecTh XML file. In the latter case, some information may be lost, as \ck{}
 files both encode more details and specify more granularity of some information than
 ReSpecTh files.
 
@@ -646,7 +648,7 @@ dp = ck.datapoints[0]
 \end{pythonbox}
 %
 The initial temperature, pressure, and mixture composition can be read from the
-instance of the \pybox|DataPoint| class. \pk{} uses Pint \pybox|Quantities| to
+instance of the \pybox|DataPoint| class. \pk{} uses instances of the Pint \pybox|Quantity| class to
 store values with units, while Cantera expects a floating-point value in SI
 units as input. Therefore, we use the built-in capabilities of Pint to convert
 the units from those specified in the \ck{} file to SI units:
