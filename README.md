@@ -6,3 +6,4 @@ Various papers regarding PyKED and ChemKED
 
 * 10th US National Combustion Meeting: https://github.com/pr-omethe-us/pyked-papers/tree/ncm-2017
 * 10th International Conference on Chemical Kinetics: https://github.com/pr-omethe-us/pyked-papers/tree/icck-2017
+* International Journal of Chemical Kinetics: https://github.com/pr-omethe-us/pyked-papers/tree/2010-chemked-ijck
