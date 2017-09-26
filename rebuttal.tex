@@ -71,7 +71,7 @@ XML is a text format and it is fully human readable, similarly to YMAL. Even a f
 
 
 \textbf{Reviewer comment:}
-\textit{``For example, where PrIMe uses internal bibliographic references, ReSpecTh adds a field for typical bibliographic data.'' 
+\textit{``For example, where PrIMe uses internal bibliographic references, ReSpecTh adds a field for typical bibliographic data.''
 I suggest the following extension:
 ``For example, where PrIMe uses internal bibliographic references, ReSpecTh adds a field for typical bibliographic data, including the DOI of the cited arecicle. Each datafile has a unique own DOI and unique URL address. [\url{http://respecth.chem.elte.hu/respecth/reac/CombustionData.php}]''. Also species can be identified by InCHI or SMILES.
 }
@@ -120,7 +120,7 @@ Extended version:
 
 \textbf{Reviewer comment:}
 \textit{``type (required, string): How ignition delay was measured;''
-The options described here is a very limited subset of the ignition delay time definitions used in experimental articles. For example, backward or forward interpolated values of a measured quantity are further possibilities.  
+The options described here is a very limited subset of the ignition delay time definitions used in experimental articles. For example, backward or forward interpolated values of a measured quantity are further possibilities.
 }
 
 \textbf{Our response:}
@@ -128,7 +128,7 @@ The options described here is a very limited subset of the ignition delay time d
 
 \textbf{Reviewer comment:}
 \textit{p.~8 ``In the latter case, some information may be lost, as ChemKED files both encode more details and specify more granularity of some information than ReSpecTh files.''
-This was true for ReSpecTh format 1.0, but no longer true for ReSpecTh Kinetic Dataformat 2.0. The latter covers all info of the ChemKED files (and more). 
+This was true for ReSpecTh format 1.0, but no longer true for ReSpecTh Kinetic Dataformat 2.0. The latter covers all info of the ChemKED files (and more).
 }
 
 \textbf{Our response:}
@@ -148,10 +148,172 @@ Also, the latest version is from 2017.
 
 \textbf{Our response:}
 
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Reviewer \#2:}
 
+\textit{My main concern with the creation of a publically available database, formatted with ChemKED, is that it seems that the creation of the files has to be done manually, i.e. susceptible for errors. This is especially true if the experiment comprises a big set of datapoints and/or hundreds of measured species. Furthermore, the YAML data serialization format is indeed human-readable, but it does not provide an easy summary/overview of the experimental data, such as an excel or CSV file would give, and therefore, people might be not willing to put the extra effort.}
 
+
+\textbf{Reviewer comment:}
+\textit{1.~How are the authors planning on ‘forcing’ the experimentalists to publish their data in this new ChemKED file format?}
+
+\textbf{Our response:}
+
+\textit{2.~Am I correct to state that ChemKED is a YAML file with a predefined structure?}
+
+\textbf{Our response:}
+
+\textit{3.~I think the article would be more appealing if it would have at least one figure as an example.}
+
+\textbf{Our response:}
+
+
+\subsection*{Abstract and introduction}
+\textit{4. In the abstract, it is mentioned that the Python-based package PyKED creates ChemKED- formatted files. However in the article there is no evidence that PyKED aides in creating ChemKED-formatted files.}
+
+\textbf{Our response:}
+
+
+\textit{5.~Page 1, line 31: The future development plans include support for jet stirred reactors, however, this is not mentioned in section 5, Conclusions and future work, nor is there any reference to it on the GitHub wiki roadmap of PyKED.}
+
+\textbf{Our response:}
+
+\textit{6. I don't completely agree with the second part of the statement on page 2 line 16-18: ``Second, the XML format is intended to be a machine-readable mark-up language rather than a data format, and its lack of human readability presents a barrier to creating and working with database files.''}
+
+\textbf{Our response:}
+
+\textit{In my opinion the YAML format resembles the XML format strongly. XML format is human- readable, however, because of the html-tags and `\texttt{<>} characters, the YAML format might be easier to read. If XML would lack human readability as it is stated in the article, it would not be such a popular format, and I don't think PrIMe and ReSpecTh would be using it.}
+
+\textbf{Our response:}
+
+\textit{7.~An initial version of the ChemKED format was introduced by Niemeyer, as is mentioned in the introduction. The mentioned article describes a Python-package called PyTeCK. How does this PyTeCK package relate to the PyKED package that is presented in the submitted article?}
+
+\textbf{Our response:}
+
+
+\textit{8.~Page 3, line 10: ``Our motivations are similar to those of '', `to' is missing.}
+
+\textbf{Our response:}
+
+
+\subsection*{Overview of ChemKED format}
+
+\textit{9.~A reference should not be a required mapping of an experimental dataset. If the intention is to make the community to adopt the ChemKED file structure, it might be easier to do so if experimentalists can use the structure internally as well, i.e. to read, store, and share non-published internal data.}
+
+\textbf{Our response:}
+
+\textit{10.~Page 4, line 32: ``The second section of the file encodes the experimental data''. Perhaps it is easier to follow if this is briefly mentioned before the authors explain the details of the first section of the ChemKED format.}
+
+\textbf{Our response:}
+
+\textit{11.~Why do both \texttt{atomic-composition} and \texttt{elemental-composition} exist as synonyms? Wouldn't it be clearer if only one of the two can be used as a valid input?}
+
+\textbf{Our response:}
+
+
+\textit{12.~Is it possible to create for example two \texttt{common-properties} \texttt{composition} blocks A and B and refer to them in the \texttt{DataPoint} keys?}
+
+\textbf{Our response:}
+
+
+\textit{13.~Page 6, line 12 describes the initial efforts of building an open repository of ChemKED files, on GitHub. Is this the most efficient way for making a publically available database? One issue with this is the fact that adding files is done via pull requests, which have to be verified and approved by the owners of the repository. Therefore a certain delay is inevitable.}
+
+\textbf{Our response:}
+
+\textit{14.~Page 6, line 18 states that a converter exists from ReSpecTh to ChemKED. But isn't this feature added when going from v0.1.6 to v0.2.0, which makes page 3 line 21: v0.1.6 not correct.}
+
+\textbf{Our response:}
+
+
+\textit{15.~Page 6, line 21, is the `,' necessary after fork?}
+
+\textbf{Our response:}
+
+
+\subsection*{PyKED architecture}
+
+\textit{16.~The Python package Cerberus is used to validate the format and content of the given ChemKED file. How does this package handles/reports the inconsistencies with the schemas? As far as my local test went with giving a corrupted YAML file to the ChemKED initiator, the package just spits out a Python error, which might be not the most user-friendly solution.}
+
+\textbf{Our response:}
+
+
+\textit{17.~A recurring issue with actively developing codes is backwards compatibility. How are the authors planning on addressing this issue?}
+
+\textbf{Our response:}
+
+
+\textit{18.~Page 7, line 12, \texttt{mole-percent}, \texttt{mole-fraction}, and \texttt{mass-fraction} include a dash in their name, whereas this is not the case for the example on page 5 line 48 and in the description of the composition element on page 4, line 47.}
+
+\textbf{Our response:}
+
+
+\textit{19.~Same issue as \#18 holds for page 7, line 17.}
+
+\textbf{Our response:}
+
+
+\textit{20.~I think it would be more clear if \texttt{volume\_history}, \texttt{compression\_time}, \texttt{compressed\_temperature},
+and \texttt{compressed\_pressure} would be combined. The line: `if the ChemKED file encodes an
+RCM experiment' is unnecessarily repeated.}
+
+\textbf{Our response:}
+
+
+\textit{21.~Page 7, line 39: ``Future versions of PyKED may support this feature via, e.g. online lookup''.
+There are two main caveats with online lookups: a) It will make the code slower if the internet
+connection is not strong, b) an internet connection is necessary for the code to be executed.}
+
+\textbf{Our response:}
+
+
+\textit{22.~Page 7, line 40: Why is it interesting to create the YAML file again with the \texttt{write\_file()} function.
+Creating a summary excel/CSV file would be more useful.}
+
+
+\subsection*{Usage examples}
+\subsubsection*{RCM modelling with varying reactor volume}
+
+\textit{23.~Page 10, line 29--30: ``A user might want to load the information'' Avoid the term `might'. It's one of the main goals of using ChemKED and its associated Python-package PyKED to load the information necessary for simulating the experiment.}
+
+\textbf{Our response:}
+
+
+\textit{24.~The Python code snippets are not always initiated in the text.}
+
+\textbf{Our response:}
+
+
+\textit{25.~Page 10, line 55: add more commentary text. It is not clear that those lines create the
+necessary instances for Cantera, rather than ChemKED.}
+
+\textbf{Our response:}
+
+
+\textit{26.~Page 11, line 7: Where is this `air.xml' file coming from. This is not clear from the text.}
+
+\textbf{Our response:}
+
+
+\subsubsection*{Shock tube modelling with constant volume}
+
+\textit{27.~The table overlapping page 11 and 12 can be reduced by truncating the \texttt{DataPoints}, similarly as is done with the table starting at page 9, line 31 and ending at page 10, line 27.}
+
+\textbf{Our response:}
+
+\textit{28. Python code snippet on page 13: (a.) Add more commentary text. (b.) Changing the example to enable multithreading might make it more appealing to start using ChemKED as a data format in addition with Cantera as a simulation tool.}
+
+\textbf{Our response:}
+
+
+\subsection*{Conclusions and future work}
+
+\textit{29.~No conclusion is mentioned for the usage examples.}
+
+\textbf{Our response:}
 
 \section*{References}
 \bibliography{rebuttal}
