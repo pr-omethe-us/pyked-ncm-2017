@@ -479,7 +479,7 @@
 \DefineBibliographyStrings{english}{bibliography = {References}}
 
 % Print the article/book title in plain font without quotes
-\DeclareFieldFormat[article,book,inproceedings,incollection,thesis,software,report]{title}{#1}
+\DeclareFieldFormat[article,book,inproceedings,incollection,thesis,software,report,misc]{title}{#1}
 \DeclareFieldFormat{booktitle}{#1}
 
 % Print the journal title in upright font
