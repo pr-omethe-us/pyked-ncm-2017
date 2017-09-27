@@ -213,6 +213,8 @@
   \newunit%
   \usebibmacro{journal}%
   \setunit*{\addspace}%
+  \usebibmacro{date}%
+  \setunit*{\addcomma\space}%
   \printfield{volume}%
   \setunit*{\addspace}%
   %\printtext[parens]{\usebibmacro{date}}%
