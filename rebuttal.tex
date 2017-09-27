@@ -33,13 +33,9 @@
 \setlength{\parskip}{0.4cm}
 
 \newenvironment{reviewer}{\vspace{0.5\baselineskip}\begingroup\itshape\textbf{Reviewer:}}{\endgroup\vspace{0.5\baselineskip}}
-\newenvironment{response}{\vspace{0.5\baselineskip}\begin{response}
-
-\end{response}}{\vspace{0.5\baselineskip}}
+\newenvironment{response}{\vspace{0.5\baselineskip}\textbf{Our Response:}}{\vspace{0.5\baselineskip}}
 \newcommand{\review}[1]{{\itshape#1}}
-\newcommand{\respond}[1]{\begin{response}
-
-\end{response} #1}
+\newcommand{\respond}[1]{\textbf{Our Response:} #1}
 
 \begin{document}
 
