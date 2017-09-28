@@ -12,6 +12,7 @@
 *.cb2
 *.pdf
 *.listing
+*.spl
 
 ## Intermediate documents:
 *.dvi

@@ -216,6 +216,8 @@
   \newunit%
   \usebibmacro{journal}%
   \setunit*{\addspace}%
+  \usebibmacro{date}%
+  \setunit*{\addcomma\space}%
   \printfield{volume}%
   \setunit*{\addspace}%
   %\printtext[parens]{\usebibmacro{date}}%
@@ -480,7 +482,7 @@
 \DefineBibliographyStrings{english}{bibliography = {References}}
 
 % Print the article/book title in plain font without quotes
-\DeclareFieldFormat[article,book,inproceedings,incollection,thesis,software,report]{title}{#1}
+\DeclareFieldFormat[article,book,inproceedings,incollection,thesis,software,report,misc]{title}{#1}
 \DeclareFieldFormat{booktitle}{#1}
 
 % Print the journal title in upright font

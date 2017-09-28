@@ -149,7 +149,7 @@ the PrIMe ecosystem. Finally, the closed and opaque natures of the PrIMe standar
 and associated Data Warehouse limit contributions and community development of
 the PrIMe standard and compatible data files and tools.
 
-More recently, Varga and coworkers~\autocite{Varga2015a,Varga2015b} developed the
+More recently, Varga and coworkers~\autocite{Varga2015a,Varga2017} developed the
 ReSpecTh standard, which builds on the PrIMe format. ReSpecTh adds important
 features that make files better standalone representations of experimental
 data---i.e., more informative by themselves rather than in concert with a larger
@@ -157,19 +157,24 @@ system. For example, where PrIMe uses internal bibliographic references,
 ReSpecTh adds a field for typical bibliographic data. The ReSpecTh standard also
 provides machine-readable formats for describing ignition experiments, including
 a field for the definition of autoignition and the ability to specify
-facility-specific effects. However, ReSpecTh experimental files are another
+facility-specific effects. It can also describe speciation measurements in
+perfectly stirred reactors, flow reactors, and burner-stabilized flames, as well as
+burning velocity data. However, ReSpecTh experimental files are another
 XML-based format, and, as such, suffer from the same usability issues as PrIMe.
-Moreover, the standard remains closed, requiring potential users to register
-with the standard's authors to access the specification and the growing database.
+Moreover, the standard remains inaccessible to the public, requiring potential users
+to register with the standard's authors using a valid institutional email address
+to access the specification and the growing database.
 
 Nonetheless, databases of fundamental combustion experiments
 have proved quite useful. For instance, Olm and colleagues used their
 ReSpecTh-based database to quantify the performance of literature
 hydrogen~\autocite{Olm:2014gn} and syngas~\autocite{Olm:2015ch} kinetic models,
 and more recently develop improved models for hydrogen\slash
-syngas~\autocite{Varga:2016gj} and ethanol~\autocite{Olm:2016et}. In all four
-cases, they converted numerous experimental datasets from the literature into
-the ReSpecTh standard.
+syngas~\autocite{Varga:2016gj}, methanol\slash formaldehyde~\autocite{Olm:2017a},
+and ethanol~\autocite{Olm:2016et}. In all five cases, they converted numerous
+experimental datasets from the literature into the ReSpecTh standard.
+Their database currently contains \num{93240} experimental data points in 1376
+ReSpecTh XML files~\autocite{respecth}.
 
 Despite the development of these standards, limited examples exist in the
 literature of open data \emph{sharing} using the formats. To the best
@@ -191,7 +196,7 @@ with data encoded in this format. Niemeyer recently introduced an initial
 version of the \ck{} format~\autocite{Niemeyer:2016wf}, and in this work we
 further formalize and develop the standard. We also discuss a related Python
 software tool for validating and working with \ck{} files: \pk{}. Our
-motivations are similar those of the PrIMe and ReSpecTh teams: the \ck{} project
+motivations resemble those of the PrIMe and ReSpecTh teams: the \ck{} project
 will enable easy sharing and use of fundamental combustion data, for the
 (primary) purposes of developing and validating predictive chemical kinetic
 models. However, we make usability a major design focus, and plan to share all
@@ -375,9 +380,9 @@ on GitHub. The authors also encourage questions and problems to be submitted eit
 email or as issues on GitHub. In particular, researchers interested in converters for
 internal data formats to the \ck{} format are encouraged to reach out;
 the \pk{} package (described in more detail in Sec.~\ref{sec:pyked-architecture})
-currently provides converters to and from the ReSpecTh format~\autocite{Varga2015b}.
+currently provides converters to and from the ReSpecTh format~\autocite{Varga2017}.
 While we plan to continue growing this database---and hope for submissions from
-the community---others can freely download files, or in fact copy (``fork,'' in GitHub
+the community---others can freely download files, or in fact copy (``fork'' in GitHub
 parlance) the entire database for their own purposes.
 
 %====================================================================
