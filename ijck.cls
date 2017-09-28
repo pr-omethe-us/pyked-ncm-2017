@@ -22,7 +22,10 @@
 
 \LoadClass{article}
 
+% switch to the 2nd line when submitting
 \RequirePackage{minted}
+%\RequirePackage[cachedir=".",frozencache=true]{minted}
+
 \RequirePackage{tcolorbox}
 \tcbuselibrary{minted,breakable,skins,xparse}
 \usemintedstyle{friendly}
