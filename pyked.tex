@@ -159,12 +159,17 @@ ReSpecTh standard, which builds on the PrIMe format. ReSpecTh adds important
 features that make files better standalone representations of experimental
 data---i.e., more informative by themselves rather than in concert with a larger
 system. For example, where PrIMe uses internal bibliographic references,
-ReSpecTh adds a field for typical bibliographic data. The ReSpecTh standard also
+ReSpecTh adds a field for typical bibliographic data, including the DOI of
+the cited article. The ReSpecTh standard also
 provides machine-readable formats for describing ignition experiments, including
 a field for the definition of autoignition and the ability to specify
 facility-specific effects. It can also describe speciation measurements in
 perfectly stirred reactors, flow reactors, and burner-stabilized flames, as well as
-burning velocity data. However, ReSpecTh experimental files are another
+burning velocity data. To support this, ReSpecTh files allow the specification of species by
+standard identifiers, including InChI or SMILES. Finally, each ReSpecTh file
+has a unique DOI and URL assigned to it.
+
+However, ReSpecTh experimental files are another
 XML-based format, and, as such, suffer from the same usability issues as PrIMe.
 Moreover, the standard remains inaccessible to the public, requiring potential users
 to register with the standard's authors using a valid institutional email address
