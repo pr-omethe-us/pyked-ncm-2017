@@ -524,9 +524,10 @@ quite long.
 
 The \pybox|write_file()| method writes a new \ck{} YAML file based on the instance attributes
 of the class, while \pybox|convert_to_ReSpecTh()| converts the \pybox|ChemKED|
-instance to a ReSpecTh XML file. In the latter case, some information may be lost, as \ck{}
-files both encode more details and specify more granularity of some information than
-ReSpecTh files.
+instance to a ReSpecTh XML file. In the latter case, some information may be lost or the conversion
+may not be possible, as \ck{} files support some data that ReSpecTh files do not support. We note
+that the reverse is also true, not all ReSpecTh files may be converted to \ck{} files because not
+all of the data that can be stored in a ReSpecTh format is supported by the \ck{} format.
 
 \pk{}~\autocite{PyKED} relies on well-established scientific Python software tools.
 These include NumPy~\autocite{vanderWalt:2011np} and Pandas~\autocite{pandas,McKinney2010}
