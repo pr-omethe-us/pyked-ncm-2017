@@ -507,8 +507,9 @@ The manuscript has been significantly revised, and we marked significant changes
     %
     We agree with the reviewer that some of the choices currently enforced in the PyKED package and
     the ChemKED schema do not lend themselves to easy informal use. We presently recommend that
-    users who wish to use ChemKED files in this way include an incomplete reference field since the
-    only required subfields of the reference field are the authors and the year.
+    users who wish to use ChemKED files in this way include an incomplete reference field. We have
+    modified the ChemKED schema in response to this comment so that the only required subfields of
+    the reference field are the authors and the year.
 
     In addition, there is a \verb|skip_validation| argument to the \verb|ChemKED| class constructor.
     This option turns off all of the validation, including the validation of the reference material
