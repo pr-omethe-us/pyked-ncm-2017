@@ -643,7 +643,23 @@ The manuscript has been significantly revised, and we marked significant changes
 \end{reviewer}
 
 \begin{response}
+    %
+    We agree with the reviewer that backwards compatibility may become an issue. We have addressed
+    this concern in ChemKED by including the database version as one of the required keys in the
+    ChemKED file. Although the functionality doesn't exist yet, we intend to be able to check this
+    version and report any feature deprecation or removal to the user (see
+    \url{https://github.com/pr-omethe-us/PyKED/issues/22), and we plan to provide an automated
+    upgrade path for ChemKED files when backwards-incompatible changes are made. In addition, we use
+    the widely supported Semantic Versioning paradigm, where changes in the various parts of the
+    version number (vX.Y.Z) have specific meaning; changing the major version (X) indicates a
+    backwards incompatible change, changing the minor version (Y) indicates a backwards compatible,
+    but somewhat large, change, and changing the patch version (Z) indicates a bug fix with no
+    anticipated incompatibilities.
 
+    Finally, each released version of PyKED is permanently archived on Zenodo
+    (\url{https://doi.org/10.5281/zenodo.597935}) so that it is accessible should a user wish to use
+    an old version to solve a compatibility issue temporarily.
+    %
 \end{response}
 
 \begin{reviewer}
