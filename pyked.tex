@@ -616,11 +616,14 @@ out the importance of automated testing in scientific software~\autocite{Wilson:
 means that the tests execute every line of code at least once, and evaluate
 every branch statement (e.g., if-then-else statements) to execute every condition
 at least once.
-Travis-CI\footnote{\url{https://travis-ci.org/pr-omethe-us/PyKED}} provides continuous
-integration service, including running the test suite, building and distributing binary
-installer packages, and building and publishing the online documentation. This automation
-runs the test suite after every change to the source code, keeps the documentation
-up-to-date with the latest changes, and streamlines the release of new versions.
+
+Travis-CI\footnote{\url{https://travis-ci.org/pr-omethe-us/PyKED}} and
+Appveyor\footnote{\url{https://ci.appveyor.com/project/Prometheus/pyked}} provide continuous
+integration (CI) service for Linux, macOS, and Windows platforms. The CI services run the test suite
+on every change to the source code, build and distribute binary installer packages for every
+release, and build and publish the online documentation automatically. This automation ensures that
+test failures are caught quickly, keeps the documentation up-to-date with the latest changes, and
+streamlines the release of new versions.
 
 \pk{} is licensed under the permissive, open-source BSD 3-clause license. The
 source code is publicly available on GitHub at \url{https://github.com/pr-omethe-us/PyKED},
