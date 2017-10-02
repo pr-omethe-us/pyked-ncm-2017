@@ -774,12 +774,20 @@ X_initial = dp.get_cantera_mole_fraction()
 \end{pythonbox}
 %
 With these properties defined, we have to create the objects in Cantera that represent the physical
-state of the system to be studied.
-%
+state of the system to be studied. In Cantera, the \pybox|Solution| class stores the thermodynamic,
+kinetic, and transport data from an input file in the CTI format. After the \pybox|Solution| object
+is created, we can set the initial temperature, pressure, and mole fractions using the \pybox|TPX|
+attribute of the \pybox|Solution| class:
+
 \begin{pythonbox}
 # Load the mechanism and set the initial state of the mixture
 gas = ct.Solution('h2-co-mechanism.cti')
 gas.TPX = T_initial, P_initial, X_initial
+\end{pythonbox}
+
+With the thermodynamic and kinetic data loaded and the initial conditions defined, we  need to
+install the \pybox|Solution| instance into an \pybox|IdealGasReactor| which implements the equations
+for mass, energy, and species conservation.
 
 # Create the reactor and the outside environment
 reac = ct.IdealGasReactor(gas)
