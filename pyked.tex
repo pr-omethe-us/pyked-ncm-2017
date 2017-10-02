@@ -441,13 +441,13 @@ the \pybox|DataPoint| stores information as instance attributes:
     the \pybox|Quantity| class from the Pint \autocite{Grecco2016} package,
     possibly with associated uncertainty
     \item \pybox|composition|: A list of dictionaries of the species and their
-    respective amounts. The values are validated so that \yabox|mole-percent|,
-    \yabox|mole-fraction|, or \yabox|mass-fraction| cannot be mixed for a single
+    respective amounts. The values are validated so that \yabox|mole percent|,
+    \yabox|mole fraction|, or \yabox|mass fraction| cannot be mixed for a single
     data point, and so that the sum of the values is approximately 1.0, or
-    100.0 for \yabox|mole-percent|.
+    100.0 for \yabox|mole percent|.
     \item \pybox|composition_type|: A string indicating the type of composition
-    information for the data point---one of \pybox|'mole-percent'|,
-    \pybox|'mole-fraction'|, or \pybox|'mass-fraction'|
+    information for the data point---one of \pybox|'mole percent'|,
+    \pybox|'mole fraction'|, or \pybox|'mass fraction'|
     \item \pybox|volume_history|: If the \yabox|volume-history| of an RCM
     experiment is provided in the \ck{} file, it is stored in this attribute as
     a \pybox|namedtuple|, and the actual values are stored in NumPy arrays
