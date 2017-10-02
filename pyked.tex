@@ -448,18 +448,23 @@ the \pybox|DataPoint| stores information as instance attributes:
     \item \pybox|composition_type|: A string indicating the type of composition
     information for the data point---one of \pybox|'mole percent'|,
     \pybox|'mole fraction'|, or \pybox|'mass fraction'|
+    \item \pybox|ignition_type|: A dictionary specifying the method of the
+    measurement of ignition delay
+\end{itemize}
+
+If the \ck{} file encodes an RCM experiment, there are several specialized fields that can be
+included.
+
+\begin{itemize}
     \item \pybox|volume_history|: If the \yabox|volume-history| of an RCM
     experiment is provided in the \ck{} file, it is stored in this attribute as
     a \pybox|namedtuple|, and the actual values are stored in NumPy arrays
     \autocite{vanderWalt:2011np}
-    \item \pybox|compression_time|: If the \ck{} file encodes an RCM experiment,
-    the length of the compression stroke may be included
-    \item \pybox|compressed_temperature|: If the \ck{} file encodes an RCM experiment,
-    the temperature at the end of compression may be included
-    \item \pybox|compressed_pressure|: If the \ck{} file encodes an RCM experiment,
-    the pressure at the end of compression may be included
-    \item \pybox|ignition_type|: A dictionary specifying the method of the
-    measurement of ignition delay
+    \item \pybox|compression_time|: The duration of the compression stroke
+    \item \pybox|compressed_temperature|: The estimated reactor temperature at the end of the
+    compression stroke
+    \item \pybox|compressed_pressure|: The measured reactor pressure at the end of the compression
+    stroke
 \end{itemize}
 
 The \pybox|DataPoint| class defines two instance methods:
@@ -517,7 +522,7 @@ are:
     \item \pybox|'Apparatus:Institution'|
 \end{itemize*}
 
-Only the first author is printed when \pybox|Reference| or
+Only the first author is included in the \pybox|DataFrame| when \pybox|Reference| or
 \pybox|Reference:Authors| is selected because the whole author list may be
 quite long.
 
