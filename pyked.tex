@@ -248,51 +248,79 @@ key5:  # Sequence of mappings
 
 The \yabox|value| can be a string, integer, or floating-point number. We designed
 the \ck{} format to include all information necessary to simulate a
-given experiment. A \ck{} file is generally broken into two main sections.
-The first section details all the ``meta'' information about the experiment
-and the \ck{} file itself. This section uses the common \yabox|author| mapping
-for any fields that specify an author. The \yabox|author| mapping
-contains the following fields:
+given experiment. A \ck{} file is generally broken into two main sections: a section containing the
+``meta'' information about the experiment and the \ck{} file itself, and a section containing the
+actual experimental data to be encoded.
+
+\subsection{Apparatus Information and Metadata}\label{sec:apparatus-information-and-metadata}
+
+We will first describe the fields in the ``meta'' section.
+This section uses a mapping that is called the \yabox|author| mapping in the schema. As this mapping
+is used for any fields that specify an author throughout the schema, we describe it first.
+The \yabox|author| mapping contains the following fields:
 %
 \begin{itemize}
     \item \yabox|name| (required, string): The author's full name
     \item \yabox|ORCID| (optional, string): the author's unique ORCID code
 \end{itemize}
 %
-More generally for the meta information, the required keys in this section
-are:
+In general, the meta information describes the experimental facility and type of experiment, the
+reference from which the data was taken, and the author of the \ck{} file itself. For each of the
+keys below, we have indicated whether the key is required or optional, and the type of value
+associated with the key. The keys in the meta section include:
 %
 \begin{itemize}
+    \item \yabox|apparatus| (required, mapping): Information about the specific experimental
+    apparatus used to conduct the experiment. The fields in this mapping are:
+    \begin{itemize}
+        \item \yabox|facility| (optional, string): A unique name or identifier for the apparatus,
+        if the institution has several that are similar
+        \item \yabox|institution| (optional, string): The institution where the experimental
+        apparatus was located when the experiments were performed
+        \item \yabox|kind| (required, string): The type of apparatus used to
+        perform the experiment. Currently, only \yabox|shock tube| or
+        \yabox|rapid compression machine| are supported.
+    \end{itemize}
+    \item \yabox|chemked-version| (required, string): The version of the \ck{}
+    schema to which this file conforms
+    \item \yabox|experiment-type| (required, string): Currently, only
+    \yabox|ignition delay| is supported
     \item \yabox|file-author| (required, \yabox|author|-type mapping): The
     author of the \ck{} file
     \item \yabox|file-version| (required, integer): The version of the \ck{}
     file
-    \item \yabox|chemked-version| (required, string): The version of the \ck{}
-    schema to which this file conforms
     \item \yabox|reference| (required, mapping): The reference information for
     the published article associated with the data in the file. The fields in this
     mapping are:
     \begin{itemize}
         \item \yabox|authors| (required, sequence): A sequence of \yabox|author|
         mappings
-        \item \yabox|journal| (optional, string): The name of the publishing
-        journal
-        \item \yabox|year| (required, integer): The year of publication
-        \item \yabox|doi| (optional, string): The article DOI
-        \item \yabox|volume| (optional, integer): The journal volume number
-        \item \yabox|pages| (optional, string): The article pages
         \item \yabox|detail| (optional, string): A description of from where the
         data originated (e.g., figure or table number)
+        \item \yabox|doi| (optional, string): The article DOI
+        \item \yabox|journal| (optional, string): The name of the publishing
+        journal
+        \item \yabox|pages| (optional, string): The article pages
+        \item \yabox|volume| (optional, integer): The journal volume number
+        \item \yabox|year| (required, integer): The year of publication
     \end{itemize}
-    \item \yabox|experiment-type| (required, string): Currently, only
-    \yabox|ignition delay| is supported
-    \item \yabox|apparatus| (required, string): The type of apparatus used to
-    perform the experiment (\yabox|shock tube| or \yabox|rapid compression machine|)
 \end{itemize}
 
-The second section of the file encodes the experimental data. The \ck{} file
-describes these using a sequence of mappings, with the following information required
-in each element of the sequence:
+Several of these keys bear further discussion. The \yabox|chemked-version| is present in the file so
+that PyKED can determine whether the file conforms to a supported version of the schema. Although
+quite similar in name, the \yabox|file-version| represents the number of versions that have been
+created of the current file; it is an integer that should be incremented whenever changes are made
+to the file. Finally, the \yabox|reference| mapping is required in every file, even those that
+represent data that has not been published. However, the \yabox|reference| mapping only requires the
+\yabox|authors| sequence and the \yabox|year|, so that \ck{} files can be used internally within
+research groups to represent unpublished data prior to publication.
+
+\subsection{Ignition Delay Experimental Data}\label{sec:ignition-delay-experimental-data}
+
+The second section of the file encodes the experimental data as a sequence of mappings. The
+top-level key for the sequence is called \yabox|datapoints|. For the current version of the \ck{}
+schema, only autoignition delay experiments are supported. The following information os required in
+each element of the sequence:
 %
 \begin{itemize}
     \item \yabox|temperature| (required, sequence): The temperature of the
