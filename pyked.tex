@@ -479,7 +479,7 @@ the community---others can freely download files, or in fact copy (``fork'' in G
 parlance) the entire database for their own purposes.
 
 %====================================================================
-\section{PyKED architecture}\label{sec:pyked-architecture}
+\section{PyKED Architecture}\label{sec:pyked-architecture}
 %
 \pk{} is a Python package that provides the reference implementation
 of the interface to \ck{} files~\autocite{PyKED}. \pk{} reads \ck{} files, validates
@@ -519,10 +519,6 @@ the \pybox|DataPoint| stores information as instance attributes:
     \item \pybox|equivalence_ratio|: The value of the equivalence ratio, if
     present. For informational purposes only---no validation is done of the
     value.
-    \item \pybox|ignition_delay|, \pybox|temperature|, \pybox|pressure|,
-    \pybox|pressure_rise|: The value of these data are stored as instances of
-    the \pybox|Quantity| class from the Pint \autocite{Grecco2016} package,
-    possibly with associated uncertainty
     \item \pybox|composition|: A list of dictionaries of the species and their
     respective amounts. The values are validated so that \yabox|mole percent|,
     \yabox|mole fraction|, or \yabox|mass fraction| cannot be mixed for a single
@@ -533,22 +529,17 @@ the \pybox|DataPoint| stores information as instance attributes:
     \pybox|'mole fraction'|, or \pybox|'mass fraction'|
     \item \pybox|ignition_type|: A dictionary specifying the method of the
     measurement of ignition delay
-\end{itemize}
-
-If the \ck{} file encodes an RCM experiment, there are several specialized fields that can be
-included.
-
-\begin{itemize}
     \item \pybox|volume_history|: If the \yabox|volume-history| of an RCM
     experiment is provided in the \ck{} file, it is stored in this attribute as
     a \pybox|namedtuple|, and the actual values are stored in NumPy arrays
     \autocite{vanderWalt:2011np}
-    \item \pybox|compression_time|: The duration of the compression stroke
-    \item \pybox|compressed_temperature|: The estimated reactor temperature at the end of the
-    compression stroke
-    \item \pybox|compressed_pressure|: The measured reactor pressure at the end of the compression
-    stroke
 \end{itemize}
+%
+Other instance attributes are stored as instances of the \pybox|Quantity| class from the
+Pint \autocite{Grecco2016} package, possibly with an associated uncertainty. These include the
+\pybox|ignition_delay|, \pybox|temperature|, \pybox|pressure|, \pybox|pressure_rise|,
+\pybox|compression_time|, \pybox|compressed_temperature|, and \pybox|compressed_pressure|
+attributes, each of which represents the similarly-named field in the \ck{} schema.
 
 The \pybox|DataPoint| class defines two instance methods:
 \pybox|get_cantera_mole_fraction()| and \pybox|get_cantera_mass_fraction()|.
