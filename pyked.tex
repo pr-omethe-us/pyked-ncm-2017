@@ -330,11 +330,15 @@ each element of the sequence:
     experiment, with units and optionally uncertainty
     \item \yabox|pressure| (required, sequence): The pressure of the experiment,
     with units and optionally uncertainty
+    \item \yabox|first-stage-ignition-delay| (optional, sequence): If two stages of ignition are
+    present in the experiment, this is the length of the first stage of ignition, and the
+    \yabox|ignition-delay| is then the overall ignition delay
+    \item \yabox|equivalence-ratio| (optional, float): The value of the equivalence ratio
     \item \yabox|composition| (required, mapping): The composition of the
-    mixture in the experiment, described via a nested mapping with the fields
+    mixture in the experiment, described via a nested mapping with the fields:
     \begin{itemize}
         \item \yabox|kind| (required, string): one of \yabox|mole fraction|, \yabox|mole percent|, or \yabox|mass fraction|
-        \item \yabox|species|: sequence of mappings, with the fields
+        \item \yabox|species|: sequence of mappings, with the fields:
         \begin{itemize}
             \item \yabox|species-name| (required, string): The name of the species
             \item \yabox|amount| (required, sequence): The mole fraction or percent, or the mass fraction, optionally with uncertainty
@@ -361,7 +365,7 @@ each element of the sequence:
     \end{itemize}
 \end{itemize}
 
-The top-level key for the sequence is called \yabox|datapoints|. Each of the
+Each of the
 quantities in an element must be specified with units. This should be done as a
 single string associated with the first element of the sequence. The units of
 the quantity are validated to ensure appropriate dimensionality
@@ -411,6 +415,56 @@ help avoid errors when several data points share some common values. However, ev
 properties are specified in the \yabox|common-properties| section, they must also be
 explicitly specified and referenced in the \yabox|datapoints| section for each data point,
 as seen in the previous code.
+
+\subsubsection{Shock Tube Experiments}\label{sec:shock-tube-experiments}
+
+There is one additional key that can be used to describe the facility-specific effects during a
+shock tube experiment:
+%
+\begin{itemize}
+    \item \yabox|pressure-rise| (optional, sequence): The pressure rise in the driven section after
+    the passage of the reflected shock, in dimensions of inverse time. Must include units and,
+    optionally, uncertainty
+\end{itemize}
+
+\subsubsection{Rapid Compression Machine Experiments}\label{sec:rcm-experiments}
+
+Rapid compression machine experiments typically report several additional pieces of information in
+addition to the ignition delay. As for shock tube experiments, these describe some of the
+facility-specific effects during an experiment. The keys to describe this information are:
+%
+\begin{itemize}
+    \item \yabox|volume-history| (optional, mapping): Specify the volume history of the reaction
+    chamber as a function of time during a rapid compression machine experiment. The fields in this
+    mapping are:
+    \begin{itemize}
+        \item \yabox|volume| (required, mapping): A mapping describing the volume in the history.
+        The fields in this mapping are:
+        \begin{itemize}
+            \item \yabox|units| (required, string): the units of the volume, with dimensions length
+            cubed
+            \item \yabox|column| (required, integer): the 0-based index of the column storing the
+            volume information in the \yabox|values| array
+        \end{itemize}
+        \item \yabox|time| (required, mapping): A mapping describing the time in the history.
+        The fields in this mapping are:
+        \begin{itemize}
+            \item \yabox|units| (required, string): the units of the time
+            \item \yabox|column| (required, integer): the 0-based index of the column storing the
+            time information in the \yabox|values| array
+        \end{itemize}
+        \item \yabox|values| (required, sequence): A sequence of sequences describing the values of
+        the volume at the time points.
+    \end{itemize}
+    \item \yabox|compressed-temperature| (optional, sequence): The estimated temperature at the end
+    of the compression stroke
+    \item \yabox|compression-time| (optional, sequence): The time taken during the compression
+    stroke
+    \item \yabox|compressed-pressure| (optional, sequence): The measured pressure at the end of the
+    compression stroke
+\end{itemize}
+
+\subsection{Public Database of \ck{} Files}\label{sec:public-database}
 
 We have begun building an open repository of \ck{} files, available online at
 GitHub.\footnote{\url{https://github.com/pr-omethe-us/ChemKED-database}}
