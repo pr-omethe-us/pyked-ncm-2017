@@ -794,7 +794,7 @@ versa) and change the reactor's thermodynamic state; we use a \pybox|Reservoir| 
 because in Cantera, \pybox|Reservoir|s always have a constant thermodynamic state and composition.
 Using a \pybox|Reservoir| accelerates the solution compared to using two \pybox|IdealGasReactor|s,
 since the composition and state of the environment are typically not necessary for the solution of
-auotignition problems. Although we do not show the details here, a reference implementation of a
+autoignition problems. Although we do not show the details here, a reference implementation of a
 class that computes a wall velocity given the volume history of the reactor is available in
 CanSen~\autocite{cansen}, in the \pybox|cansen.profile.VolumeProfile| class. Then, a Cantera
 \pybox|ReactorNet| can be used to advance the state through autoignition, in this case to an end
