@@ -731,7 +731,18 @@ The manuscript has been significantly revised, and we marked significant changes
 \end{reviewer}
 
 \begin{response}
+    %
+    The use case for the \texttt{write\_file()} is that users might modify the ChemKED instance
+    after it has been loaded, and wish to write their changes out to a new file.
 
+    Users can create Excel or CSV files containing all or some of the datapoints in the ChemKED
+    instance by using the \verb|get_dataframe()| function, and the associated functionality in
+    Pandas (\verb|DataFrame.to_csv()| and \verb|DataFrame.to_excel()|). Since this functionality
+    already exists, we do not wish to reinvent the wheel by writing our own functions that would
+    have to be maintained and tested. Finally, we would note that data can also be plotted and
+    viewed directly from Python using existing functionality in the Pandas DataFrame class
+    (\verb|DataFrame.plot()|).
+    %
 \end{response}
 
 \subsection*{Usage examples}
