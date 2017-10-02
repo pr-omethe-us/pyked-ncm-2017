@@ -214,15 +214,15 @@ data and software openly to cultivate a community of user-contributors.
 %====================================================================
 \section{Overview of ChemKED format}\label{sec:overview-of-format}
 
-This section provides a brief introduction to the current version of the
-\ck{} database format, v0.1.6, which represents a functional standard
-for documenting autoignition measurements in shock tubes and rapid compression machines.
-Here we do not include a complete listing of available fields; a complete reference for the
-schema can be found in the online
-documentation.\footnote{\url{https://pr-omethe-us.github.io/PyKED/schema-docs.html}}
-In Section~\ref{sec:usage-example}, we provide examples of \ck{} files and
-representative use cases. We indicate \yabox|yaml| keywords or values using text with
-gray background, and \pybox|Python| code using text with a yellow background.
+This section provides an introduction to the current version of the \ck{} database format, v0.1.6,
+which represents a functional standard for documenting autoignition measurements in shock tubes and
+rapid compression machines. Here we describe the fields that a user creating a \ck{} file is likely
+to use. There are several fields that are used internally in the schema that are not described here,
+but can be found in the online documentation for the
+schema.\footnote{\url{https://pr-omethe-us.github.io/PyKED/schema-docs.html}} In
+Section~\ref{sec:usage-example}, we provide examples of \ck{} files and representative use cases. We
+indicate \yabox|yaml| keywords or values using text with gray background, and \pybox|Python| code
+using text with a yellow background.
 
 \ck{} files use the YAML data serialization format~\autocite{yaml:1.2}. This
 format offers the advantages of being relatively easy for humans to read and write,
