@@ -694,13 +694,19 @@ reac = ct.IdealGasReactor(gas)
 env = ct.Reservoir(ct.Solution('air.xml'))
 \end{pythonbox}
 %
-To apply the effect of the volume trace to the \pybox|IdealGasReactor|, a
-\pybox|Wall| is installed between the reactor and environment, and assigned
-a velocity. Although we do not show the details here, a reference implementation
-of a class that computes a wall velocity given the volume history of the reactor
-is available in CanSen~\autocite{cansen}, in the
-\pybox|cansen.profile.VolumeProfile| class. Then, a Cantera \pybox|ReactorNet|
-can be used to advance the state through autoignition, in this case to an end
+In this example, \pybox|reac| represents the contents of the RCM reaction chamber and \pybox|env|
+represents the contents of the environment. \verb|air.xml| is an input file included with Cantera
+that represents an average composition of air. To apply the effect of the volume trace to the
+\pybox|IdealGasReactor|, a \pybox|Wall| is installed between the reactor and environment and
+assigned a velocity. The \pybox|Wall| allows the environment to do work on the reactor (or vice
+versa) and change the reactor's thermodynamic state; we use a \pybox|Reservoir| for the environment
+because in Cantera, \pybox|Reservoir|s always have a constant thermodynamic state and composition.
+Using a \pybox|Reservoir| accelerates the solution compared to using two \pybox|IdealGasReactor|s,
+since the composition and state of the environment are typically not necessary for the solution of
+auotignition problems. Although we do not show the details here, a reference implementation of a
+class that computes a wall velocity given the volume history of the reactor is available in
+CanSen~\autocite{cansen}, in the \pybox|cansen.profile.VolumeProfile| class. Then, a Cantera
+\pybox|ReactorNet| can be used to advance the state through autoignition, in this case to an end
 time of \SI{50}{\milli\second}:
 %
 \begin{pythonbox}
