@@ -683,7 +683,7 @@ Finally, this file contains just a single datapoint, which describes the experim
 ignition delay, initial mixture composition, initial temperature, initial pressure,
 compression time, ignition type, and volume history that specifies
 how the volume of the reactor varies with time, for simulating the compression
-stroke and post-compression processes.
+stroke and post-compression processes:
 %
 \begin{yamlbox}
 datapoints:
@@ -735,14 +735,26 @@ The values for the \yabox|volume-history| are truncated here to save space. One 
 data stored in this file is to perform a simulation using Cantera~\autocite{Cantera:2.3.0} to
 calculate the ignition delay, including the facility-dependent effects represented in the volume
 trace. All information required to perform this simulation is present in the \ck{} file, with the
-exception of a chemical kinetic model for \ce{H2}\slash {CO} combustion.
+exception of a chemical kinetic model for \ce{H2}\slash \ce{CO} combustion.
+
+In Python, additional functionality can be imported into a script or session by the \pybox|import|
+keyword. Cantera and PyKED both must be imported into the session so that we can work with the code.
+In the case of Cantera, we will use many functions from the library, so we assign it an abbreviation
+(\pybox|ct|) for convenience. From PyKED, we will only be using the \pybox|ChemKED| class, so this
+is all that is imported:
 %
 \begin{pythonbox}
 import cantera as ct
 from pyked import ChemKED
-
-# Load the ChemKED file and retrieve the first element of the
-# datapoints list, which is an instance of the DataPoint class
+\end{pythonbox}
+%
+Next, we have to load the ChemKED file and retrieve the first element of the \pybox|datapoints|
+list. Although this file only encodes a single experiment, the \pybox|datapoints| attribute will
+always be a list (in this case, of length 1). As mentioned previously, the elements of the
+\pybox|datapoints| list are instances of the \pybox|DataPoint| class, which we store in the variable
+\pybox|dp|.
+%
+\begin{pythonbox}
 ck = ChemKED('testfile_rcm.yaml')
 dp = ck.datapoints[0]
 \end{pythonbox}
@@ -751,12 +763,18 @@ The initial temperature, pressure, and mixture composition can be read from the
 instance of the \pybox|DataPoint| class. \pk{} uses instances of the Pint \pybox|Quantity| class to
 store values with units, while Cantera expects a floating-point value in SI
 units as input. Therefore, we use the built-in capabilities of Pint to convert
-the units from those specified in the \ck{} file to SI units:
+the units from those specified in the \ck{} file to SI units, and we use the \pybox|magnitude|
+attribute of the \pybox|Quantity| class to take only the numerical part. We also retrieve the
+initial mixture mole fractions in a format Cantera will understand:
 %
 \begin{pythonbox}
 T_initial = dp.temperature.to('K').magnitude
 P_initial = dp.pressure.to('Pa').magnitude
 X_initial = dp.get_cantera_mole_fraction()
+\end{pythonbox}
+%
+With these properties defined, we have to create the objects in Cantera that represent the physical
+state of the system to be studied.
 
 # Load the mechanism and set the initial state of the mixture
 gas = ct.Solution('h2-co-mechanism.cti')
