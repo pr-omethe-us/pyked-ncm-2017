@@ -775,7 +775,8 @@ X_initial = dp.get_cantera_mole_fraction()
 %
 With these properties defined, we have to create the objects in Cantera that represent the physical
 state of the system to be studied.
-
+%
+\begin{pythonbox}
 # Load the mechanism and set the initial state of the mixture
 gas = ct.Solution('h2-co-mechanism.cti')
 gas.TPX = T_initial, P_initial, X_initial
