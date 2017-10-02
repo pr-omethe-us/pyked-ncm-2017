@@ -384,12 +384,12 @@ datapoints:
     ...
 \end{yamlbox}
 
-Frequently, experimental series hold certain properties constant, such as initial
-mixture composition or pressure, and use the same method to detect ignition delay.
-\ck{} files support a \yabox|common-properties| convenience section where these
-common details may be defined once, and referenced in each datapoint.
-This block uses the ability of YAML files to define an anchor with the
-\yabox|&| symbol and refer to that section later with the \yabox|*| symbol:
+Frequently, experimental series hold certain properties constant, such as initial mixture
+composition or pressure, and use the same method to detect ignition delay. \ck{} files support a
+\yabox|common-properties| convenience section where these common details may be defined once, and
+referenced in each element of the \yabox|datapoints| sequence. This block uses the ability of YAML
+files to define an anchor with the \yabox|&| symbol and refer to that section later with the
+\yabox|*| symbol:
 %
 \begin{yamlbox}
 common-properties:
