@@ -585,7 +585,7 @@ chemked-version: 0.1.6
 Then, we find the information regarding the article in the literature from which
 this data was taken. In this case, the dataset comes from the work of
 \textcite{Mittal2006a}:
-%
+%r
 \begin{yamlbox}
 reference:
   doi: 10.1002/kin.20180
@@ -658,11 +658,11 @@ datapoints:
       ...
 \end{yamlbox}
 %
-The values for the \yabox|volume-history| are truncated here to save space. A user
-might want to load the information from this file to perform a simulation using
-Cantera~\autocite{Cantera:2.3.0} to calculate the ignition delay. All information
-required to perform this simulation is present in the \ck{} file, with the exception
-of a chemical kinetic model for \ce{H2}\slash {CO} combustion.
+The values for the \yabox|volume-history| are truncated here to save space. One application of the
+data stored in this file is to perform a simulation using Cantera~\autocite{Cantera:2.3.0} to
+calculate the ignition delay, including the facility-dependent effects represented in the volume
+trace. All information required to perform this simulation is present in the \ck{} file, with the
+exception of a chemical kinetic model for \ce{H2}\slash {CO} combustion.
 %
 \begin{pythonbox}
 import cantera as ct
