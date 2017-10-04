@@ -860,7 +860,7 @@ while netw.time < 0.05:
     netw.step()
 \end{pythonbox}
 
-At this point, the user could post-process the information in the \pybox|pressure| list to calculate
+At this point, the user would post-process the information in the \pybox|pressure| list to calculate
 the derivative by whatever algorithm they choose.
 
 \subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
@@ -869,11 +869,13 @@ The \ck{} file used in this example can be found in the \texttt{tests} directory
 repository.\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_st_p5.yaml}}
 The data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
 shock-tube ignition delays for \textit{tert}-butanol. We have omitted the file
-meta information below for space; the format is largely similar to the example in Section~\ref{sec:rcm-modeling}.
-%
+meta information below for space; the format is largely similar to the example in
+Section~\ref{sec:rcm-modeling}.
+
 This \ck{} file specifies multiple data points with some common
 conditions, including a common mixture composition and common definition of
-ignition delay. Therefore, a \yabox|common-properties| section is specified.
+ignition delay. Therefore, a \yabox|common-properties| section is specified, followed by the
+datapoints list:
 %
 \begin{yamlbox}
 common-properties:
@@ -914,64 +916,78 @@ datapoints:
     composition: *comp
     ignition-type: *ign
     equivalence-ratio: 0.5
-  - temperature:
-      - 1497 kelvin
-    ignition-delay:
-      - 212 us
-    pressure:
-      - 1.55 atm
-    composition: *comp
-    ignition-type: *ign
-    equivalence-ratio: 0.5
-  - temperature:
-      - 1562 kelvin
-    ignition-delay:
-      - 105 us
-    pressure:
-      - 1.50 atm
-    composition: *comp
-    ignition-type: *ign
-    equivalence-ratio: 0.5
+    ...
 \end{yamlbox}
+%
+As before, we have truncated the datapoints list for space.
 
-In this example, we would like to run constant-volume simulations at each
+In this example, we will run constant-volume simulations at each
 pressure and temperature condition in the \yabox|datapoints| list. Once again,
 the \ck{} file specifies all the information required for the simulations except
-for the chemical kinetic model, and Cantera can be used to simulate autoignition:
+for the chemical kinetic model, and Cantera can be used to simulate autoignition. The setup steps
+are the same as in the previous example, with one exception. In this example, we also import
+Python's built-in multiprocessing library so that we can run the simulations on multiple cores. We
+import the \pybox|Pool| class, which offers facilities to manage a jobs on a pool of processors:
 %
 \begin{pythonbox}
 import cantera as ct
+from multiprocessing import Pool
 from pyked import ChemKED
+\end{pythonbox}
 
-ck = ChemKED('Stranic2012-tbuoh.yaml')
-
-gas = ct.Solution('tbuoh-mechanism.cti')
-
-# Since the composition is specified by the common-properties,
-# just take the composition of the first DataPoint
-X_initial = ck.datapoints[0].get_cantera_mole_fraction()
-
-# Loop through each of the DataPoints
-for dp in ck.datapoints:
-    T_initial = dp.temperature.to('K').magnitude
-    P_initial = dp.pressure.to('Pa').magnitude
-    gas.TPX = T_initial, P_initial, X_initial
+Then, we define a function that will be mapped onto each job. This function takes the initial
+temperature, pressure, and mole fractions as input and returns the simulated ignition delay time,
+defined as the time the temperature increases by \SI{400}{\K} over the initial temperature, a
+simplified definition for this example. In general, the user could process the mole fraction of
+\ce{OH^*} (provided that the mechanism included accurate chemistry for \ce{OH^*}) to match the
+definition of ignition delay in the experiments. As before, the \verb|tbuoh-mechanism.cti| file must
+be supplied by the user:
+%
+\begin{pythonbox}
+def run_simulation(T, P, X):
+    gas = ct.Solution('tbuoh-mechanism.cti')
+    gas.TPX = T, P, X
     reac = ct.IdealGasReactor(gas)
     netw = ct.ReactorNet([reac])
-    # Define ignition delay as T_initial + 400 K
-    while reac.T < T_initial + 400:
+    while reac.T < T + 400:
         netw.step()
 
-    print('The ignition delay for T_initial={}, P_initial={} is: '
-          '{} seconds'.format(T_initial, P_initial, netw.time)
-          )
+    return netw.time
+\end{pythonbox}
+
+Then, we load the ChemKED file and generate a list of initial conditions that will be mapped onto
+the \pybox|run_simulation()| function. We first define a convenience function to collect the input
+from a single datapoint and return a Python tuple with the conditions (tuples are lightweight groups
+of data in Python). Then, we use the built-in \pybox|map| function to apply the
+\pybox|collect_input| function to each of the elements in the \pybox|ck.datapoints| list: convert a
+\pybox|Quantity| to some input units and return the magnitude, then use Python's list comprehension
+syntax to generate a list of tuples (tuples are lightweight groups of data in Python):
+%
+\begin{pythonbox}
+ck = ChemKED('Stranic2012-tbuoh.yaml')
+
+def collect_input(dp):
+    T_initial = dp.temperature.to('K').magnitude
+    P_initial = dp.pressure.to('Pa').magnitude
+    X_initial = dp.get_cantera_mole_fraction()
+    return (T_initial, P_initial, X_initial)
+
+initial_conditions = map(collect_input, ck.datapoints)
+initial_conditions = [(to_SI(dp.temperature, 'K'), to_SI(dp.pressure, 'Pa'), dp.get_cantera_mole_fraction()) for dp in ck.datapoints]
+\end{pythonbox}
+
+Finally, we create the processor \pybox|Pool| and send the jobs out to run:
+%
+\begin{pythonbox}
+with Pool(12) as pool:
+    ignition_delays = pool.starmap(run_simulation, initial_conditions)
+
+for (T, P, X), tau in zip(initial_conditions, ignition_delays):
+    print(f'The ignition delay for T_initial={T}, P_initial={P} is: {tau} seconds')
 \end{pythonbox}
 %
-The ignition delay in this example is defined as equal to the \SI{400}{\kelvin}
-above the initial temperature, a simplified definition used for this example.
-In general, the user could post-process the concentration information from the
-simulation to determine one-half the maximum \ce{OH^*} concentration to match
-the experimental definition of ignition delay.
+The simulated ignition delay results are returned in the \pybox|ignition_delays| list. The results
+are printed to the screen using a Python formatted string (f-string).
 %====================================================================
 \section{Conclusions and future work}
 
