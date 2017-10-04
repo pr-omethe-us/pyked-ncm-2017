@@ -738,13 +738,14 @@ trace. All information required to perform this simulation is present in the \ck
 exception of a chemical kinetic model for \ce{H2}\slash \ce{CO} combustion.
 
 In Python, additional functionality can be imported into a script or session by the \pybox|import|
-keyword. Cantera and PyKED both must be imported into the session so that we can work with the code.
-In the case of Cantera, we will use many functions from the library, so we assign it an abbreviation
-(\pybox|ct|) for convenience. From PyKED, we will only be using the \pybox|ChemKED| class, so this
-is all that is imported:
+keyword. Cantera, NumPy, and PyKED must be imported into the session so that we can work with the
+code. In the case of Cantera and NumPy, we will use many functions from these libraries, so we
+assign them abbreviations (\pybox|ct| and \pybox|np|, respectively) for convenience. From PyKED, we
+will only be using the \pybox|ChemKED| class, so this is all that is imported:
 %
 \begin{pythonbox}
 import cantera as ct
+import numpy as np
 from pyked import ChemKED
 \end{pythonbox}
 %
@@ -787,43 +788,80 @@ gas.TPX = T_initial, P_initial, X_initial
 
 With the thermodynamic and kinetic data loaded and the initial conditions defined, we  need to
 install the \pybox|Solution| instance into an \pybox|IdealGasReactor| which implements the equations
-for mass, energy, and species conservation.
+for mass, energy, and species conservation. In addition, we create a \pybox|Reservoir| to represent
+the environment external to the reaction chamber. The input file used for the environment,
+\verb|air.xml|, is included with Cantera and represents an average composition of air.
 
+\begin{pythonbox}
 # Create the reactor and the outside environment
 reac = ct.IdealGasReactor(gas)
 env = ct.Reservoir(ct.Solution('air.xml'))
 \end{pythonbox}
 %
-In this example, \pybox|reac| represents the contents of the RCM reaction chamber and \pybox|env|
-represents the contents of the environment. \verb|air.xml| is an input file included with Cantera
-that represents an average composition of air. To apply the effect of the volume trace to the
-\pybox|IdealGasReactor|, a \pybox|Wall| is installed between the reactor and environment and
-assigned a velocity. The \pybox|Wall| allows the environment to do work on the reactor (or vice
-versa) and change the reactor's thermodynamic state; we use a \pybox|Reservoir| for the environment
-because in Cantera, \pybox|Reservoir|s always have a constant thermodynamic state and composition.
-Using a \pybox|Reservoir| accelerates the solution compared to using two \pybox|IdealGasReactor|s,
-since the composition and state of the environment are typically not necessary for the solution of
-autoignition problems. Although we do not show the details here, a reference implementation of a
-class that computes a wall velocity given the volume history of the reactor is available in
-CanSen~\autocite{cansen}, in the \pybox|cansen.profile.VolumeProfile| class. Then, a Cantera
-\pybox|ReactorNet| can be used to advance the state through autoignition, in this case to an end
-time of \SI{50}{\milli\second}:
+To apply the effect of the volume trace to the \pybox|IdealGasReactor|, a \pybox|Wall| must be
+installed between the reactor and environment and assigned a velocity. The \pybox|Wall| allows the
+environment to do work on the reactor (or vice versa) and change the reactor's thermodynamic state;
+we use a \pybox|Reservoir| for the environment because in Cantera, \pybox|Reservoir|s always have a
+constant thermodynamic state and composition. Using a \pybox|Reservoir| accelerates the solution
+compared to using two \pybox|IdealGasReactor|s, since the composition and state of the environment
+are typically not necessary for the solution of autoignition problems. Although we do not show the
+details here, a reference implementation of a class that computes the wall velocity given the volume
+history of the reactor is available in CanSen~\autocite{cansen}, in the
+\pybox|cansen.profile.VolumeProfile| class.
 %
 \begin{pythonbox}
+# Retrieve the time and volume from the
+# history in the datapoint
 time = dp.volume_history.time
 volume = dp.volume_history.volume
+# Install the Wall between the
+# reactor and environment
 ct.Wall(reac, env, velocity=VolumeProfile(time=time, volume=volume))
+\end{pythonbox}
 
+Then, the \pybox|IdealGasReactor| is installed in a \pybox|ReactorNet|. The \pybox|ReactorNet|
+implements the connection to the numerical solver (CVODES \autocite{hindmarsh_sundials:_2005} is
+used in Cantera) to solve the energy and species equations. For this example, it is best practice
+to set the maximum time step allowed in the solution to be the minimum time difference in the time array from the volume trace:
+
+\begin{pythonbox}
 netw = ct.ReactorNet([reac])
+netw.set_max_time_step(np.min(np.diff(time)))
+\end{pythonbox}
 
+To calculate the ignition delay, we will follow the definition specified in the ChemKED file for
+this experiment, where the experimentalists used the maximum of the time derivative of the pressure
+to define the ignition delay. To calculate this derivative, we need to store the state variables and the composition on each time step, so we initialize several Python lists to act as storage:
+
+\begin{pythonbox}
+# Initialize lists to store solution information
+time = []
+temperature = []
+pressure = []
+volume = []
+mass_fractions = []
+\end{pythonbox}
+
+Finally, the problem is integrated using the \pybox|step| method of the \pybox|ReactorNet|. The
+\pybox|step| method takes one timestep forward on each call, with step size determined by the CVODES
+solver (CVODES is an adaptive time-stepping algorithm). On each step, we add the relevant variables
+to their respective lists. The problem is integrated until a user-specified end time, in this case
+\SI{50}{\milli\second}, although in principle, the user could end the simulation on any condition
+they choose:
+
+\begin{pythonbox}
 # Integrate for 50 ms
 while netw.time < 0.05:
+    time.append(netw.time)
+    temperature.append(reac.T)
+    pressure.append(reac.thermo.P)
+    volume.append(reac.volume)
+    mass_fractions.append(reac.Y)
     netw.step()
 \end{pythonbox}
-%
-Although not shown in this example, the user would typically store information
-about the \pybox|IdealGasReactor| (e.g., temperature, pressure, mass fractions)
-at each time step of the integration for post-processing.
+
+At this point, the user could post-process the information in the \pybox|pressure| list to calculate
+the derivative by whatever algorithm they choose.
 
 \subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
 
