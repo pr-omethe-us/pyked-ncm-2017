@@ -404,9 +404,10 @@ common-properties:
   ignition-type: &ign
     ...
 datapoints:
-  composition: *comp
-  ignition-type: *ign
-  temperature: 1000 kelvin
+  - composition: *comp
+    ignition-type: *ign
+    temperature:
+      - 1000 kelvin
   ...
 \end{yamlbox}
 %
