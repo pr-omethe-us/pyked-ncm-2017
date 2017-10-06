@@ -30,10 +30,10 @@
 \usepackage{todonotes}
 
 \setlength{\parindent}{0in}
-\setlength{\parskip}{0.4cm}
+\setlength{\parskip}{0.25cm}
 
-\newenvironment{reviewer}{\vspace{0.5\baselineskip}\begingroup\itshape\textbf{Reviewer:}}{\endgroup\vspace{0.5\baselineskip}}
-\newenvironment{response}{\vspace{0.5\baselineskip}\textbf{Our Response:}}{\vspace{0.5\baselineskip}}
+\newenvironment{reviewer}{\vspace{0.5\baselineskip}\begingroup\itshape\textbf{Reviewer:}}{\endgroup}
+\newenvironment{response}{\textbf{Our Response:}}{\vspace{0.5\baselineskip}}
 \newcommand{\review}[1]{{\itshape#1}}
 \newcommand{\respond}[1]{\textbf{Our Response:} #1}
 
@@ -452,7 +452,7 @@ The manuscript has been significantly revised, and we marked significant changes
     data format, and its lack of human readability presents a barrier to creating and working with
     database files.''
 
-    In my opinion the YAML format resembles the XML format strongly. XML format is human-readable,
+    In my opinioo n the YAML format resembles the XML format strongly. XML format is human-readable,
     however, because of the html-tags and \texttt{<>} characters, the YAML format might be easier to
     read. If XML would lack human readability as it is stated in the article, it would not be such a
     popular format, and I don't think PrIMe and ReSpecTh would be using it.
