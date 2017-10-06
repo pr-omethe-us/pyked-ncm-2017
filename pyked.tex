@@ -404,9 +404,10 @@ common-properties:
   ignition-type: &ign
     ...
 datapoints:
-  composition: *comp
-  ignition-type: *ign
-  temperature: 1000 kelvin
+  - composition: *comp
+    ignition-type: *ign
+    temperature:
+      - 1000 kelvin
   ...
 \end{yamlbox}
 %
@@ -738,13 +739,14 @@ trace. All information required to perform this simulation is present in the \ck
 exception of a chemical kinetic model for \ce{H2}\slash \ce{CO} combustion.
 
 In Python, additional functionality can be imported into a script or session by the \pybox|import|
-keyword. Cantera and PyKED both must be imported into the session so that we can work with the code.
-In the case of Cantera, we will use many functions from the library, so we assign it an abbreviation
-(\pybox|ct|) for convenience. From PyKED, we will only be using the \pybox|ChemKED| class, so this
-is all that is imported:
+keyword. Cantera, NumPy, and PyKED must be imported into the session so that we can work with the
+code. In the case of Cantera and NumPy, we will use many functions from these libraries, so we
+assign them abbreviations (\pybox|ct| and \pybox|np|, respectively) for convenience. From PyKED, we
+will only be using the \pybox|ChemKED| class, so this is all that is imported:
 %
 \begin{pythonbox}
 import cantera as ct
+import numpy as np
 from pyked import ChemKED
 \end{pythonbox}
 %
@@ -787,43 +789,80 @@ gas.TPX = T_initial, P_initial, X_initial
 
 With the thermodynamic and kinetic data loaded and the initial conditions defined, we  need to
 install the \pybox|Solution| instance into an \pybox|IdealGasReactor| which implements the equations
-for mass, energy, and species conservation.
+for mass, energy, and species conservation. In addition, we create a \pybox|Reservoir| to represent
+the environment external to the reaction chamber. The input file used for the environment,
+\verb|air.xml|, is included with Cantera and represents an average composition of air.
 
+\begin{pythonbox}
 # Create the reactor and the outside environment
 reac = ct.IdealGasReactor(gas)
 env = ct.Reservoir(ct.Solution('air.xml'))
 \end{pythonbox}
 %
-In this example, \pybox|reac| represents the contents of the RCM reaction chamber and \pybox|env|
-represents the contents of the environment. \verb|air.xml| is an input file included with Cantera
-that represents an average composition of air. To apply the effect of the volume trace to the
-\pybox|IdealGasReactor|, a \pybox|Wall| is installed between the reactor and environment and
-assigned a velocity. The \pybox|Wall| allows the environment to do work on the reactor (or vice
-versa) and change the reactor's thermodynamic state; we use a \pybox|Reservoir| for the environment
-because in Cantera, \pybox|Reservoir|s always have a constant thermodynamic state and composition.
-Using a \pybox|Reservoir| accelerates the solution compared to using two \pybox|IdealGasReactor|s,
-since the composition and state of the environment are typically not necessary for the solution of
-autoignition problems. Although we do not show the details here, a reference implementation of a
-class that computes a wall velocity given the volume history of the reactor is available in
-CanSen~\autocite{cansen}, in the \pybox|cansen.profile.VolumeProfile| class. Then, a Cantera
-\pybox|ReactorNet| can be used to advance the state through autoignition, in this case to an end
-time of \SI{50}{\milli\second}:
+To apply the effect of the volume trace to the \pybox|IdealGasReactor|, a \pybox|Wall| must be
+installed between the reactor and environment and assigned a velocity. The \pybox|Wall| allows the
+environment to do work on the reactor (or vice versa) and change the reactor's thermodynamic state;
+we use a \pybox|Reservoir| for the environment because in Cantera, \pybox|Reservoir|s always have a
+constant thermodynamic state and composition. Using a \pybox|Reservoir| accelerates the solution
+compared to using two \pybox|IdealGasReactor|s, since the composition and state of the environment
+are typically not necessary for the solution of autoignition problems. Although we do not show the
+details here, a reference implementation of a class that computes the wall velocity given the volume
+history of the reactor is available in CanSen~\autocite{cansen}, in the
+\pybox|cansen.profile.VolumeProfile| class.
 %
 \begin{pythonbox}
+# Retrieve the time and volume from the
+# history in the datapoint
 time = dp.volume_history.time
 volume = dp.volume_history.volume
+# Install the Wall between the
+# reactor and environment
 ct.Wall(reac, env, velocity=VolumeProfile(time=time, volume=volume))
+\end{pythonbox}
 
+Then, the \pybox|IdealGasReactor| is installed in a \pybox|ReactorNet|. The \pybox|ReactorNet|
+implements the connection to the numerical solver (CVODES \autocite{hindmarsh_sundials:_2005} is
+used in Cantera) to solve the energy and species equations. For this example, it is best practice
+to set the maximum time step allowed in the solution to be the minimum time difference in the time array from the volume trace:
+
+\begin{pythonbox}
 netw = ct.ReactorNet([reac])
+netw.set_max_time_step(np.min(np.diff(time)))
+\end{pythonbox}
 
+To calculate the ignition delay, we will follow the definition specified in the ChemKED file for
+this experiment, where the experimentalists used the maximum of the time derivative of the pressure
+to define the ignition delay. To calculate this derivative, we need to store the state variables and the composition on each time step, so we initialize several Python lists to act as storage:
+
+\begin{pythonbox}
+# Initialize lists to store solution information
+time = []
+temperature = []
+pressure = []
+volume = []
+mass_fractions = []
+\end{pythonbox}
+
+Finally, the problem is integrated using the \pybox|step| method of the \pybox|ReactorNet|. The
+\pybox|step| method takes one timestep forward on each call, with step size determined by the CVODES
+solver (CVODES is an adaptive time-stepping algorithm). On each step, we add the relevant variables
+to their respective lists. The problem is integrated until a user-specified end time, in this case
+\SI{50}{\milli\second}, although in principle, the user could end the simulation on any condition
+they choose:
+
+\begin{pythonbox}
 # Integrate for 50 ms
 while netw.time < 0.05:
+    time.append(netw.time)
+    temperature.append(reac.T)
+    pressure.append(reac.thermo.P)
+    volume.append(reac.volume)
+    mass_fractions.append(reac.Y)
     netw.step()
 \end{pythonbox}
-%
-Although not shown in this example, the user would typically store information
-about the \pybox|IdealGasReactor| (e.g., temperature, pressure, mass fractions)
-at each time step of the integration for post-processing.
+
+At this point, the user would post-process the information in the \pybox|pressure| list to calculate
+the derivative by whatever algorithm they choose.
 
 \subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
 
@@ -831,11 +870,13 @@ The \ck{} file used in this example can be found in the \texttt{tests} directory
 repository.\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_st_p5.yaml}}
 The data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describing
 shock-tube ignition delays for \textit{tert}-butanol. We have omitted the file
-meta information below for space; the format is largely similar to the example in Section~\ref{sec:rcm-modeling}.
-%
+meta information below for space; the format is largely similar to the example in
+Section~\ref{sec:rcm-modeling}.
+
 This \ck{} file specifies multiple data points with some common
 conditions, including a common mixture composition and common definition of
-ignition delay. Therefore, a \yabox|common-properties| section is specified.
+ignition delay. Therefore, a \yabox|common-properties| section is specified, followed by the
+datapoints list:
 %
 \begin{yamlbox}
 common-properties:
@@ -876,64 +917,78 @@ datapoints:
     composition: *comp
     ignition-type: *ign
     equivalence-ratio: 0.5
-  - temperature:
-      - 1497 kelvin
-    ignition-delay:
-      - 212 us
-    pressure:
-      - 1.55 atm
-    composition: *comp
-    ignition-type: *ign
-    equivalence-ratio: 0.5
-  - temperature:
-      - 1562 kelvin
-    ignition-delay:
-      - 105 us
-    pressure:
-      - 1.50 atm
-    composition: *comp
-    ignition-type: *ign
-    equivalence-ratio: 0.5
+    ...
 \end{yamlbox}
+%
+As before, we have truncated the datapoints list for space.
 
-In this example, we would like to run constant-volume simulations at each
+In this example, we will run constant-volume simulations at each
 pressure and temperature condition in the \yabox|datapoints| list. Once again,
 the \ck{} file specifies all the information required for the simulations except
-for the chemical kinetic model, and Cantera can be used to simulate autoignition:
+for the chemical kinetic model, and Cantera can be used to simulate autoignition. The setup steps
+are the same as in the previous example, with one exception. In this example, we also import
+Python's built-in multiprocessing library so that we can run the simulations on multiple cores. We
+import the \pybox|Pool| class, which offers facilities to manage a jobs on a pool of processors:
 %
 \begin{pythonbox}
 import cantera as ct
+from multiprocessing import Pool
 from pyked import ChemKED
+\end{pythonbox}
 
-ck = ChemKED('Stranic2012-tbuoh.yaml')
-
-gas = ct.Solution('tbuoh-mechanism.cti')
-
-# Since the composition is specified by the common-properties,
-# just take the composition of the first DataPoint
-X_initial = ck.datapoints[0].get_cantera_mole_fraction()
-
-# Loop through each of the DataPoints
-for dp in ck.datapoints:
-    T_initial = dp.temperature.to('K').magnitude
-    P_initial = dp.pressure.to('Pa').magnitude
-    gas.TPX = T_initial, P_initial, X_initial
+Then, we define a function that will be mapped onto each job. This function takes the initial
+temperature, pressure, and mole fractions as input and returns the simulated ignition delay time,
+defined as the time the temperature increases by \SI{400}{\K} over the initial temperature, a
+simplified definition for this example. In general, the user could process the mole fraction of
+\ce{OH^*} (provided that the mechanism included accurate chemistry for \ce{OH^*}) to match the
+definition of ignition delay in the experiments. As before, the \verb|tbuoh-mechanism.cti| file must
+be supplied by the user:
+%
+\begin{pythonbox}
+def run_simulation(T, P, X):
+    gas = ct.Solution('tbuoh-mechanism.cti')
+    gas.TPX = T, P, X
     reac = ct.IdealGasReactor(gas)
     netw = ct.ReactorNet([reac])
-    # Define ignition delay as T_initial + 400 K
-    while reac.T < T_initial + 400:
+    while reac.T < T + 400:
         netw.step()
 
-    print('The ignition delay for T_initial={}, P_initial={} is: '
-          '{} seconds'.format(T_initial, P_initial, netw.time)
-          )
+    return netw.time
+\end{pythonbox}
+
+Then, we load the ChemKED file and generate a list of initial conditions that will be mapped onto
+the \pybox|run_simulation()| function. We first define a convenience function to collect the input
+from a single datapoint and return a Python tuple with the conditions (tuples are lightweight groups
+of data in Python). Then, we use the built-in \pybox|map| function to apply the
+\pybox|collect_input| function to each of the elements in the \pybox|ck.datapoints| list: convert a
+\pybox|Quantity| to some input units and return the magnitude, then use Python's list comprehension
+syntax to generate a list of tuples (tuples are lightweight groups of data in Python):
+%
+\begin{pythonbox}
+ck = ChemKED('Stranic2012-tbuoh.yaml')
+
+def collect_input(dp):
+    T_initial = dp.temperature.to('K').magnitude
+    P_initial = dp.pressure.to('Pa').magnitude
+    X_initial = dp.get_cantera_mole_fraction()
+    return (T_initial, P_initial, X_initial)
+
+initial_conditions = map(collect_input, ck.datapoints)
+initial_conditions = [(to_SI(dp.temperature, 'K'), to_SI(dp.pressure, 'Pa'), dp.get_cantera_mole_fraction()) for dp in ck.datapoints]
+\end{pythonbox}
+
+Finally, we create the processor \pybox|Pool| and send the jobs out to run:
+%
+\begin{pythonbox}
+with Pool(12) as pool:
+    ignition_delays = pool.starmap(run_simulation, initial_conditions)
+
+for (T, P, X), tau in zip(initial_conditions, ignition_delays):
+    print(f'The ignition delay for T_initial={T}, P_initial={P} is: {tau} seconds')
 \end{pythonbox}
 %
-The ignition delay in this example is defined as equal to the \SI{400}{\kelvin}
-above the initial temperature, a simplified definition used for this example.
-In general, the user could post-process the concentration information from the
-simulation to determine one-half the maximum \ce{OH^*} concentration to match
-the experimental definition of ignition delay.
+The simulated ignition delay results are returned in the \pybox|ignition_delays| list. The results
+are printed to the screen using a Python formatted string (f-string).
 %====================================================================
 \section{Conclusions and future work}
 
