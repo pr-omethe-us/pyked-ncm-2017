@@ -219,7 +219,8 @@ models. However, we make usability a major design focus, and plan to share all
 data and software openly to cultivate a community of user-contributors.
 
 %====================================================================
-\section{Overview of ChemKED format}\label{sec:overview-of-format}
+\section{Overview of ChemKED format}
+\label{sec:overview-of-format}
 
 This section provides an introduction to the current version of the \ck{} database format, v0.1.6,
 which represents a functional standard for documenting autoignition measurements in shock tubes and
@@ -260,7 +261,8 @@ given experiment. A \ck{} file is generally broken into two main sections: a sec
 ``meta'' information about the experiment and the \ck{} file itself, and a section containing the
 actual experimental data to be encoded.
 
-\subsection{Apparatus Information and Metadata}\label{sec:apparatus-information-and-metadata}
+\subsection{Apparatus information and metadata}
+\label{sec:apparatus-information-and-metadata}
 
 We will first describe the fields in the ``meta'' section.
 This section uses a mapping that is called the \yabox|author| mapping in the schema. As this mapping
@@ -323,7 +325,8 @@ represent data that has not been published. However, the \yabox|reference| mappi
 \yabox|authors| sequence and the \yabox|year|, so that \ck{} files can be used internally within
 research groups to represent unpublished data prior to publication.
 
-\subsection{Ignition Delay Experimental Data}\label{sec:ignition-delay-experimental-data}
+\subsection{Ignition delay experimental data}
+\label{sec:ignition-delay-experimental-data}
 
 The second section of the file encodes the experimental data as a sequence of mappings. The
 top-level key for the sequence is called \yabox|datapoints|. For the current version of the \ck{}
@@ -423,7 +426,8 @@ properties are specified in the \yabox|common-properties| section, they must als
 explicitly specified and referenced in the \yabox|datapoints| section for each data point,
 as seen in the previous code.
 
-\subsubsection{Shock Tube Experiments}\label{sec:shock-tube-experiments}
+\subsubsection{Shock tube experiments}
+\label{sec:shock-tube-experiments}
 
 There is one additional key that can be used to describe the facility-specific effects during a
 shock tube experiment:
@@ -434,7 +438,8 @@ shock tube experiment:
     optionally, uncertainty
 \end{itemize}
 
-\subsubsection{Rapid Compression Machine Experiments}\label{sec:rcm-experiments}
+\subsubsection{Rapid compression machine experiments}
+\label{sec:rcm-experiments}
 
 Rapid compression machine experiments typically report several additional pieces of information in
 addition to the ignition delay. As for shock tube experiments, these describe some of the
@@ -471,7 +476,8 @@ facility-specific effects during an experiment. The keys to describe this inform
     compression stroke
 \end{itemize}
 
-\subsection{Public Database of \ck{} Files}\label{sec:public-database}
+\subsection{Public database of \ck{} files}
+\label{sec:public-database}
 
 We have begun building an open repository of \ck{} files, available online at
 GitHub.\footnote{\url{https://github.com/pr-omethe-us/ChemKED-database}}
@@ -486,7 +492,8 @@ the community---others can freely download files, or in fact copy (``fork'' in G
 parlance) the entire database for their own purposes.
 
 %====================================================================
-\section{PyKED Architecture}\label{sec:pyked-architecture}
+\section{PyKED architecture}
+\label{sec:pyked-architecture}
 %
 \pk{} is a Python package that provides the reference implementation
 of the interface to \ck{} files~\autocite{PyKED}. \pk{} reads \ck{} files, validates
@@ -640,13 +647,15 @@ provides detailed installation instructions at
 \url{https://pr-omethe-us.github.io/PyKED/install.html}.
 
 %====================================================================
-\section{Usage examples}\label{sec:usage-example}
+\section{Usage examples}
+\label{sec:usage-example}
 
 The following usage examples provide a guide to the use of \pk{}. They are by no
 means an exhaustive treatment, and are meant to demonstrate the basic
 capabilities of the software.
 
-\subsection{RCM modeling with varying reactor volume}\label{sec:rcm-modeling}
+\subsection{RCM modeling with varying reactor volume}
+\label{sec:rcm-modeling}
 
 The \ck{} file that will be used in this example can be found in the
 \texttt{tests} directory of the PyKED
@@ -870,7 +879,8 @@ while netw.time < 0.05:
 At this point, the user would post-process the information in the \pybox|pressure| list to calculate
 the derivative by whatever algorithm they choose.
 
-\subsection{Shock tube modeling with constant volume}\label{sec:shock-tube}
+\subsection{Shock tube modeling with constant volume}
+\label{sec:shock-tube}
 
 The \ck{} file used in this example can be found in the \texttt{tests} directory of the \pk{}
 repository.\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_st_p5.yaml}}
