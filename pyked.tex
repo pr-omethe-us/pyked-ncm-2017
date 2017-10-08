@@ -138,27 +138,31 @@ it a strong standardization format, but it suffers from several flaws that
 prevent wide adoption. First, the PrIMe standard does not require or support all
 the information needed to simulate an experiment, including a machine-readable
 definition of ignition or a standard way to express detailed facility-specific
-effects necessary to properly simulate certain experiments. Second, the XML
-format is intended to be a machine-readable markup language rather than a data format.
+effects necessary to properly simulate certain experiments. Second, PrIMe uses
+internal identifiers for bibliographic references and
+species\slash reactions, rather than standard identifiers (e.g., DOIs for
+scholarly products, InCHI or SMILES for species). This limits the usability of PrIMe files outside
+the PrIMe ecosystem.
+
+Third, XML is intended to be a machine-readable markup language rather than a data format.
 As a general-purpose document markup language, XML can represent detailed
 information about a dataset, but implementing this detail requires XML-formatted
 files to be much more verbose than files formatted with a language focused
 only on representing data structures. The verbosity inherent in the XML format
 limits the human readability of database files constructed in XML and presents a barrier to
-creating and working with them. Furthermore, PrIMe uses
-internal identifiers for bibliographic references and
-species\slash reactions, rather than standard identifiers (e.g., DOIs for
-scholarly products, InCHI or SMILES for species). This limits the usability of PrIMe files outside
-the PrIMe ecosystem. Finally, the closed and opaque natures of the PrIMe standard
-and associated Data Warehouse limit contributions and community development of
-the PrIMe standard and compatible data files and tools.
+creating and working with them.
 
-%discuss open source definition here
-(When we describe a software package or project as ``closed,'' we are generally
-contrasting it with the open source definition~\cite{opensource}. In brief, to be
-``open,'' a project must provide free and unrestricted access to source code and\slash
-or data, allow free redistribution, permit derived works, and not discriminate against
-any people or areas of work, along with a few other criteria.)
+Finally, the closed and opaque natures of the PrIMe standard and associated Data Warehouse limit
+contributions and community development of the PrIMe standard and compatible data files and tools.
+In this sense, we mean ``closed'' as a contrast to open source, open science, and open data, as
+defined by the Open Knowledge Institute~\cite{openknowledge} or the Open Source
+Initiative~\cite{opensource}. Although most commonly applied to software, the distinction between
+open and closed is becoming increasingly important in science and research. In brief, the Open
+Knowledge Institute defines open knowledge as ``free to access, use, modify, and share... — subject,
+at most, to measures that preserve provenance and openness''~\cite{openknowledge}, while the Open
+Source Institute focuses on software and declares that a project must provide free and unrestricted
+access to the source code, allow free redistribution, permit derived works, and not discriminate
+against any people or areas of work, along with a few other criteria~\cite{opensource}.
 
 More recently, Varga and coworkers~\autocite{Varga2015a,Varga2017} developed the
 ReSpecTh standard, which builds on the PrIMe format. ReSpecTh adds important
