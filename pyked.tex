@@ -993,7 +993,7 @@ initial_conditions = map(collect_input, ck.datapoints)
 initial_conditions = [(to_SI(dp.temperature, 'K'), to_SI(dp.pressure, 'Pa'), dp.get_cantera_mole_fraction()) for dp in ck.datapoints]
 \end{pythonbox}
 
-Finally, we create the processor \pybox|Pool| and send the jobs out to run:
+Finally, we create the processor \pybox|Pool| (with 12 processes) and send the jobs out to run:
 %
 \begin{pythonbox}
 with Pool(12) as pool:

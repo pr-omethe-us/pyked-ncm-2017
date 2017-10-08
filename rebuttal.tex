@@ -838,7 +838,7 @@ The manuscript has been significantly revised, and we marked significant changes
 
 \begin{response}
     %
-    We have truncated the datapoints list as the reviewer suggests.
+    We have truncated the datapoints list on \textbf{pages 12 and 16} as the reviewer suggests.
     %
 \end{response}
 
@@ -852,12 +852,13 @@ The manuscript has been significantly revised, and we marked significant changes
 
 \begin{response}
     %
-    We have modified the example to include more explanatory text and to use Python's built-in
+    We have modified the example on \textbf{pages 16--17} to include more
+    explanatory text and to use Python's built-in
     multiprocessing library to run the simulations on many processors. We note that if Cantera has
     been built with multi-threaded BLAS and LAPACK libraries (such as the Intel MKL), then the 0-D
     solver will automatically utilize the multithreading capabilities of those libraries. Therefore,
     using the multiprocessing library may not give much benefit in terms of overall speedup,
-    depending on the complexity of the chemical kinetic mechanism (i.e., how long the simulation
+    depending on the complexity of the chemical kinetic model (i.e., how long the simulation
     takes to run), how many processors are available, and the availability of the multi-threaded
     BLAS and LAPACk libraries. However, we have not explained this detail of Cantera in the text to
     avoid confusing the reader.
