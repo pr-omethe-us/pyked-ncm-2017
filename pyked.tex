@@ -897,11 +897,10 @@ The data in this file comes from Stranic et al.~\autocite{Stranic:2012}, describ
 shock-tube ignition delays for \textit{tert}-butanol. We have omitted the file
 meta information below for space; the format is largely similar to the example in
 Section~\ref{sec:rcm-modeling}.
-
 This \ck{} file specifies multiple data points with some common
 conditions, including a common mixture composition and common definition of
 ignition delay. Therefore, a \yabox|common-properties| section is specified, followed by the
-\yabox|datapoints| list:
+\yabox|datapoints| list (as before, we have truncated the \yabox|datapoints| list for space):
 %
 \begin{yamlbox}
 common-properties:
@@ -944,16 +943,15 @@ datapoints:
     equivalence-ratio: 0.5
     ...
 \end{yamlbox}
-%
-As before, we have truncated the datapoints list for space.
 
 In this example, we will run constant-volume simulations at each
 pressure and temperature condition in the \yabox|datapoints| list. Once again,
-the \ck{} file specifies all the information required for the simulations except
+the \ck{} file specifies all information required for the simulations except
 for the chemical kinetic model, and Cantera can be used to simulate autoignition. The setup steps
-are the same as in the previous example, with one exception. In this example, we also import
-Python's built-in multiprocessing library so that we can run the simulations on multiple cores. We
-import the \pybox|Pool| class, which offers facilities to manage a jobs on a pool of processors:
+match those from the previous example, with one exception: in this example, we also import
+Python's built-in multiprocessing library so that we can run the simulations on multiple cores.
+We import the \pybox|Pool| class, which offers tools to manage a set of jobs on a
+pool of processors:
 %
 \begin{pythonbox}
 import cantera as ct
@@ -966,12 +964,13 @@ temperature, pressure, and mole fractions as input and returns the simulated ign
 defined as the time the temperature increases by \SI{400}{\K} over the initial temperature, a
 simplified definition for this example. In general, the user could process the mole fraction of
 \ce{OH^*} (provided that the kinetic model includes accurate chemistry for \ce{OH^*}) to match the
-definition of ignition delay in the experiments. As before, the \verb|tbuoh-mechanism.cti| file must
-be supplied by the user:
+definition of ignition delay in the experiments. We use the chemical kinetic model
+for butanol isomers from Sarathy et al.~\cite{Sarathy:2012fj}, represented as
+\verb|LLNL_sarathy_butanol.cti|:
 %
 \begin{pythonbox}
 def run_simulation(T, P, X):
-    gas = ct.Solution('tbuoh-mechanism.cti')
+    gas = ct.Solution('LLNL_sarathy_butanol.cti')
     gas.TPX = T, P, X
     reac = ct.IdealGasReactor(gas)
     netw = ct.ReactorNet([reac])
@@ -999,7 +998,7 @@ def collect_input(dp):
 initial_conditions = list(map(collect_input, ck.datapoints))
 \end{pythonbox}
 
-Finally, we create the processor \pybox|Pool| (with 4 processes) and send the jobs out to run:
+Finally, we create the processor \pybox|Pool| (with four processes) and send the jobs out to run:
 %
 \begin{pythonbox}
 with Pool(processes=4) as pool:
@@ -1010,7 +1009,34 @@ for (T, P, X), tau in zip(initial_conditions, ignition_delays):
 \end{pythonbox}
 %
 The simulated ignition delay results are returned in the \pybox|ignition_delays| list. The results
-are printed to the screen using a Python formatted string (f-string).
+are printed to the screen using a Python formatted string (f-string). We can also visually
+compare the results using Matplotlib~\cite{matplotlib}, as
+Figure~\ref{fig:ignition-delays} shows:
+%
+\begin{pythonbox}
+import matplotlib.pyplot as plt
+
+inv_temps = [1000/i[0] for i in initial_conditions]
+exp_ignition_delays = [dp.ignition_delay.to('ms').magnitude for dp in ck.datapoints]
+sim_ignition_delays = np.array(ignition_delays)*1.0E3
+
+plt.figure()
+plt.scatter(inv_temps, exp_ignition_delays, label='Experimental ignition delays')
+plt.scatter(inv_temps, sim_ignition_delays, label='Simulated ignition delays', marker='s')
+plt.legend(loc='best')
+plt.yscale('log')
+plt.ylabel('Ignition delay [ms]')
+plt.xlabel('1000/T [1/K]')
+\end{pythonbox}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{ignition-delays.pdf}
+    \caption{Comparison of experimental and simulated ignition delays of
+    \textit{tert}-butanol from shock tube example.}
+    \label{fig:ignition-delays}
+\end{figure}
+
 %====================================================================
 \section{Conclusions and future work}
 
