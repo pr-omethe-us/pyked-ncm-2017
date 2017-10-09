@@ -833,9 +833,9 @@ history of the reactor is available in CanSen~\autocite{cansen}, in the
 %
 \begin{pythonbox}
 # Retrieve the time and volume from the history in the datapoint
-time = dp.volume_history.time.magnitude
-volume = dp.volume_history.volume.magnitude
-keywords = {'vproTime': time, 'vproVol': volume}
+exp_time = dp.volume_history.time.magnitude
+exp_volume = dp.volume_history.volume.magnitude
+keywords = {'vproTime': exp_time, 'vproVol': exp_volume}
 # Install the Wall between the reactor and environment
 ct.Wall(reac, env, velocity=VolumeProfile(keywords))
 \end{pythonbox}
@@ -847,7 +847,7 @@ to set the maximum time step allowed in the solution to be the minimum time diff
 
 \begin{pythonbox}
 netw = ct.ReactorNet([reac])
-netw.set_max_time_step(np.min(np.diff(time)))
+netw.set_max_time_step(np.min(np.diff(exp_time)))
 \end{pythonbox}
 
 To calculate the ignition delay, we will follow the definition specified in the \ck{} file for
@@ -1002,7 +1002,7 @@ with Pool(processes=4) as pool:
     ignition_delays = pool.starmap(run_simulation, initial_conditions)
 
 for (T, P, X), tau in zip(initial_conditions, ignition_delays):
-    print(f'The ignition delay for T_initial={T}, P_initial={P} is: {tau} seconds')
+    print(f'The ignition delay for T_initial={T} K, P_initial={P} Pa is: {tau} seconds')
 \end{pythonbox}
 %
 The simulated ignition delay results are returned in the \pybox|ignition_delays| list. The results
