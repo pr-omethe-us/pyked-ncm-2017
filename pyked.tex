@@ -9,7 +9,14 @@
 
 %\usepackage{listings}
 
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{textcomp}
+\usepackage{latexsym,amsmath,amssymb}
+
 \usepackage{fancyvrb,newverbs,xcolor}
+\usepackage{graphicx}
+\usepackage{caption,subcaption}
 
 \definecolor{cverbbg}{gray}{0.93}
 \colorlet{pyyellow}{yellow!10!white}
@@ -799,16 +806,16 @@ T_initial = dp.temperature.to('K').magnitude
 P_initial = dp.pressure.to('Pa').magnitude
 X_initial = dp.get_cantera_mole_fraction()
 \end{pythonbox}
-%
+
 With these properties defined, we have to create the objects in Cantera that represent the physical
 state of the system to be studied. In Cantera, the \pybox|Solution| class stores the thermodynamic,
-kinetic, and transport data from an input file in the CTI format. After the \pybox|Solution| object
-is created, we can set the initial temperature, pressure, and mole fractions using the \pybox|TPX|
-attribute of the \pybox|Solution| class:
-
+kinetic, and transport data from the GRI Mech 3.0~\cite{GRI3.0} model included with Cantera.
+After the \pybox|Solution| object is created, we can set the initial temperature, pressure,
+and mole fractions using the \pybox|TPX| attribute of the \pybox|Solution| class:
+%
 \begin{pythonbox}
 # Load the mechanism and set the initial state of the mixture
-gas = ct.Solution('h2-co-mechanism.cti')
+gas = ct.Solution('gri30.cti')
 gas.TPX = T_initial, P_initial, X_initial
 \end{pythonbox}
 
@@ -817,7 +824,7 @@ install the \pybox|Solution| instance into an \pybox|IdealGasReactor| which impl
 for mass, energy, and species conservation. In addition, we create a \pybox|Reservoir| to represent
 the environment external to the reaction chamber. The input file used for the environment,
 \verb|air.xml|, is included with Cantera and represents an average composition of air.
-
+%
 \begin{pythonbox}
 # Create the reactor and the outside environment
 reac = ct.IdealGasReactor(gas)
@@ -836,6 +843,7 @@ history of the reactor is available in CanSen~\autocite{cansen}, in the
 \pybox|cansen.profiles.VolumeProfile| class.
 %
 \begin{pythonbox}
+from cansen.profiles import VolumeProfile
 # Retrieve the time and volume from the history in the datapoint
 exp_time = dp.volume_history.time.magnitude
 exp_volume = dp.volume_history.volume.magnitude
@@ -847,8 +855,9 @@ ct.Wall(reac, env, velocity=VolumeProfile(keywords))
 Then, the \pybox|IdealGasReactor| is installed in a \pybox|ReactorNet|. The \pybox|ReactorNet|
 implements the connection to the numerical solver (CVODES \autocite{hindmarsh_sundials:_2005} is
 used in Cantera) to solve the energy and species equations. For this example, it is best practice
-to set the maximum time step allowed in the solution to be the minimum time difference in the time array from the volume trace:
-
+to set the maximum time step allowed in the solution to be the minimum time difference in
+the time array from the volume trace:
+%
 \begin{pythonbox}
 netw = ct.ReactorNet([reac])
 netw.set_max_time_step(np.min(np.diff(exp_time)))
@@ -856,8 +865,9 @@ netw.set_max_time_step(np.min(np.diff(exp_time)))
 
 To calculate the ignition delay, we will follow the definition specified in the \ck{} file for
 this experiment, where the experimentalists used the maximum of the time derivative of the pressure
-to define the ignition delay. To calculate this derivative, we need to store the state variables and the composition on each time step, so we initialize several Python lists to act as storage:
-
+to define the ignition delay. To calculate this derivative, we need to store the state variables
+and the composition on each time step, so we initialize several Python lists to act as storage:
+%
 \begin{pythonbox}
 # Initialize lists to store solution information
 time = []
@@ -873,7 +883,7 @@ solver (CVODES uses an adaptive time-stepping algorithm). On each step, we add t
 variables to their respective lists. The problem is integrated until a user-specified end time, in
 this case \SI{50}{\milli\second}, although in principle, the user could end the simulation on any
 condition they choose:
-
+%
 \begin{pythonbox}
 # Integrate for 50 ms
 while netw.time < 0.05:
@@ -886,7 +896,42 @@ while netw.time < 0.05:
 \end{pythonbox}
 
 At this point, the user would post-process the information in the \pybox|pressure| list to calculate
-the derivative by whatever algorithm they choose.
+the derivative by whatever algorithm they choose. Here, we plot pressure versus time from the
+simulation, and compare the simulated and experimental volume traces,
+using the Matplotlib library~\cite{matplotlib} and shown in Figure~\ref{fig:rcm}:
+%
+\begin{pythonbox}
+import matplotlib.pyplot as plt
+
+plt.figure()
+plt.plot(time, pressure)
+plt.ylabel('Pressure [Pa]')
+plt.xlabel('Time [s]')
+
+plt.figure()
+plt.plot(exp_time, exp_volume/exp_volume[0], label='Experimental volume', linestyle='--')
+plt.plot(time, volume, label='Simulated volume')
+plt.legend(loc='best')
+plt.ylabel('Volume [m^3]')
+plt.xlabel('Time [s]')
+\end{pythonbox}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.7\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{rcm-pressure.pdf}
+        \caption{Simulated pressure trace}
+    \end{subfigure}
+    \\
+    \begin{subfigure}{0.7\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{rcm-volume.pdf}
+        \caption{Experimental and simulated volume histories}
+    \end{subfigure}
+    \caption{Results from RCM example}
+    \label{fig:rcm}
+\end{figure}
 
 \subsection{Shock tube modeling with constant volume}
 \label{sec:shock-tube}
@@ -1029,7 +1074,7 @@ plt.ylabel('Ignition delay [ms]')
 plt.xlabel('1000/T [1/K]')
 \end{pythonbox}
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.7\textwidth]{ignition-delays.pdf}
     \caption{Comparison of experimental and simulated ignition delays of
