@@ -664,7 +664,7 @@ capabilities of the software.
 \label{sec:rcm-modeling}
 
 The \ck{} file that will be used in this example can be found in the
-\texttt{tests} directory of the PyKED
+\texttt{tests} directory of the \pk{}
 repository.\footnote{\url{https://github.com/pr-omethe-us/PyKED/blob/master/pyked/tests/testfile_rcm.yaml}}
 Examining that file, we find the first section specifies the information about
 the \ck{} file itself:
@@ -829,16 +829,15 @@ compared to using two \pybox|IdealGasReactor|s, since the composition and state 
 are typically not necessary for the solution of autoignition problems. Although we do not show the
 details here, a reference implementation of a class that computes the wall velocity given the volume
 history of the reactor is available in CanSen~\autocite{cansen}, in the
-\pybox|cansen.profile.VolumeProfile| class.
+\pybox|cansen.profiles.VolumeProfile| class.
 %
 \begin{pythonbox}
-# Retrieve the time and volume from the
-# history in the datapoint
-time = dp.volume_history.time
-volume = dp.volume_history.volume
-# Install the Wall between the
-# reactor and environment
-ct.Wall(reac, env, velocity=VolumeProfile(time=time, volume=volume))
+# Retrieve the time and volume from the history in the datapoint
+time = dp.volume_history.time.magnitude
+volume = dp.volume_history.volume.magnitude
+keywords = {'vproTime': time, 'vproVol': volume}
+# Install the Wall between the reactor and environment
+ct.Wall(reac, env, velocity=VolumeProfile(keywords))
 \end{pythonbox}
 
 Then, the \pybox|IdealGasReactor| is installed in a \pybox|ReactorNet|. The \pybox|ReactorNet|
@@ -851,7 +850,7 @@ netw = ct.ReactorNet([reac])
 netw.set_max_time_step(np.min(np.diff(time)))
 \end{pythonbox}
 
-To calculate the ignition delay, we will follow the definition specified in the ChemKED file for
+To calculate the ignition delay, we will follow the definition specified in the \ck{} file for
 this experiment, where the experimentalists used the maximum of the time derivative of the pressure
 to define the ignition delay. To calculate this derivative, we need to store the state variables and the composition on each time step, so we initialize several Python lists to act as storage:
 
@@ -866,10 +865,10 @@ mass_fractions = []
 
 Finally, the problem is integrated using the \pybox|step| method of the \pybox|ReactorNet|. The
 \pybox|step| method takes one timestep forward on each call, with step size determined by the CVODES
-solver (CVODES is an adaptive time-stepping algorithm). On each step, we add the relevant variables
-to their respective lists. The problem is integrated until a user-specified end time, in this case
-\SI{50}{\milli\second}, although in principle, the user could end the simulation on any condition
-they choose:
+solver (CVODES uses an adaptive time-stepping algorithm). On each step, we add the relevant
+variables to their respective lists. The problem is integrated until a user-specified end time, in
+this case \SI{50}{\milli\second}, although in principle, the user could end the simulation on any
+condition they choose:
 
 \begin{pythonbox}
 # Integrate for 50 ms
@@ -898,7 +897,7 @@ Section~\ref{sec:rcm-modeling}.
 This \ck{} file specifies multiple data points with some common
 conditions, including a common mixture composition and common definition of
 ignition delay. Therefore, a \yabox|common-properties| section is specified, followed by the
-datapoints list:
+\yabox|datapoints| list:
 %
 \begin{yamlbox}
 common-properties:
@@ -982,9 +981,7 @@ Then, we load the ChemKED file and generate a list of initial conditions that wi
 the \pybox|run_simulation()| function. We first define a convenience function to collect the input
 from a single datapoint and return a Python tuple with the conditions (tuples are lightweight groups
 of data in Python). Then, we use the built-in \pybox|map| function to apply the
-\pybox|collect_input| function to each of the elements in the \pybox|ck.datapoints| list: convert a
-\pybox|Quantity| to some input units and return the magnitude, then use Python's list comprehension
-syntax to generate a list of tuples (tuples are lightweight groups of data in Python):
+\pybox|collect_input| function to each of the elements in the \pybox|ck.datapoints| list:
 %
 \begin{pythonbox}
 ck = ChemKED('Stranic2012-tbuoh.yaml')
@@ -995,14 +992,13 @@ def collect_input(dp):
     X_initial = dp.get_cantera_mole_fraction()
     return (T_initial, P_initial, X_initial)
 
-initial_conditions = map(collect_input, ck.datapoints)
-initial_conditions = [(to_SI(dp.temperature, 'K'), to_SI(dp.pressure, 'Pa'), dp.get_cantera_mole_fraction()) for dp in ck.datapoints]
+initial_conditions = list(map(collect_input, ck.datapoints))
 \end{pythonbox}
 
-Finally, we create the processor \pybox|Pool| (with 12 processes) and send the jobs out to run:
+Finally, we create the processor \pybox|Pool| (with 4 processes) and send the jobs out to run:
 %
 \begin{pythonbox}
-with Pool(12) as pool:
+with Pool(processes=4) as pool:
     ignition_delays = pool.starmap(run_simulation, initial_conditions)
 
 for (T, P, X), tau in zip(initial_conditions, ignition_delays):
