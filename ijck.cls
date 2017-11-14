@@ -22,9 +22,11 @@
 
 \LoadClass{article}
 
-% switch to the 2nd line when submitting
-\RequirePackage{minted}
-%\RequirePackage[cachedir=".",frozencache=true]{minted}
+%% use these lines when modifying paper contents
+%\RequirePackage{minted}
+%\RequirePackage[cachedir=".",finalizecache=true]{minted}
+%% switch to this line when submitting
+\RequirePackage[cachedir=".",frozencache=true]{minted}
 
 \RequirePackage{tcolorbox}
 \tcbuselibrary{minted,breakable,skins,xparse}
