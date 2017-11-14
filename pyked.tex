@@ -55,6 +55,15 @@
 \usepackage[inline]{enumitem}
 \setlist{noitemsep}
 
+
+% For the version with changes, use these four commands
+% *** Be very precise and careful about including whitespace and punctuation in your edits ***
+\usepackage[normalem]{ulem}
+\newcommand{\addone}[1]{{\sloppy\textcolor{teal}{\uline{#1}}}}  % add
+\newcommand{\deleteone}[1]{\sloppy\textcolor{teal}{\sout{#1}}}    % delete
+\newcommand{\addtwo}[1]{{\sloppy\textcolor{red}{\uline{#1}}}}  % add
+\newcommand{\deletetwo}[1]{\sloppy\textcolor{red}{\sout{#1}}}    % delete
+
 \usepackage{microtype}
 %======================================================================
 \addbibresource{pyked.bib}
@@ -199,11 +208,13 @@ Nonetheless, databases of fundamental combustion experiments
 have proved quite useful. For instance, Olm and colleagues used their
 ReSpecTh-based database to quantify the performance of literature
 hydrogen~\autocite{Olm:2014gn} and syngas~\autocite{Olm:2015ch} kinetic models,
-and more recently develop improved models for hydrogen\slash
-syngas~\autocite{Varga:2016gj}, methanol\slash formaldehyde~\autocite{Olm:2017a},
-and ethanol~\autocite{Olm:2016et}. In all five cases, they converted numerous
+and more recently develop improved models for \addtwo{hydrogen~\autocite{Varga:2015hy}},
+hydrogen\slash syngas~\autocite{Varga:2016gj},
+methanol\slash formaldehyde~\autocite{Olm:2017a},
+and ethanol~\autocite{Olm:2016et}. In all \deletetwo{five}~\addtwo{six} cases, they converted numerous
 experimental datasets from the literature into the ReSpecTh standard.
-Their database currently contains \num{93240} experimental data points in 1376
+Their database currently contains \deletetwo{\num{93240}}~\addtwo{\num{93326}}
+experimental data points in \deletetwo{1376}~\addtwo{1396}
 ReSpecTh XML files~\autocite{respecth}.
 
 Despite the development of these standards, limited examples exist in the
@@ -344,8 +355,8 @@ research groups to represent unpublished data prior to publication.
 
 The second section of the file encodes the experimental data as a sequence of mappings. The
 top-level key for the sequence is called \yabox|datapoints|. For the current version of the \ck{}
-schema, only autoignition delay experiments are supported. The following information os required in
-each element of the sequence:
+schema, only autoignition delay experiments are supported. The following information
+\deleteone{os}~\addone{is} required in each element of the sequence:
 %
 \begin{itemize}
     \item \yabox|temperature| (required, sequence): The temperature of the
@@ -628,7 +639,8 @@ The \pybox|write_file()| method writes a new \ck{} YAML file based on the instan
 of the class, while \pybox|convert_to_ReSpecTh()| converts the \pybox|ChemKED|
 instance to a ReSpecTh XML file. In the latter case, some information may be lost or the conversion
 may not be possible, as \ck{} files support some data that ReSpecTh files do not support. We note
-that the reverse is also true: not all ReSpecTh files may be converted to \ck{} files because not
+that the reverse is also true: not all ReSpecTh files may be
+\addtwo{equivalently} converted to \ck{} files because not
 all of the data that can be stored in a ReSpecTh format is (currently) supported by the \ck{} format.
 
 \pk{}~\autocite{PyKED} relies on well-established scientific Python software tools.
