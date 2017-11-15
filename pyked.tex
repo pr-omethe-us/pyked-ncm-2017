@@ -482,18 +482,19 @@ facility-specific effects during an experiment. The keys to describe this inform
         \begin{itemize}
             \item \yabox|units| (required, string): the units of the volume, with dimensions length
             cubed
-            \item \yabox|column| (required, integer): the 0-based index of the column storing the
-            volume information in the \yabox|values| array
+            \item \yabox|column| (required, integer): the \deletetwo{0-based} \addtwo{zero-based} index of the column storing the
+            volume information in the \yabox|values| array \addtwo{(e.g., 0 or 1)}
         \end{itemize}
         \item \yabox|time| (required, mapping): A mapping describing the time in the history.
         The fields in this mapping are:
         \begin{itemize}
             \item \yabox|units| (required, string): the units of the time
-            \item \yabox|column| (required, integer): the 0-based index of the column storing the
-            time information in the \yabox|values| array
+            \item \yabox|column| (required, integer): the \deletetwo{0-based} \addtwo{zero-based} index of the column storing the
+            time information in the \yabox|values| array \addtwo{(e.g., 0 or 1)}
         \end{itemize}
-        \item \yabox|values| (required, sequence): A sequence of sequences describing the values of
-        the volume at the time points.
+        \item \yabox|values| (required, sequence): A \deletetwo{sequence of sequences describing the values of
+        the volume at the time points.}\addtwo{sequence of time-volume pairs describing the values
+        of the volume at different times}
     \end{itemize}
     \item \yabox|compressed-temperature| (optional, sequence): The estimated temperature at the end
     of the compression stroke
