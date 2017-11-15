@@ -477,7 +477,9 @@ facility-specific effects during an experiment. The keys to describe this inform
     chamber as a function of time during a rapid compression machine experiment. The fields in this
     mapping are:
     \begin{itemize}
-        \item \yabox|volume| (required, mapping): A mapping describing the volume in the history.
+        \item \yabox|volume| (required, mapping): A mapping describing the volume in the history\footnote{\addtwo{Future versions
+        of \ck{} will support specifying additional time histories for rapid compression machine and shock tubes (e.g.,
+        pressure, volume, light emission, OH emission). These will follow the specification format given for volume.}}
         The fields in this mapping are:
         \begin{itemize}
             \item \yabox|units| (required, string): the units of the volume, with dimensions length

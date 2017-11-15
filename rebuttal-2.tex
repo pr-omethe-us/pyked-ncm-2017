@@ -46,6 +46,17 @@
 %    scientific-notation = fixed
 }
 
+\usepackage{fancyvrb,newverbs}
+\definecolor{cverbbg}{gray}{0.93}
+\colorlet{pyyellow}{yellow!10!white}
+\colorlet{yamlblack}{black!10!white}
+\newverbcommand{\yabox}
+  {\setbox\verbbox\hbox\bgroup}
+  {\egroup\colorbox{yamlblack}{\box\verbbox}}
+\newverbcommand{\pybox}
+  {\setbox\verbbox\hbox\bgroup}
+  {\egroup\colorbox{pyyellow}{\box\verbbox}}
+
 \usepackage[normalem]{ulem}
 % *** Be very precise and careful about including whitespace and punctuation in your edits ***
 % For the version with changes, use these four commands
@@ -272,7 +283,7 @@ ReSpecTh XML files [17].''
 
 We have clarified the description in both places on page 7:
 ``the \deletetwo{0-based} \addtwo{zero-based} index of the column storing the
-volume information in the \texttt{values} array \addtwo{(e.g., 0 or 1)}''.
+volume information in the \yabox|values| array \addtwo{(e.g., 0 or 1)}''.
 
 \begin{quoting}
     ``A sequence of sequences describing the values''
@@ -292,7 +303,18 @@ of the volume at different times}''.
     is accompanied with a pressure history?
 \end{quoting}
 
+The current version of ChemKED can represent a constant preignition pressure rise
+in shock tubes through the \yabox|pressure-rise| key. It does not currently
+support specifying a pressure time-history, although we are planning to extend
+support for more time histories for both shock tubes and rapid compression
+machines in a future version (for, e.g., pressure, volume, piston position, light
+emission, OH emission, and absorption). See \url{https://github.com/pr-omethe-us/PyKED/issues/91}
+for our discussion on these plans.
 
+We added a footnote on page 7 describing these plans:
+``\addtwo{Future versions of ChemKED will support specifying additional time histories for
+rapid compression machine and shock tubes (e.g., pressure, volume, light emission, OH emission).
+These will follow the specification format given for volume.}''
 
 \begin{quoting}
     p. 10, first para:
@@ -312,6 +334,7 @@ We have adopted the suggested text on page 10:
 
 This is the correct surname for one of the creators of the YAML data format: Ingy döt Net.
 
+\vspace{1em}
 
 %%%%%%% ``closing'' sets the sign-off line.
 \closing{Sincerely,}
