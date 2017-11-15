@@ -39,7 +39,7 @@
     {\setboolean{logofound}{true}}
     {\setboolean{logofound}{false}}
 
-\setlength{\textwidth}{6.875in}
+\setlength{\textwidth}{6.85in}
 \setlength{\textheight}{7.5in}
 \setlength{\topskip}{0.0in}
 \setlength{\footskip}{1.0in}
