@@ -58,11 +58,11 @@
 
 % For the version with changes, use these four commands
 % *** Be very precise and careful about including whitespace and punctuation in your edits ***
-\usepackage[normalem]{ulem}
-\newcommand{\addone}[1]{{\sloppy\textcolor{teal}{\uline{#1}}}}  % add
-\newcommand{\deleteone}[1]{\sloppy\textcolor{teal}{\sout{#1}}}    % delete
-\newcommand{\addtwo}[1]{{\sloppy\textcolor{red}{\uline{#1}}}}  % add
-\newcommand{\deletetwo}[1]{\sloppy\textcolor{red}{\sout{#1}}}    % delete
+% \usepackage[normalem]{ulem}
+% \newcommand{\addone}[1]{{\sloppy\textcolor{teal}{\uline{#1}}}}  % add
+% \newcommand{\deleteone}[1]{\sloppy\textcolor{teal}{\sout{#1}}}    % delete
+% \newcommand{\addtwo}[1]{{\sloppy\textcolor{red}{\uline{#1}}}}  % add
+% \newcommand{\deletetwo}[1]{\sloppy\textcolor{red}{\sout{#1}}}    % delete
 
 \usepackage{microtype}
 %======================================================================
@@ -200,24 +200,20 @@ has a unique DOI and URL assigned to it.
 
 However, ReSpecTh experimental files are another
 XML-based format, and, as such, suffer from the same readability issues as PrIMe.
-Moreover, \deletetwo{the standard remains inaccessible to the public, requiring potential users
-to register with the standard's authors using a valid institutional email address
-to access the specification and the growing database}
-\addtwo{potential users must register using a valid institutional email address
-to access the growing database}.
+Moreover, potential users must register using a valid institutional email address
+to access the growing database.
 
 Nonetheless, databases of fundamental combustion experiments
 have proved quite useful. For instance, Olm and colleagues used their
 ReSpecTh-based database to quantify the performance of literature
 hydrogen~\autocite{Olm:2014gn} and syngas~\autocite{Olm:2015ch} kinetic models,
-and more recently develop improved models for \addtwo{hydrogen~\autocite{Varga:2015hy}},
+and more recently develop improved models for hydrogen~\autocite{Varga:2015hy},
 hydrogen\slash syngas~\autocite{Varga:2016gj},
 methanol\slash formaldehyde~\autocite{Olm:2017a},
-and ethanol~\autocite{Olm:2016et}. In all \deletetwo{five}~\addtwo{six} cases, they converted numerous
+and ethanol~\autocite{Olm:2016et}. In all six cases, they converted numerous
 experimental datasets from the literature into the ReSpecTh standard.
-Their database currently contains \deletetwo{\num{93240}}~\addtwo{\num{93326}}
-experimental data points in \deletetwo{1376}~\addtwo{1396}
-ReSpecTh XML files~\autocite{respecth}.
+Their database currently contains \num{93326}
+experimental data points in 1396 ReSpecTh XML files~\autocite{respecth}.
 
 Despite the development of these standards, limited examples exist in the
 literature of open data \emph{sharing} using the formats. To the best
@@ -358,7 +354,7 @@ research groups to represent unpublished data prior to publication.
 The second section of the file encodes the experimental data as a sequence of mappings. The
 top-level key for the sequence is called \yabox|datapoints|. For the current version of the \ck{}
 schema, only autoignition delay experiments are supported. The following information
-\deleteone{os}~\addone{is} required in each element of the sequence:
+is required in each element of the sequence:
 %
 \begin{itemize}
     \item \yabox|temperature| (required, sequence): The temperature of the
@@ -477,26 +473,25 @@ facility-specific effects during an experiment. The keys to describe this inform
     chamber as a function of time during a rapid compression machine experiment. The fields in this
     mapping are:
     \begin{itemize}
-        \item \yabox|volume| (required, mapping): A mapping describing the volume in the history\footnote{\addtwo{Future versions
+        \item \yabox|volume| (required, mapping): A mapping describing the volume in the history\footnote{Future versions
         of \ck{} will support specifying additional time histories for rapid compression machine and shock tube
-        experiments (e.g., pressure, volume, light emission, OH emission). These will follow the specification format given for volume.}}
+        experiments (e.g., pressure, volume, light emission, OH emission). These will follow the specification format given for volume.}
         The fields in this mapping are:
         \begin{itemize}
             \item \yabox|units| (required, string): the units of the volume, with dimensions length
             cubed
-            \item \yabox|column| (required, integer): the \deletetwo{0-based} \addtwo{zero-based} index of the column storing the
-            volume information in the \yabox|values| array \addtwo{(e.g., 0 or 1)}
+            \item \yabox|column| (required, integer): the zero-based index of the column storing the
+            volume information in the \yabox|values| array (e.g., 0 or 1)
         \end{itemize}
         \item \yabox|time| (required, mapping): A mapping describing the time in the history.
         The fields in this mapping are:
         \begin{itemize}
             \item \yabox|units| (required, string): the units of the time
-            \item \yabox|column| (required, integer): the \deletetwo{0-based} \addtwo{zero-based} index of the column storing the
-            time information in the \yabox|values| array \addtwo{(e.g., 0 or 1)}
+            \item \yabox|column| (required, integer): the zero-based index of the column storing the
+            time information in the \yabox|values| array (e.g., 0 or 1)
         \end{itemize}
-        \item \yabox|values| (required, sequence): A \deletetwo{sequence of sequences describing the values of
-        the volume at the time points.}\addtwo{sequence of time-volume pairs describing the values
-        of the volume at different times}
+        \item \yabox|values| (required, sequence): A sequence of time-volume pairs describing the values
+        of the volume at different times
     \end{itemize}
     \item \yabox|compressed-temperature| (optional, sequence): The estimated temperature at the end
     of the compression stroke
@@ -645,7 +640,7 @@ of the class, while \pybox|convert_to_ReSpecTh()| converts the \pybox|ChemKED|
 instance to a ReSpecTh XML file. In the latter case, some information may be lost or the conversion
 may not be possible, as \ck{} files support some data that ReSpecTh files do not support. We note
 that the reverse is also true: not all ReSpecTh files may be
-\addtwo{equivalently} converted to \ck{} files because not
+equivalently converted to \ck{} files because not
 all of the data that can be stored in a ReSpecTh format is (currently) supported by the \ck{} format.
 
 \pk{}~\autocite{PyKED} relies on well-established scientific Python software tools.
